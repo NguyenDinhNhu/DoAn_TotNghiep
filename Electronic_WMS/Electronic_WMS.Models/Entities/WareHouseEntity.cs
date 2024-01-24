@@ -19,5 +19,6 @@ namespace Electronic_WMS.Models.Entities
         public DateTime UpdatedDate { get; set; }
         public int CreatedBy { get; set; }
         public int UpdatedBy { get; set; }
+        public string Location { get; set; }
     }
 }

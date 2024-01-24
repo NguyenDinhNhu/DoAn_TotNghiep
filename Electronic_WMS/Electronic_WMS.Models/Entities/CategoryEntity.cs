@@ -15,5 +15,6 @@ namespace Electronic_WMS.Models.Entities
         public int CateId { get; set; }
         public string CateName { get; set; }
         public int ParentId { get; set; }
+        public int Status { get; set; }
     }
 }

@@ -14,5 +14,6 @@ namespace Electronic_WMS.Models.Entities
         [Key]
         public int RoleId { get; set; }
         public string RoleName { get; set; }
+        public int Status { get; set; }
     }
 }
