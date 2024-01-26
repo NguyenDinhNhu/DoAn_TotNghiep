@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { CustomFunc } from '../assets/js/script.js';
+import * as feather from 'feather-icons';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Electronic_WMS_Angular';
+  ngOnInit(): void {
+    CustomFunc();
+  }
+
+  ngAfterViewInit() {
+    feather.replace();
+  }
 }
