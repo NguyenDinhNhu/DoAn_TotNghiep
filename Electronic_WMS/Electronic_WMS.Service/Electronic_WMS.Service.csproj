@@ -11,9 +11,4 @@
     <ProjectReference Include="..\Electronic_WMS.Utilities\Electronic_WMS.Utilities.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="IService\" />
-    <Folder Include="Service\" />
-  </ItemGroup>
-
 </Project>

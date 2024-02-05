@@ -7,46 +7,46 @@ namespace Electronic_WMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class BrandController : ControllerBase
     {
-        private readonly ICategoryService _iCategoryService;
-        public CategoryController(ICategoryService iCategoryService)
+        private readonly IBrandService _iBrandService;
+        public BrandController(IBrandService iBrandService)
         {
-            _iCategoryService = iCategoryService;
+            _iBrandService = iBrandService;
         }
 
         [HttpPost(nameof(GetList))]
-        public IActionResult GetList([FromBody] SearchVM search) 
+        public IActionResult GetList(SearchVM search)
         {
-            var result = _iCategoryService.GetList(search);
+            var result = _iBrandService.GetList(search);
             return Ok(result);
         }
 
         [HttpGet(nameof(GetCategory))]
         public IActionResult GetCategory([FromQuery] int id)
         {
-            var result = _iCategoryService.GetById(id);
+            var result = _iBrandService.GetById(id);
             return Ok(result);
         }
 
         [HttpPost(nameof(Insert))]
-        public IActionResult Insert([FromBody] Category category)
+        public IActionResult Insert([FromBody] Brand brand)
         {
-            var result = _iCategoryService.Insert(category);
+            var result = _iBrandService.Insert(brand);
             return Ok(result);
         }
 
         [HttpPatch(nameof(Delete))]
         public IActionResult Delete([FromQuery] int id)
         {
-            var result = _iCategoryService.Delete(id);
+            var result = _iBrandService.Delete(id);
             return Ok(result);
         }
 
         [HttpPost(nameof(Update))]
-        public IActionResult Update([FromBody] Category cate)
+        public IActionResult Update([FromBody] Brand brand)
         {
-            var result = _iCategoryService.Update(cate);
+            var result = _iBrandService.Update(brand);
             return Ok(result);
         }
     }

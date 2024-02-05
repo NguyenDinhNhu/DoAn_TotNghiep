@@ -14,6 +14,7 @@ namespace Electronic_WMS.Models.Entities
         [Key]
         public int BrandId { get; set; }
         public string BrandName { get; set; }
+        public int ParentId { get; set; }
         public int Status {  get; set; }
     }
 }

@@ -7,7 +7,7 @@
     <aside class="sidebar">
       <div class="sidebar-start">
         <div class="sidebar-head">
-          <a href="/" class="logo-wrapper" title="Home">
+          <a [routerLink]="['/']" class="logo-wrapper" title="Home">
             <span class="sr-only">Home</span>
             <span class="icon logo" aria-hidden="true"></span>
             <div class="logo-text">
@@ -145,7 +145,7 @@
       </div>
     </aside>
     <!-- style="background-color: #eff0f6;" -->
-    <div class="main-wrapper" >
+    <div class="main-wrapper">
       <!-- ! Main nav -->
       <nav class="main-nav--bg">
         <div class="container main-nav">
@@ -216,12 +216,9 @@
                 <span class="sr-only">My profile</span>
                 <div class="user-info d-flex">
                   <span class="nav-user-img">
-                    <picture>
-                      <source srcset="./img/avatar/avatar-illustrated-02.webp" type="image/webp"><img
-                        src="./img/avatar/avatar-illustrated-02.png" alt="User name">
-                    </picture>
+                    <img src="../assets//img/avatar/avatar-illustrated-02.png" alt="User name">
                   </span>
-                  <p style="margin: 12px 8px 0;">admin</p>
+                  <p style="margin: 12px 8px 0;">admin<i data-feather="chevron-down" aria-hidden="true"></i></p>
                 </div>
               </button>
               <ul class="users-item-dropdown nav-user-dropdown dropdown">
@@ -244,12 +241,8 @@
       </nav>
       <!-- ! Main -->
       <main class="main users chart-page" id="skip-target">
-        <div class="container">
-          <h2 class="main-title">Dashboard</h2>
-        </div>
+        <router-outlet></router-outlet>
       </main>
     </div>
   </div>
 </div>
-
-<router-outlet></router-outlet>
