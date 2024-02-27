@@ -83,7 +83,7 @@ namespace Electronic_WMS.Service.Service
 
         public ResponseModel Insert(Roles role)
         {
-            // Check CateName in database
+            // Check RoleName in database
             var checkRoleName = _iRolesRepository.GetByName(role.RoleName);
             if (checkRoleName != null)
             {
@@ -94,7 +94,7 @@ namespace Electronic_WMS.Service.Service
                 };
             }
 
-            // Insert Category 
+            // Insert Role 
             var roleEntity = new RolesEntity
             {
                 RoleId = role.RoleId,
@@ -129,7 +129,7 @@ namespace Electronic_WMS.Service.Service
                     StatusMessage = "Role does not exists!"
                 };
             }
-            // Check CateName in database
+            // Check RoleName in database
             var checkRoleName = _iRolesRepository.GetByName(role.RoleName);
             if (checkRoleName != null && (checkRoleName.RoleId != role.RoleId && checkRoleName.RoleName == role.RoleName))
             {
@@ -140,7 +140,7 @@ namespace Electronic_WMS.Service.Service
                 };
             }
 
-            // Update Category 
+            // Update Role 
             roleDetail.RoleName = role.RoleName;
             roleDetail.Status = role.Status;
 

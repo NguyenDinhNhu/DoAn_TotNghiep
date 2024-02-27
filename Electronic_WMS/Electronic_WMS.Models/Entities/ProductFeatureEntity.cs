@@ -15,5 +15,6 @@ namespace Electronic_WMS.Models.Entities
         public int ProductFeatureId { get; set; }
         public int ProductId { get; set; }
         public int FeatureId { get; set; }
+        public string Value { get; set; }
     }
 }

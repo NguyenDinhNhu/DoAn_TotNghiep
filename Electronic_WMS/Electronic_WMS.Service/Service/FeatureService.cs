@@ -81,9 +81,9 @@ namespace Electronic_WMS.Service.Service
 
         public ResponseModel Insert(Feature feature)
         {
-            // Check CateName in database
-            var checkFeaturedName = _iFeatureRepository.GetByName(feature.FeatureName);
-            if (checkFeaturedName != null)
+            // Check FeatureName in database
+            var checkFeatureName = _iFeatureRepository.GetByName(feature.FeatureName);
+            if (checkFeatureName != null)
             {
                 return new ResponseModel
                 {
@@ -92,7 +92,7 @@ namespace Electronic_WMS.Service.Service
                 };
             }
 
-            // Insert Category 
+            // Insert Feature 
             var featureEntity = new FeatureEntity
             {
                 FeatureId = feature.FeatureId,
@@ -127,7 +127,7 @@ namespace Electronic_WMS.Service.Service
                     StatusMessage = "Feature does not exists!"
                 };
             }
-            // Check CateName in database
+            // Check FeatureName in database
             var checkFeatureName = _iFeatureRepository.GetByName(feature.FeatureName);
             if (checkFeatureName != null && (checkFeatureName.FeatureId != feature.FeatureId && checkFeatureName.FeatureName == feature.FeatureName))
             {
@@ -138,7 +138,7 @@ namespace Electronic_WMS.Service.Service
                 };
             }
 
-            // Update Category 
+            // Update Feature 
             featureDetail.FeatureName = feature.FeatureName;
             featureDetail.Status = feature.Status;
 

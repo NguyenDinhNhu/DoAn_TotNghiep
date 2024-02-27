@@ -31,12 +31,12 @@ namespace Electronic_WMS.Repository.Repository
 
         public WareHouseEntity GetByName(string name)
         {
-            return _db.WareHouseEntities.Where(x => x.Status != (int)CommonStatus.IsDelete && x.Name.ToLower() == name.ToLower()).FirstOrDefault();
+            return _db.WareHouseEntities.Where(x => x.Status == (int)CommonStatus.IsDelete && x.Name.ToLower() == name.ToLower()).FirstOrDefault();
         }
 
         public IEnumerable<WareHouseEntity> GetList()
         {
-            return _db.WareHouseEntities.Where(x => x.Status != (int)CommonStatus.IsDelete).ToList();
+            return _db.WareHouseEntities.Where(x => x.Status == (int)CommonStatus.IsDelete).ToList();
         }
 
         public int Insert(WareHouseEntity wh)

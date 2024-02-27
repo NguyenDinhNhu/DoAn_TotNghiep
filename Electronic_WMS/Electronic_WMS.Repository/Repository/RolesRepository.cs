@@ -31,12 +31,12 @@ namespace Electronic_WMS.Repository.Repository
 
         public RolesEntity GetByName(string name)
         {
-            return _db.RolesEntities.Where(x => x.Status != (int)CommonStatus.IsDelete && x.RoleName.ToLower() == name.ToLower()).FirstOrDefault();
+            return _db.RolesEntities.Where(x => x.Status == (int)CommonStatus.IsActive && x.RoleName.ToLower() == name.ToLower()).FirstOrDefault();
         }
 
         public IEnumerable<RolesEntity> GetList()
         {
-            return _db.RolesEntities.Where(x => x.Status != (int)CommonStatus.IsDelete).ToList();
+            return _db.RolesEntities.Where(x => x.Status == (int)CommonStatus.IsActive).ToList();
         }
 
         public int Insert(RolesEntity role)

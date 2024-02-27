@@ -93,7 +93,7 @@ namespace Electronic_WMS.Service.Service
 
         public ResponseModel Insert(InsertUpdateWareHouse wh)
         {
-            // Check CateName in database
+            // Check WareHouseName in database
             var checkWHName = _iWareHouseRepository.GetByName(wh.Name);
             if (checkWHName != null)
             {
@@ -104,7 +104,7 @@ namespace Electronic_WMS.Service.Service
                 };
             }
 
-            // Insert Category 
+            // Insert WareHouse 
             var whEntity = new WareHouseEntity
             {
                 WareHouseId = wh.WareHouseId,
@@ -142,7 +142,7 @@ namespace Electronic_WMS.Service.Service
                     StatusMessage = "WareHouse does not exists!"
                 };
             }
-            // Check CateName in database
+            // Check WareHouseName in database
             var checkWHName = _iWareHouseRepository.GetByName(wh.Name);
             if (checkWHName != null && (checkWHName.WareHouseId != wh.WareHouseId && checkWHName.Name == wh.Name))
             {
@@ -153,7 +153,7 @@ namespace Electronic_WMS.Service.Service
                 };
             }
 
-            // Update Category 
+            // Update WareHouse 
             whDetail.Name = wh.Name;
             whDetail.Address = wh.Address;
             whDetail.UpdatedDate = DateTime.Now;

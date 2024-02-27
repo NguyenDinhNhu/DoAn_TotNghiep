@@ -32,12 +32,12 @@ namespace Electronic_WMS.Repository.Repository
 
         public FeatureEntity GetByName(string name)
         {
-            return _db.FeatureEntities.Where(f => f.Status != (int)CommonStatus.IsDelete && f.FeatureName.ToLower() == name.ToLower()).FirstOrDefault();
+            return _db.FeatureEntities.Where(f => f.Status == (int)CommonStatus.IsActive && f.FeatureName.ToLower() == name.ToLower()).FirstOrDefault();
         }
 
         public IEnumerable<FeatureEntity> GetList()
         {
-            return _db.FeatureEntities.Where(f => f.Status != (int)CommonStatus.IsDelete).ToList();
+            return _db.FeatureEntities.Where(f => f.Status == (int)CommonStatus.IsActive).ToList();
         }
 
         public int Insert(FeatureEntity feature)

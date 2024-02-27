@@ -19,12 +19,12 @@ namespace Electronic_WMS.Models.Entities
         public string Email { get; set; }
         public string Address { get; set; }
         public string Phone { get; set; }
-        public string Image { get; set; }
+        public string? Image { get; set; }
         public int Status { get; set; }
         public DateTime CreatedDate { get; set; }
-        public DateTime UpdatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
         public int CreatedBy { get; set; }
-        public int UpdatedBy { get; set; }
+        public int? UpdatedBy { get; set; }
         public int RoleId { get; set; }
     }
 }

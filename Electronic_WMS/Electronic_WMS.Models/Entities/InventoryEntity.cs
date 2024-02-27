@@ -14,7 +14,8 @@ namespace Electronic_WMS.Models.Entities
         [Key]
         public int InventoryId { get; set; }
         public int UserId { get; set; }
-        public int WareHouseId { get; set; }
+        public int WareHouseId { get; set; } // Vị trí đích
+        public int SourceLocation { get; set; } // vị trí nguồn
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public int UpdatedBy { get; set; }

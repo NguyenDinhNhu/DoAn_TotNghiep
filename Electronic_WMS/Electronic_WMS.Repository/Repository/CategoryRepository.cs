@@ -32,12 +32,12 @@ namespace Electronic_WMS.Repository.Repository
 
         public CategoryEntity GetByName(string name)
         {
-            return _db.CategoryEntities.Where(c => c.Status != (int)CommonStatus.IsDelete && c.CateName.ToLower() == name.ToLower()).FirstOrDefault();
+            return _db.CategoryEntities.Where(c => c.Status == (int)CommonStatus.IsActive && c.CateName.ToLower() == name.ToLower()).FirstOrDefault();
         }
 
         public IEnumerable<CategoryEntity> GetList()
         {
-            return _db.CategoryEntities.Where(c => c.Status != (int)CommonStatus.IsDelete).ToList();
+            return _db.CategoryEntities.Where(c => c.Status == (int)CommonStatus.IsActive).ToList();
         }
 
         public string GetParentName(int parentId)

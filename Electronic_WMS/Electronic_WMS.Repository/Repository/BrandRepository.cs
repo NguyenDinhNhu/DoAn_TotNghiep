@@ -31,12 +31,12 @@ namespace Electronic_WMS.Repository.Repository
 
         public BrandEntity GetByName(string name)
         {
-            return _db.BrandEntities.Where(b => b.Status != (int)CommonStatus.IsDelete && b.BrandName.ToLower() == name.ToLower()).FirstOrDefault();
+            return _db.BrandEntities.Where(b => b.Status == (int)CommonStatus.IsActive && b.BrandName.ToLower() == name.ToLower()).FirstOrDefault();
         }
 
         public IEnumerable<BrandEntity> GetList()
         {
-            return _db.BrandEntities.Where(b => b.Status != (int)CommonStatus.IsDelete).ToList();
+            return _db.BrandEntities.Where(b => b.Status == (int)CommonStatus.IsActive).ToList();
         }
 
         public string GetParentName(int parentId)

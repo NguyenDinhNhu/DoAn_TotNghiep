@@ -67,7 +67,7 @@ namespace Electronic_WMS.Service.Service
                             {
                                 CateId = c.CateId,
                                 CateName = c.CateName,
-                                ParentName = c.ParentId == 0?"Cấp cha": _iCategoryRepository.GetParentName(c.ParentId),
+                                ParentName = c.ParentId == 0? "Highest level" : _iCategoryRepository.GetParentName(c.ParentId),
                                 Status = c.Status,
                             };
             if (search.TextSearch == null)

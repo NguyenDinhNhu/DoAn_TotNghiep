@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Electronic_WMS.Repository\Electronic_WMS.Repository.csproj" />
     <ProjectReference Include="..\Electronic_WMS.Utilities\Electronic_WMS.Utilities.csproj" />
   </ItemGroup>

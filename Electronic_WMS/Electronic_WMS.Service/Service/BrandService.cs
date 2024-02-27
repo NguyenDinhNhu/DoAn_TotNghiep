@@ -67,7 +67,7 @@ namespace Electronic_WMS.Service.Service
                            {
                                BrandId = b.BrandId,
                                BrandName = b.BrandName,
-                               ParentName = b.ParentId == 0 ? "Cấp cha" : _iBrandRepository.GetParentName(b.ParentId),
+                               ParentName = b.ParentId == 0 ? "Highest level" : _iBrandRepository.GetParentName(b.ParentId),
                                Status = b.Status
                            };
             if (search.TextSearch == null)
@@ -83,7 +83,7 @@ namespace Electronic_WMS.Service.Service
 
         public ResponseModel Insert(Brand brand)
         {
-            // Check CateName in database
+            // Check BrandName in database
             var checkBrandName = _iBrandRepository.GetByName(brand.BrandName);
             if (checkBrandName != null)
             {
@@ -94,7 +94,7 @@ namespace Electronic_WMS.Service.Service
                 };
             }
 
-            // Insert Category 
+            // Insert Brand 
             var brandEntity = new BrandEntity
             {
                 BrandId = brand.BrandId,
@@ -130,7 +130,7 @@ namespace Electronic_WMS.Service.Service
                     StatusMessage = "Brand does not exists!"
                 };
             }
-            // Check CateName in database
+            // Check BrandName in database
             var checkBrandName = _iBrandRepository.GetByName(brand.BrandName);
             if (checkBrandName != null && (checkBrandName.BrandId != brand.BrandId && checkBrandName.BrandName == brand.BrandName))
             {
@@ -141,7 +141,7 @@ namespace Electronic_WMS.Service.Service
                 };
             }
 
-            // Update Category 
+            // Update Brand 
             brandDetail.BrandName = brand.BrandName;
             brandDetail.ParentId = brand.ParentId;
             brandDetail.Status = brand.Status;
