@@ -13,6 +13,12 @@ namespace Electronic_WMS.Models.Models
         public string ParentName { get; set; }
         public int Status { get; set; }
     }
+
+    public class CategoryCombobox
+    {
+        public int CateId { get; set; }
+        public string CateName { get; set; }
+    }
     public class Category
     {
         public int CateId { get; set; }

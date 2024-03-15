@@ -36,7 +36,7 @@ namespace Electronic_WMS.Repository.Repository
 
         public IEnumerable<BrandEntity> GetList()
         {
-            return _db.BrandEntities.Where(b => b.Status == (int)CommonStatus.IsActive).ToList();
+            return _db.BrandEntities.Where(b => b.Status == (int)CommonStatus.IsActive).OrderBy(b => b.BrandName).ToList();
         }
 
         public string GetParentName(int parentId)

@@ -79,6 +79,17 @@ namespace Electronic_WMS.Service.Service
             return list;
         }
 
+        public IEnumerable<FeatureCombobox> GetListCombobox()
+        {
+            var list = from f in _iFeatureRepository.GetList()
+                       select new FeatureCombobox
+                       {
+                           FeatureId = f.FeatureId,
+                           FeatureName = f.FeatureName,
+                       };
+            return list;
+        }
+
         public ResponseModel Insert(Feature feature)
         {
             // Check FeatureName in database

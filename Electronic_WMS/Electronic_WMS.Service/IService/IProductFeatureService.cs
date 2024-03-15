@@ -12,8 +12,8 @@ namespace Electronic_WMS.Service.IService
         public IEnumerable<ProductFeatureVM> GetList(SearchVM search);
         public IEnumerable<ProductFeatureVM> GetListByProductId(int productId);
         public ProductFeatureVM GetById(int id);
-        public ResponseModel Insert(ProductFeature prod);
-        public ResponseModel Update(ProductFeature prod);
+        public ResponseModel Insert(List<ProductFeature> pf);
+        public ResponseModel Update(ProductFeature pf);
         public ResponseModel Delete(int id);
     }
 }

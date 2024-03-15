@@ -25,5 +25,6 @@ namespace Electronic_WMS.Models.Entities
         public DbSet<RolesEntity> RolesEntities { get; set; }
         public DbSet<UsersEntity> UsersEntities { get; set; }
         public DbSet<WareHouseEntity> WareHouseEntities { get; set;}
+        public DbSet<SerialNumberEntity> SerialNumberEntities { get; set;}
     }
 }

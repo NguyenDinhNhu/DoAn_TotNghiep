@@ -10,6 +10,7 @@ namespace Electronic_WMS.Service.IService
     public interface IFeatureService
     {
         public IEnumerable<Feature> GetList(SearchVM search);
+        public IEnumerable<FeatureCombobox> GetListCombobox();
         public Feature GetById(int id);
         public ResponseModel Insert(Feature feature);
         public ResponseModel Update(Feature feature);

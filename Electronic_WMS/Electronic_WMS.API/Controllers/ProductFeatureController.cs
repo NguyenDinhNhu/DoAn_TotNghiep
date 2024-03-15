@@ -37,9 +37,9 @@ namespace Electronic_WMS.API.Controllers
         }
 
         [HttpPost(nameof(Insert))]
-        public IActionResult Insert([FromBody] ProductFeature pf)
+        public IActionResult Insert([FromBody] List<ProductFeature> listPF)
         {
-            var result = _iProductFeatureService.Insert(pf);
+            var result = _iProductFeatureService.Insert(listPF);
             return Ok(result);
         }
 

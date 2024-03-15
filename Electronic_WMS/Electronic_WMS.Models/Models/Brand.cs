@@ -13,6 +13,13 @@ namespace Electronic_WMS.Models.Models
         public string ParentName { get; set; }
         public int Status { get; set; }
     }
+
+    public class BrandCombobox
+    {
+        public int BrandId { get; set; }
+        public string BrandName { get; set; }
+    }
+
     public class Brand
     {
         public int BrandId { get; set; }

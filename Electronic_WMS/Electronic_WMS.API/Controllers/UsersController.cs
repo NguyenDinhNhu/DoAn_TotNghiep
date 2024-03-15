@@ -1,5 +1,6 @@
 ﻿using Electronic_WMS.Models.Models;
 using Electronic_WMS.Service.IService;
+using Electronic_WMS.Service.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,13 @@ namespace Electronic_WMS.API.Controllers
         public IActionResult GetUser([FromQuery] int id)
         {
             var result = _iUsersService.GetById(id);
+            return Ok(result);
+        }
+
+        [HttpPost(nameof(GetListSupplierOrShop))]
+        public IActionResult GetListSupplierOrShop([FromBody]int rolesId)
+        {
+            var result = _iUsersService.GetListSupplierOrShop(rolesId);
             return Ok(result);
         }
 

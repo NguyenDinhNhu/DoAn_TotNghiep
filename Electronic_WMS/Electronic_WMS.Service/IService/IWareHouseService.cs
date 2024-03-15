@@ -10,6 +10,7 @@ namespace Electronic_WMS.Service.IService
     public interface IWareHouseService
     {
         public IEnumerable<WareHouseVM> GetList(SearchVM search);
+        public IEnumerable<WareHouseCombobox> GetListCombobox();
         public WareHouseVM GetById(int id);
         public ResponseModel Insert(InsertUpdateWareHouse wh);
         public ResponseModel Update(InsertUpdateWareHouse wh);

@@ -12,4 +12,9 @@ namespace Electronic_WMS.Models.Models
         public string RoleName { get; set; }
         public int Status { get; set; }
     }
+    public class RolesCombobox
+    {
+        public int RoleId { get; set; }
+        public string RoleName { get; set; }
+    }
 }

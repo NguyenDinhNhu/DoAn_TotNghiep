@@ -81,6 +81,17 @@ namespace Electronic_WMS.Service.Service
             return list;
         }
 
+        public IEnumerable<RolesCombobox> GetListCombobox()
+        {
+            var list = from r in _iRolesRepository.GetList()
+                       select new RolesCombobox
+                       {
+                           RoleId = r.RoleId,
+                           RoleName = r.RoleName,
+                       };
+            return list;
+        }
+
         public ResponseModel Insert(Roles role)
         {
             // Check RoleName in database

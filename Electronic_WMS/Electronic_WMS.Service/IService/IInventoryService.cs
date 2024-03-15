@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 
 namespace Electronic_WMS.Service.IService
 {
-    public interface IProductService
+    public interface IInventoryService
     {
-        public IEnumerable<ProductVM> GetList(SearchVM search);
-        public IEnumerable<ProductCombobox> GetListCombobox();
+        public IEnumerable<InventoryVM> GetList(SearchVM search);
         public ProductVM GetById(int id);
-        public ResponseModel Insert(InsertOrUpdateProduct prod);
-        public ResponseModel Update(InsertOrUpdateProduct prod);
+        public ResponseModel Insert(InsertOrUpdateInventory inv);
+        public ResponseModel Update(InsertOrUpdateInventory inv);
         public ResponseModel Delete(int id);
     }
 }

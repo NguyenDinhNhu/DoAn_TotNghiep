@@ -26,6 +26,11 @@ namespace Electronic_WMS.Models.Models
         public string RoleName { get; set; }
     }
 
+    public class SupplierOrShopCombobox
+    {
+        public int UserId { get; set; }
+        public string FullName { get; set; }
+    }
     public class InsertUpdateUsers
     {
         public int UserId { get; set; }

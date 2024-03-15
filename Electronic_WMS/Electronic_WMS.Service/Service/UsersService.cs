@@ -106,6 +106,18 @@ namespace Electronic_WMS.Service.Service
             return list;
         }
 
+        public IEnumerable<SupplierOrShopCombobox> GetListSupplierOrShop(int rolesId)
+        {
+            var list = from user in _iUsersRepository.GetList()
+                       where user.RoleId == rolesId
+                       select new SupplierOrShopCombobox
+                       {
+                           UserId = user.UserId,
+                           FullName = user.FullName,
+                       };
+            return list;
+        }
+
         public ResponseModel Insert(InsertUpdateUsers user)
         {
             // Check UserName in database

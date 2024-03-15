@@ -81,6 +81,17 @@ namespace Electronic_WMS.Service.Service
             return listBrand;
         }
 
+        public IEnumerable<BrandCombobox> GetListCombobox()
+        {
+            var listBrand = from b in _iBrandRepository.GetList()
+                            select new BrandCombobox
+                            {
+                                BrandId = b.BrandId,
+                                BrandName = b.BrandName
+                            };
+            return listBrand;
+        }
+
         public ResponseModel Insert(Brand brand)
         {
             // Check BrandName in database

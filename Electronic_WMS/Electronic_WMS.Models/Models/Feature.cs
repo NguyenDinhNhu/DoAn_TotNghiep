@@ -12,4 +12,10 @@ namespace Electronic_WMS.Models.Models
         public string FeatureName { get; set; }
         public int Status { get; set; }
     }
+
+    public class FeatureCombobox
+    {
+        public int FeatureId { get; set; }
+        public string FeatureName { get; set; }
+    }
 }

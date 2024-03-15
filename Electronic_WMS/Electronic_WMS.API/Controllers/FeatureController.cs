@@ -30,6 +30,13 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet(nameof(GetListCombobox))]
+        public IActionResult GetListCombobox()
+        {
+            var result = _iFeatureService.GetListCombobox();
+            return Ok(result);
+        }
+
         [HttpPost(nameof(Insert))]
         public IActionResult Insert([FromBody] Feature feature)
         {

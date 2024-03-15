@@ -17,8 +17,8 @@ namespace Electronic_WMS.Models.Entities
         public int WareHouseId { get; set; } // Vị trí đích
         public int SourceLocation { get; set; } // vị trí nguồn
         public DateTime CreatedDate { get; set; }
-        public DateTime UpdatedDate { get; set; }
-        public int UpdatedBy { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+        public int? UpdatedBy { get; set; }
         public int Type { get; set; }
         public int Status { get; set; }
 

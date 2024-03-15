@@ -10,6 +10,7 @@ namespace Electronic_WMS.Service.IService
     public interface IRolesService
     {
         public IEnumerable<Roles> GetList(SearchVM search);
+        public IEnumerable<RolesCombobox> GetListCombobox();
         public Roles GetById(int id);
         public ResponseModel Insert(Roles role);
         public ResponseModel Update(Roles role);

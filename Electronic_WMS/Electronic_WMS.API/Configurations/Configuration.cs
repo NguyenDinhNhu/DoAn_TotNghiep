@@ -20,6 +20,8 @@ namespace Electronic_WMS.API.Configurations
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductFeatureRepository, ProductFeatureRepository>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
+            services.AddScoped<IInventoryLineRepository, InventoryLineRepository>();
 
 
             // Config Service
@@ -31,6 +33,7 @@ namespace Electronic_WMS.API.Configurations
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IProductFeatureService, ProductFeatureService>();
+            services.AddScoped<IInventoryService, InventoryService>();
         }
     }
 }

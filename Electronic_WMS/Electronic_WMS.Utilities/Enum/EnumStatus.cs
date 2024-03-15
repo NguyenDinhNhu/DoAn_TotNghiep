@@ -11,4 +11,12 @@ namespace Electronic_WMS.Utilities.Enum
         IsDelete = 0,
         IsActive = 1,
     }
+
+    public enum InventoryStatus 
+    {
+        IsDelete = 0,
+        IsReady = 1,
+        IsComplete = 2,
+        IsCancle = 3,
+    }
 }

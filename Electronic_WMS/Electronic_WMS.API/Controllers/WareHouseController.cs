@@ -1,5 +1,6 @@
 ﻿using Electronic_WMS.Models.Models;
 using Electronic_WMS.Service.IService;
+using Electronic_WMS.Service.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,13 @@ namespace Electronic_WMS.API.Controllers
         public IActionResult GetWareHouse([FromQuery] int id)
         {
             var result = _iWareHouseService.GetById(id);
+            return Ok(result);
+        }
+
+        [HttpGet(nameof(GetListCombobox))]
+        public IActionResult GetListCombobox()
+        {
+            var result = _iWareHouseService.GetListCombobox();
             return Ok(result);
         }
 

@@ -27,6 +27,12 @@ namespace Electronic_WMS.Models.Models
         public string CateName { get; set;}
     }
 
+    public class ProductCombobox
+    {
+        public int ProductId { get; set; }
+        public string ProductName { get; set; }
+    }
+
     public class InsertOrUpdateProduct
     {
         public int ProductId { get; set; }
@@ -39,6 +45,6 @@ namespace Electronic_WMS.Models.Models
         public int CateId { get; set; }
         public int BrandId { get; set; }
         public IFormFile? FileImage { get; set; }
-        public List<ProductFeature>? ListProductFeature { get; set; }  
+        public string? ListProductFeature { get; set; }  
     }
 }

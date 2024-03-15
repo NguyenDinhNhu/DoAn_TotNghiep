@@ -91,6 +91,17 @@ namespace Electronic_WMS.Service.Service
             return list;
         }
 
+        public IEnumerable<WareHouseCombobox> GetListCombobox()
+        {
+            var list = from wh in _iWareHouseRepository.GetList()
+                       select new WareHouseCombobox
+                       {
+                           WareHouseId = wh.WareHouseId,
+                           Name = wh.Name
+                       };
+            return list;
+        }
+
         public ResponseModel Insert(InsertUpdateWareHouse wh)
         {
             // Check WareHouseName in database

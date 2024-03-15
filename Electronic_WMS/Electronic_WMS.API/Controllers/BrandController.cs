@@ -20,10 +20,17 @@ namespace Electronic_WMS.API.Controllers
         {
             var result = _iBrandService.GetList(search);
             return Ok(result);
+        } 
+        
+        [HttpGet(nameof(GetListCombobox))]
+        public IActionResult GetListCombobox()
+        {
+            var result = _iBrandService.GetListCombobox();
+            return Ok(result);
         }
 
-        [HttpGet(nameof(GetCategory))]
-        public IActionResult GetCategory([FromQuery] int id)
+        [HttpGet(nameof(GetBrand))]
+        public IActionResult GetBrand([FromQuery] int id)
         {
             var result = _iBrandService.GetById(id);
             return Ok(result);

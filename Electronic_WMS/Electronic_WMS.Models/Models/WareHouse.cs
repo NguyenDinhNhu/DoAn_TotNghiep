@@ -17,6 +17,12 @@ namespace Electronic_WMS.Models.Models
         public int? UpdatedBy { get; set; }
         public int Status { get; set; }
     }
+
+    public class WareHouseCombobox
+    {
+        public int WareHouseId { get; set; }
+        public string Name { get; set; }
+    }
     
     public class InsertUpdateWareHouse
     {

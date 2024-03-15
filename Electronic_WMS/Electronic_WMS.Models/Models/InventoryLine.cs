@@ -13,5 +13,6 @@ namespace Electronic_WMS.Models.Models
         public decimal Price { get; set; }
         public int InventoryId { get; set; }
         public int ProductId { get; set; }
+        public string? ProductName { get; set; }
     }
 }

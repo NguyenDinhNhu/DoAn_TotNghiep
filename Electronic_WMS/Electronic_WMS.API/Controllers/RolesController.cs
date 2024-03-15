@@ -1,5 +1,6 @@
 ﻿using Electronic_WMS.Models.Models;
 using Electronic_WMS.Service.IService;
+using Electronic_WMS.Service.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,13 @@ namespace Electronic_WMS.API.Controllers
         public IActionResult GetRoles([FromQuery] int id)
         {
             var result = _iRolesService.GetById(id);
+            return Ok(result);
+        }
+
+        [HttpGet(nameof(GetListCombobox))]
+        public IActionResult GetListCombobox()
+        {
+            var result = _iRolesService.GetListCombobox();
             return Ok(result);
         }
 

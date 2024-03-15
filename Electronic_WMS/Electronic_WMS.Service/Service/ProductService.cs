@@ -6,6 +6,7 @@ using Electronic_WMS.Service.IService;
 using Electronic_WMS.Utilities.Enum;
 using Electronic_WMS.Utilities.Library;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -114,6 +115,17 @@ namespace Electronic_WMS.Service.Service
             return list;
         }
 
+        public IEnumerable<ProductCombobox> GetListCombobox()
+        {
+            var list = from prod in _iProductRepository.GetList()
+                       select new ProductCombobox
+                       {
+                           ProductId = prod.ProductId,
+                           ProductName = prod.ProductName,
+                       };
+            return list;
+        }
+
         public ResponseModel Insert(InsertOrUpdateProduct prod)
         {
             // Check ProductName in database
@@ -166,9 +178,11 @@ namespace Electronic_WMS.Service.Service
                     StatusMessage = "Error!"
                 };
             }
-            if (prod.ListProductFeature != null)
+
+            List<ProductFeature> PFList = JsonConvert.DeserializeObject<List<ProductFeature>>(prod.ListProductFeature);
+            if (PFList.Count() > 0)
             {
-                foreach (var pf in prod.ListProductFeature)
+                foreach (var pf in PFList)
                 {
                     var productFeature = new ProductFeatureEntity
                     {
@@ -177,7 +191,7 @@ namespace Electronic_WMS.Service.Service
                         Value = pf.Value,
                     };
                     var res = _iProductFeatureRepository.Insert(productFeature);
-                    if (res == 0) 
+                    if (res == 0)
                     {
                         return new ResponseModel
                         {
@@ -206,7 +220,7 @@ namespace Electronic_WMS.Service.Service
                 };
             }
 
-            // Check UserName in database
+            // Check ProductName in database
             //var checkProdName = _iProductRepository.GetByUserName(prod.ProductName);
             //if (checkProdName != null && (checkProdName.ProductId != prod.ProductId && checkProdName.ProductName == prod.ProductName))
             //{
@@ -217,7 +231,7 @@ namespace Electronic_WMS.Service.Service
             //    };
             //}
 
-            // Update User 
+            // Update Product 
             prodDetail.ProductName = prod.ProductName;
             prodDetail.ProductName = prod.ProductName;
             prodDetail.UpdatedDate = DateTime.Now;
@@ -225,7 +239,7 @@ namespace Electronic_WMS.Service.Service
             prodDetail.Description = prod.Description;
             prodDetail.Price = prod.Price;
             prodDetail.Unit = prod.Unit;
-            prodDetail.Quantity = 0;
+            prodDetail.Quantity = prod.Quantity;
             prodDetail.Status = prod.Status;
             prodDetail.CateId = prod.CateId;
             prodDetail.BrandId = prod.BrandId;
@@ -253,11 +267,13 @@ namespace Electronic_WMS.Service.Service
                     StatusMessage = "Error!"
                 };
             }
-            if (prod.ListProductFeature != null)
+
+            List<ProductFeature> PFList = JsonConvert.DeserializeObject<List<ProductFeature>>(prod.ListProductFeature);
+            if (PFList.Count() > 0)
             {
-                foreach (var pf in prod.ListProductFeature)
+                foreach (var pf in PFList)
                 {
-                    var productFeature = _iProductFeatureRepository.GetById(pf.ProductId);
+                    var productFeature = _iProductFeatureRepository.GetById(pf.ProductFeatureId);
                     productFeature.ProductId = prodDetail.ProductId;
                     productFeature.FeatureId = pf.FeatureId;
                     productFeature.Value = pf.Value;
