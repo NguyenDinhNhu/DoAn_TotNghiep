@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace Electronic_WMS.Models.Models
 {
+    public class InventorySearch : SearchVM
+    {
+        public int Type { get; set; }
+    }
     public class InventoryVM
     {
         public int InventoryId { get; set; }
-        public int UserId { get; set; }
-        public string UserName { get; set; }
+        public int SourceLocation { get; set; }
         public string CustomerName { get; set; }
         public DateTime CreatedDate { get; set; }
         public int Type { get; set; }
@@ -28,6 +31,7 @@ namespace Electronic_WMS.Models.Models
         public int? UpdatedBy { get; set; }
         public int Type { get; set; }
         public int Status { get; set; }
+        public List<InsertOrUpdateInventoryLine>? ListInventoryLine { get; set; }
     }
 
     public class InventoryDetail
@@ -36,6 +40,7 @@ namespace Electronic_WMS.Models.Models
         public int UserId { get; set; }
         public string UserName { get; set; }
         public string CustomerName { get; set; }
+        public string WareHouseName { get; set; }
         public int WareHouseId { get; set; } // vị trí đích
         public int SourceLocation { get; set; } // vị trí nguồn
         public DateTime CreatedDate { get; set; }
@@ -43,6 +48,6 @@ namespace Electronic_WMS.Models.Models
         public int? UpdatedBy { get; set; }
         public int Type { get; set; }
         public int Status { get; set; }
-        public List<InventoryLine> InventoryLines { get; set; }
+        public List<InventoryLineVM> ListInventoryLine { get; set; }
     }
 }

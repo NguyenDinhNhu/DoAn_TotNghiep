@@ -23,6 +23,11 @@ namespace Electronic_WMS.Repository.Repository
             return _db.SaveChanges();
         }
 
+        public InventoryLineEntity GetById(int id)
+        {
+            return _db.InventoryLineEntities.Find(id);
+        }
+
         public IEnumerable<InventoryLineEntity> GetListByInventoryId(int invId)
         {
             return _db.InventoryLineEntities.Where(x => x.InventoryId != invId).ToList();

@@ -9,8 +9,8 @@ namespace Electronic_WMS.Service.IService
 {
     public interface IInventoryService
     {
-        public IEnumerable<InventoryVM> GetList(SearchVM search);
-        public ProductVM GetById(int id);
+        public IEnumerable<InventoryVM> GetListByType(InventorySearch search);
+        public InventoryDetail GetById(int id);
         public ResponseModel Insert(InsertOrUpdateInventory inv);
         public ResponseModel Update(InsertOrUpdateInventory inv);
         public ResponseModel Delete(int id);

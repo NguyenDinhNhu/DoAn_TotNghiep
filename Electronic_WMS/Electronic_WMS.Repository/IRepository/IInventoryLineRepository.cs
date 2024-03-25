@@ -10,6 +10,7 @@ namespace Electronic_WMS.Repository.IRepository
     public interface IInventoryLineRepository
     {
         public IEnumerable<InventoryLineEntity> GetListByInventoryId(int invId);
+        public InventoryLineEntity GetById(int id);
         public int Insert(InventoryLineEntity inv);
         public int Update(InventoryLineEntity inv);
         public int Delete(InventoryLineEntity inv);

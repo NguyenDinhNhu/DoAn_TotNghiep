@@ -28,6 +28,11 @@ namespace Electronic_WMS.Repository.Repository
             return _db.SerialNumberEntities.Where(x => x.Status == (int)CommonStatus.IsActive && x.ProductId != productId).ToList();
         }
 
+        public IEnumerable<SerialNumberEntity> GetListByInventoryLineId(int inventoryLineId)
+        {
+            return _db.SerialNumberEntities.Where(x => x.Status == (int)CommonStatus.IsActive && x.InventoryLineId != inventoryLineId).ToList();
+        }
+
         public int Insert(SerialNumberEntity seri)
         {
             _db.SerialNumberEntities.Add(seri);
@@ -38,6 +43,11 @@ namespace Electronic_WMS.Repository.Repository
         {
             _db.Entry(seri).State = EntityState.Modified;
             return _db.SaveChanges();
+        }
+
+        public SerialNumberEntity GetById(int id)
+        {
+            return _db.SerialNumberEntities.Find(id);
         }
     }
 }

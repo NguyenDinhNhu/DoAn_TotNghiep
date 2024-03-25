@@ -19,4 +19,11 @@ namespace Electronic_WMS.Utilities.Enum
         IsComplete = 2,
         IsCancle = 3,
     }
+
+    public enum SeriStatus
+    {
+        IsDelete = 0,
+        IsStock = 1,
+        IsReleased = 2,
+    }
 }

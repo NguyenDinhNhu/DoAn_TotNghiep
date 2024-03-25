@@ -1984,6 +1984,7 @@ label {
   position: sticky;
   top: 0;
   height: 100%;
+  overflow-y: hidden;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1995,7 +1996,7 @@ label {
   -ms-flex-pack: justify;
   justify-content: space-between;
   background-color: #0061f7 !important;
-  width: 253px;
+  width: 280px;
   padding: 20px 15px 37px 20px;
   -webkit-transition: 0.5s all;
   -o-transition: 0.5s all;
@@ -2963,7 +2964,7 @@ label {
   margin-right: 0;
 }
 
-.users .col-xl-3 {
+.stat-cards .col-xl-3 {
   margin-bottom: 20px;
 }
 

@@ -13,5 +13,8 @@ namespace Electronic_WMS.Models.Models
         public DateTime CreatedDate { get; set; }
         public int Status { get; set; }
         public int ProductId { get; set; }
+        public string? Location { get; set; }
+        public int WareHouseId { get; set; }
+        public int InventoryLineId { get; set; }
     }
 }

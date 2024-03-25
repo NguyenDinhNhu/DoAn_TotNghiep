@@ -17,7 +17,7 @@ namespace Electronic_WMS.API.Controllers
         }
 
         [HttpPost(nameof(GetList))]
-        public IActionResult GetList(SearchVM search)
+        public IActionResult GetList([FromBody] SearchVM search)
         {
             var result = _iWareHouseService.GetList(search);
             return Ok(result);

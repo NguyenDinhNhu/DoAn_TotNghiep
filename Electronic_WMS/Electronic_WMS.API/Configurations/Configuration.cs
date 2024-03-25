@@ -22,6 +22,7 @@ namespace Electronic_WMS.API.Configurations
             services.AddScoped<IProductFeatureRepository, ProductFeatureRepository>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
             services.AddScoped<IInventoryLineRepository, InventoryLineRepository>();
+            services.AddScoped<ISerialNumberRepository, SerialNumberRepository>();
 
 
             // Config Service
