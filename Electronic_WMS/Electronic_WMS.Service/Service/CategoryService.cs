@@ -60,7 +60,7 @@ namespace Electronic_WMS.Service.Service
             return cateDetail;
         }
 
-        public IEnumerable<CategoryVM> GetList(SearchVM search)
+        public GetListCategory GetList(SearchVM search)
         {
             var listCate =  from c in _iCategoryRepository.GetList()
                             select new CategoryVM
@@ -70,6 +70,7 @@ namespace Electronic_WMS.Service.Service
                                 ParentName = c.ParentId == 0? "Highest level" : _iCategoryRepository.GetParentName(c.ParentId),
                                 Status = c.Status,
                             };
+            var total = listCate.Count();
             if (search.TextSearch == null)
             {
                 listCate = listCate.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
@@ -78,7 +79,7 @@ namespace Electronic_WMS.Service.Service
             {
                 listCate = listCate.Where(b => b.CateName.ToLower().Contains(search.TextSearch.ToLower())).Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
             }
-            return listCate;
+            return new GetListCategory { ListCate = listCate, Total = total};
         }
 
         public IEnumerable<CategoryCombobox> GetListCombobox()

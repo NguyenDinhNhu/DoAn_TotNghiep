@@ -61,7 +61,7 @@ namespace Electronic_WMS.Service.Service
             return roleDetail;
         }
 
-        public IEnumerable<Roles> GetList(SearchVM search)
+        public GetListRole GetList(SearchVM search)
         {
             var list = from r in _iRolesRepository.GetList()
                        select new Roles
@@ -70,6 +70,7 @@ namespace Electronic_WMS.Service.Service
                            RoleName = r.RoleName,
                            Status = r.Status
                        };
+            var total = list.Count();
             if (search.TextSearch == null)
             {
                 list = list.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
@@ -78,7 +79,7 @@ namespace Electronic_WMS.Service.Service
             {
                 list = list.Where(x => x.RoleName.ToLower().Contains(search.TextSearch.ToLower())).Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
             }
-            return list;
+            return new GetListRole { ListRole = list, Total = total};
         }
 
         public IEnumerable<RolesCombobox> GetListCombobox()

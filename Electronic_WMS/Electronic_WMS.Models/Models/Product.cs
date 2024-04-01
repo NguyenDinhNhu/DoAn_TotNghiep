@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 
 namespace Electronic_WMS.Models.Models
 {
+    public class GetListProduct
+    {
+        public IEnumerable<ProductVM> ListProduct { get; set; }
+        public int Total { get; set; }
+    }
+
     public class ProductVM
     {
         public int ProductId { get; set; }

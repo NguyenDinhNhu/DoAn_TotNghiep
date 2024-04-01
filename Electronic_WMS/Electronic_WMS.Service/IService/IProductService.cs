@@ -9,7 +9,7 @@ namespace Electronic_WMS.Service.IService
 {
     public interface IProductService
     {
-        public IEnumerable<ProductVM> GetList(SearchVM search);
+        public GetListProduct GetList(SearchVM search);
         public IEnumerable<ProductCombobox> GetListCombobox();
         public ProductVM GetById(int id);
         public ResponseModel Insert(InsertOrUpdateProduct prod);

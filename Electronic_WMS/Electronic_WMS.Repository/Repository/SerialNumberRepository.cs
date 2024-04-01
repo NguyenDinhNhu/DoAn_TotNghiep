@@ -25,12 +25,12 @@ namespace Electronic_WMS.Repository.Repository
 
         public IEnumerable<SerialNumberEntity> GetListByProductId(int productId)
         {
-            return _db.SerialNumberEntities.Where(x => x.Status == (int)CommonStatus.IsActive && x.ProductId != productId).ToList();
+            return _db.SerialNumberEntities.Where(x => x.Status == (int)SeriStatus.IsStock && x.ProductId != productId).ToList();
         }
 
         public IEnumerable<SerialNumberEntity> GetListByInventoryLineId(int inventoryLineId)
         {
-            return _db.SerialNumberEntities.Where(x => x.Status == (int)CommonStatus.IsActive && x.InventoryLineId != inventoryLineId).ToList();
+            return _db.SerialNumberEntities.Where(x => x.Status != (int)SeriStatus.IsDelete && x.InventoryLineId == inventoryLineId).ToList();
         }
 
         public int Insert(SerialNumberEntity seri)

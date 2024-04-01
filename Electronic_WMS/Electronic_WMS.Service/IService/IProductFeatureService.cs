@@ -9,7 +9,7 @@ namespace Electronic_WMS.Service.IService
 {
     public interface IProductFeatureService
     {
-        public IEnumerable<ProductFeatureVM> GetList(SearchVM search);
+        public GetListProductFeature GetList(SearchVM search);
         public IEnumerable<ProductFeatureVM> GetListByProductId(int productId);
         public ProductFeatureVM GetById(int id);
         public ResponseModel Insert(List<ProductFeature> pf);

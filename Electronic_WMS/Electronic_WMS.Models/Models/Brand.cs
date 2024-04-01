@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace Electronic_WMS.Models.Models
 {
+    public class GetListBrand
+    {
+        public IEnumerable<BrandVM> ListBrand { get; set; }
+        public int Total { get; set; }
+    }
     public class BrandVM
     {
         public int BrandId { get; set; }

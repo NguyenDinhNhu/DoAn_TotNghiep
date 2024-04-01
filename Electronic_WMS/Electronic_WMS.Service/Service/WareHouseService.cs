@@ -66,7 +66,7 @@ namespace Electronic_WMS.Service.Service
             return whDetail;
         }
 
-        public IEnumerable<WareHouseVM> GetList(SearchVM search)
+        public GetListWareHouse GetList(SearchVM search)
         {
             var list = from wh in _iWareHouseRepository.GetList()
                        select new WareHouseVM
@@ -80,6 +80,7 @@ namespace Electronic_WMS.Service.Service
                            UpdatedBy = wh.UpdatedBy,
                            Status = wh.Status
                        };
+            var total = list.Count();
             if (search.TextSearch == null)
             {
                 list = list.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
@@ -88,7 +89,7 @@ namespace Electronic_WMS.Service.Service
             {
                 list = list.Where(x => x.Name.ToLower().Contains(search.TextSearch.ToLower())).Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
             }
-            return list;
+            return new GetListWareHouse { ListWareHouse = list, Total = total};
         }
 
         public IEnumerable<WareHouseCombobox> GetListCombobox()

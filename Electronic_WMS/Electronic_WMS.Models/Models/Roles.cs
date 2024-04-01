@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace Electronic_WMS.Models.Models
 {
+    public class GetListRole 
+    {
+        public IEnumerable<Roles> ListRole { get; set; }
+        public int Total { get; set; }
+    }
     public class Roles
     {
         public int RoleId { get; set; }

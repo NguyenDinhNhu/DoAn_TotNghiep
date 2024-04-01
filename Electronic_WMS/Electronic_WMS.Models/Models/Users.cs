@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace Electronic_WMS.Models.Models
 {
+    public class GetListUser
+    {
+        public IEnumerable<UsersVM> ListUser { get; set; }
+        public int Total { get; set; }
+    }
     public class UsersVM
     {
         public int UserId { get; set; }

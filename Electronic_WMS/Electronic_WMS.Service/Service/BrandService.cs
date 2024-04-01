@@ -60,7 +60,7 @@ namespace Electronic_WMS.Service.Service
             return brandDetail;
         }
 
-        public IEnumerable<BrandVM> GetList(SearchVM search)
+        public GetListBrand GetList(SearchVM search)
         {
             var listBrand = from b in _iBrandRepository.GetList()
                            select new BrandVM
@@ -70,6 +70,7 @@ namespace Electronic_WMS.Service.Service
                                ParentName = b.ParentId == 0 ? "Highest level" : _iBrandRepository.GetParentName(b.ParentId),
                                Status = b.Status
                            };
+            var total = listBrand.Count();
             if (search.TextSearch == null)
             {
                 listBrand = listBrand.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
@@ -78,7 +79,7 @@ namespace Electronic_WMS.Service.Service
             {
                 listBrand = listBrand.Where(b => b.BrandName.ToLower().Contains(search.TextSearch.ToLower())).Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
             }
-            return listBrand;
+            return new GetListBrand { ListBrand = listBrand, Total = total};
         }
 
         public IEnumerable<BrandCombobox> GetListCombobox()

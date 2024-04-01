@@ -74,7 +74,7 @@ namespace Electronic_WMS.Service.Service
             return userDetail;
         }
 
-        public IEnumerable<UsersVM> GetList(SearchVM search)
+        public GetListUser GetList(SearchVM search)
         {
             var list = from user in _iUsersRepository.GetList()
                        select new UsersVM
@@ -95,6 +95,7 @@ namespace Electronic_WMS.Service.Service
                            RoleId = user.RoleId,
                            RoleName = _iRolesRepository.GetById(user.UserId).RoleName,
                        };
+            var total = list.Count();
             if (search.TextSearch == null)
             {
                 list = list.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
@@ -103,7 +104,7 @@ namespace Electronic_WMS.Service.Service
             {
                 list = list.Where(x => x.FullName.ToLower().Contains(search.TextSearch.ToLower())).Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
             }
-            return list;
+            return new GetListUser { ListUser = list, Total = total};
         }
 
         public IEnumerable<SupplierOrShopCombobox> GetListSupplierOrShop(int rolesId)

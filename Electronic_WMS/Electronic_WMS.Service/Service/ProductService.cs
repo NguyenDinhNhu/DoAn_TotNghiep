@@ -82,7 +82,7 @@ namespace Electronic_WMS.Service.Service
             return prodDetail;
         }
 
-        public IEnumerable<ProductVM> GetList(SearchVM search)
+        public GetListProduct GetList(SearchVM search)
         {
             var list = from prod in _iProductRepository.GetList()
                        select new ProductVM
@@ -104,6 +104,7 @@ namespace Electronic_WMS.Service.Service
                            BrandName = _iBrandRepository.GetById(prod.BrandId).BrandName,
                            CateName = _iCategoryRepository.GetById(prod.CateId).CateName,
                        };
+            var total = list.Count();
             if (search.TextSearch == null)
             {
                 list = list.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
@@ -112,7 +113,7 @@ namespace Electronic_WMS.Service.Service
             {
                 list = list.Where(x => x.ProductName.ToLower().Contains(search.TextSearch.ToLower())).Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
             }
-            return list;
+            return new GetListProduct { ListProduct = list, Total = total};
         }
 
         public IEnumerable<ProductCombobox> GetListCombobox()

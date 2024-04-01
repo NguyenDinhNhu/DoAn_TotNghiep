@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace Electronic_WMS.Models.Models
 {
+    public class GetListFeature
+    {
+        public IEnumerable<Feature> ListFeature { get; set; }
+        public int Total { get; set; }
+    }
     public class Feature
     {
         public int FeatureId { get; set; }

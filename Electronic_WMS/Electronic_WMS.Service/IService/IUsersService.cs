@@ -9,7 +9,7 @@ namespace Electronic_WMS.Service.IService
 {
     public interface IUsersService
     {
-        public IEnumerable<UsersVM> GetList(SearchVM search);
+        public GetListUser GetList(SearchVM search);
         public IEnumerable<SupplierOrShopCombobox> GetListSupplierOrShop(int rolesId);
         public UsersVM GetById(int id);
         public ResponseModel Insert(InsertUpdateUsers user);

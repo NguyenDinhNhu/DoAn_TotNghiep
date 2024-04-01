@@ -10,6 +10,11 @@ namespace Electronic_WMS.Models.Models
     {
         public int Type { get; set; }
     }
+    public class GetListInventory
+    {
+        public IEnumerable<InventoryVM> ListInventory { get; set; }
+        public int Total { get; set; }
+    }
     public class InventoryVM
     {
         public int InventoryId { get; set; }

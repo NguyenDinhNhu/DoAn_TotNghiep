@@ -9,7 +9,7 @@ namespace Electronic_WMS.Service.IService
 {
     public interface IBrandService
     {
-        public IEnumerable<BrandVM> GetList(SearchVM search);
+        public GetListBrand GetList(SearchVM search);
         public IEnumerable<BrandCombobox> GetListCombobox();
         public Brand GetById(int id);
         public ResponseModel Insert(Brand brand);

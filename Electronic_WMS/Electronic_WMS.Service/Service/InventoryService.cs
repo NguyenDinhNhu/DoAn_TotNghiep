@@ -35,19 +35,86 @@ namespace Electronic_WMS.Service.Service
             _iProductRepository = iProductRepository;
             _iWareHouseRepository = iWareHouseRepository;
         }
-        public ResponseModel Delete(int id)
+
+        public ResponseModel ChangeStatus(int id, int status)
         {
-            var user = _iInventoryRepository.GetById(id);
-            if (user == null)
+            var inv = _iInventoryRepository.GetById(id);
+            if (inv == null)
             {
                 return new ResponseModel
                 {
                     StatusCode = 404,
-                    StatusMessage = "Product Not Found!"
+                    StatusMessage = "Inventory Not Found!"
                 };
             }
-            user.Status = (int)InventoryStatus.IsDelete;
-            var status = _iInventoryRepository.Update(user);
+            if (status == (int)InventoryStatus.IsCancle)
+            {
+                inv.Status = status;
+            }
+            else if (status == (int)InventoryStatus.IsComplete)
+            {
+                inv.Status = status;
+                var invDetail = _iInventoryLineRepository.GetListByInventoryId(id);
+                if (invDetail != null)
+                {
+                    foreach (var i in invDetail)
+                    {
+                        var product = _iProductRepository.GetById(i.ProductId);
+                        if (product != null) 
+                        {
+                            if (inv.Type == 1) // Receipts
+                            {
+                                product.Quantity += i.Quantity;
+                            }
+                            else if (inv.Type == 2) // Deliveries
+                            {
+                                product.Quantity -= i.Quantity;
+                            }
+                        }
+                        var updateProduct = _iProductRepository.Update(product);
+                        if (updateProduct == 0)
+                        {
+                            return new ResponseModel
+                            {
+                                StatusCode = 500,
+                                StatusMessage = "Eror!"
+                            };
+                        }
+                    }
+                }
+            }
+            inv.UpdatedDate = DateTime.Now;
+            inv.UpdatedBy = 1;
+            var res = _iInventoryRepository.Update(inv);
+            if (res == 0)
+            {
+                return new ResponseModel
+                {
+                    StatusCode = 500,
+                    StatusMessage = "Eror!"
+                };
+
+            }
+            return new ResponseModel
+            {
+                StatusCode = 200,
+                StatusMessage = "Status change successful!"
+            };
+        }
+
+        public ResponseModel Delete(int id)
+        {
+            var inv = _iInventoryRepository.GetById(id);
+            if (inv == null)
+            {
+                return new ResponseModel
+                {
+                    StatusCode = 404,
+                    StatusMessage = "Inventory Not Found!"
+                };
+            }
+            inv.Status = (int)InventoryStatus.IsDelete;
+            var status = _iInventoryRepository.Update(inv);
             if (status == 0)
             {
                 return new ResponseModel
@@ -106,7 +173,7 @@ namespace Electronic_WMS.Service.Service
             return invDetail;
         }
 
-        public IEnumerable<InventoryVM> GetListByType(InventorySearch search)
+        public GetListInventory GetListByType(InventorySearch search)
         {
             var list = from inv in _iInventoryRepository.GetList()
                        select new InventoryVM
@@ -126,6 +193,7 @@ namespace Electronic_WMS.Service.Service
             {
                 list = list.Where(x => x.Type == search.Type).Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
             }
+            var total = list.Count();
 
             if (search.TextSearch == null)
             {
@@ -135,7 +203,7 @@ namespace Electronic_WMS.Service.Service
             {
                 list = list.Where(x => x.CustomerName.ToLower().Contains(search.TextSearch.ToLower())).Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
             }
-            return list;
+            return new GetListInventory { ListInventory = list, Total = total};
         }
 
         public ResponseModel Insert(InsertOrUpdateInventory inv)
@@ -149,7 +217,7 @@ namespace Electronic_WMS.Service.Service
                 SourceLocation = inv.SourceLocation,
                 CreatedDate = DateTime.Now,
                 Type = inv.Type,
-                Status = 0,
+                Status = (int)InventoryStatus.IsReady,
             };
             var status = _iInventoryRepository.Insert(inventory);
             if (status == 0)
@@ -192,9 +260,9 @@ namespace Electronic_WMS.Service.Service
                                 SerialNumber = seri.SerialNumber,
                                 CreatedDate = DateTime.Now,
                                 Status = (int)SeriStatus.IsStock,
-                                ProductId = invLine.ProductId,
+                                ProductId = inventoryLine.ProductId,
                                 WareHouseId = inventory.WareHouseId,
-                                InventoryLineId = invLine.InventoryLineId
+                                InventoryLineId = inventoryLine.InventoryLineId
                             };
                             //Insert SerialNumber
                             var result = _iSerialNumberRepository.Insert(serialNumber);
@@ -250,45 +318,102 @@ namespace Electronic_WMS.Service.Service
             {
                 foreach (var invLine in inv.ListInventoryLine)
                 {
-                    var invLineDetail = _iInventoryLineRepository.GetById(invLine.InventoryLineId);
-                    invLineDetail.ProductId = invLine.ProductId;
-                    invLineDetail.Quantity = invLine.Quantity;
-                    invLineDetail.Price = invLine.Price;
-                    invLineDetail.InventoryId = invDetail.InventoryId;
-
-                    var res = _iInventoryLineRepository.Update(invLineDetail);
-                    if (res == 0)
+                    if (invLine.InventoryLineId >  0)
                     {
-                        return new ResponseModel
-                        {
-                            StatusCode = 500,
-                            StatusMessage = "Error!"
-                        };
-                    }
+                        var invLineDetail = _iInventoryLineRepository.GetById(invLine.InventoryLineId);
+                        invLineDetail.ProductId = invLine.ProductId;
+                        invLineDetail.Quantity = invLine.Quantity;
+                        invLineDetail.Price = invLine.Price;
+                        invLineDetail.InventoryId = invDetail.InventoryId;
 
-                    if (invLine.ListSerialNumber.Count() > 0)
-                    {
-                        foreach (var seri in invLine.ListSerialNumber)
+                        var res = _iInventoryLineRepository.Update(invLineDetail);
+                        if (res == 0)
                         {
-                            if (seri.SerialId > 0)
+                            return new ResponseModel
                             {
-                                var serialNumber = _iSerialNumberRepository.GetById(seri.SerialId);
-                                serialNumber.SerialNumber = seri.SerialNumber;
-                                serialNumber.Status = (int)SeriStatus.IsStock;
-                                serialNumber.ProductId = invLine.ProductId;
-                                serialNumber.WareHouseId = invDetail.WareHouseId;
-                                serialNumber.InventoryLineId = invLine.InventoryLineId;
+                                StatusCode = 500,
+                                StatusMessage = "Error!"
+                            };
+                        }
+                        if (invLine.ListSerialNumber.Count() > 0)
+                        {
+                            foreach (var seri in invLine.ListSerialNumber)
+                            {
+                                if (seri.SerialId > 0)
+                                {
+                                    var serialNumber = _iSerialNumberRepository.GetById(seri.SerialId);
+                                    serialNumber.SerialNumber = seri.SerialNumber;
+                                    serialNumber.Status = (int)SeriStatus.IsStock;
+                                    serialNumber.ProductId = invLineDetail.ProductId;
+                                    serialNumber.WareHouseId = invDetail.WareHouseId;
+                                    serialNumber.InventoryLineId = invLineDetail.InventoryLineId;
+                                    //Update SerialNumber
+                                    var result = _iSerialNumberRepository.Update(serialNumber);
+                                    if (result == 0)
+                                    {
+                                        return new ResponseModel
+                                        {
+                                            StatusCode = 500,
+                                            StatusMessage = "Error!"
+                                        };
+                                    }
+                                }
+                                else
+                                {
+                                    var serialNumber = new SerialNumberEntity
+                                    {
+                                        SerialNumber = seri.SerialNumber,
+                                        CreatedDate = DateTime.Now,
+                                        Status = (int)SeriStatus.IsStock,
+                                        ProductId = invLineDetail.ProductId,
+                                        WareHouseId = invDetail.WareHouseId,
+                                        InventoryLineId = invLineDetail.InventoryLineId
+                                    };
+                                    //Insert SerialNumber
+                                    var result = _iSerialNumberRepository.Insert(serialNumber);
+                                    if (result == 0)
+                                    {
+                                        return new ResponseModel
+                                        {
+                                            StatusCode = 500,
+                                            StatusMessage = "Error!"
+                                        };
+                                    }
+                                }
                             }
-                            else
+                        }
+                    }
+                    else
+                    {
+                        var inventoryLine = new InventoryLineEntity
+                        {
+                            ProductId = invLine.ProductId,
+                            Quantity = invLine.Quantity,
+                            Price = invLine.Price,
+                            InventoryId = invDetail.InventoryId
+                        };
+                        //Insert InventoryLine
+                        var res = _iInventoryLineRepository.Insert(inventoryLine);
+                        if (res == 0)
+                        {
+                            return new ResponseModel
+                            {
+                                StatusCode = 500,
+                                StatusMessage = "Error!"
+                            };
+                        }
+                        if (invLine.ListSerialNumber.Count() > 0)
+                        {
+                            foreach (var seri in invLine.ListSerialNumber)
                             {
                                 var serialNumber = new SerialNumberEntity
                                 {
                                     SerialNumber = seri.SerialNumber,
                                     CreatedDate = DateTime.Now,
                                     Status = (int)SeriStatus.IsStock,
-                                    ProductId = invLine.ProductId,
+                                    ProductId = inventoryLine.ProductId,
                                     WareHouseId = invDetail.WareHouseId,
-                                    InventoryLineId = invLine.InventoryLineId
+                                    InventoryLineId = inventoryLine.InventoryLineId
                                 };
                                 //Insert SerialNumber
                                 var result = _iSerialNumberRepository.Insert(serialNumber);
@@ -303,6 +428,8 @@ namespace Electronic_WMS.Service.Service
                             }
                         }
                     }
+
+                    
                 }
             }
 
@@ -312,5 +439,7 @@ namespace Electronic_WMS.Service.Service
                 StatusMessage = "Edit Successfully!"
             };
         }
+
+        
     }
 }

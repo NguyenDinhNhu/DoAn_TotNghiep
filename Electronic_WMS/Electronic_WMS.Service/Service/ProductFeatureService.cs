@@ -65,7 +65,7 @@ namespace Electronic_WMS.Service.Service
             return productFeature;
         }
 
-        public IEnumerable<ProductFeatureVM> GetList(SearchVM search)
+        public GetListProductFeature GetList(SearchVM search)
         {
             var list = from pf in _iProductFeatureRepository.GetList()
                        select new ProductFeatureVM
@@ -77,6 +77,7 @@ namespace Electronic_WMS.Service.Service
                            FeatureName = _iFeatureRepository.GetById(pf.FeatureId).FeatureName,
                            Value = pf.Value,
                        };
+            var total = list.Count();
             if (search.TextSearch == null)
             {
                 list = list.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
@@ -85,7 +86,7 @@ namespace Electronic_WMS.Service.Service
             {
                 list = list.Where(x => x.Value.ToLower().Contains(search.TextSearch.ToLower())).Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
             }
-            return list;
+            return new GetListProductFeature { ListProductFeature = list, Total = total };
         }
 
         public IEnumerable<ProductFeatureVM> GetListByProductId(int productId)

@@ -59,7 +59,7 @@ namespace Electronic_WMS.Service.Service
             return featureDetail;
         }
 
-        public IEnumerable<Feature> GetList(SearchVM search)
+        public GetListFeature GetList(SearchVM search)
         {
             var list = from f in _iFeatureRepository.GetList()
                             select new Feature
@@ -68,6 +68,7 @@ namespace Electronic_WMS.Service.Service
                                 FeatureName = f.FeatureName,
                                 Status = f.Status
                             };
+            var total = list.Count();
             if (search.TextSearch == null)
             {
                 list = list.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
@@ -76,7 +77,7 @@ namespace Electronic_WMS.Service.Service
             {
                 list = list.Where(x => x.FeatureName.ToLower().Contains(search.TextSearch.ToLower())).Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
             }
-            return list;
+            return new GetListFeature { ListFeature = list, Total = total};
         }
 
         public IEnumerable<FeatureCombobox> GetListCombobox()
