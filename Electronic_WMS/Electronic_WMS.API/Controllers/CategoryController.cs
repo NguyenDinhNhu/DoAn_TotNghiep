@@ -36,6 +36,13 @@ namespace Electronic_WMS.API.Controllers
             var result = _iCategoryService.GetListCombobox();
             return Ok(result);
         }
+        
+        [HttpGet(nameof(GetCategoryParentCombobox))]
+        public IActionResult GetCategoryParentCombobox()
+        {
+            var result = _iCategoryService.GetCategoryParentCombobox();
+            return Ok(result);
+        }
 
         [HttpPost(nameof(Insert))]
         public IActionResult Insert([FromBody] Category category)

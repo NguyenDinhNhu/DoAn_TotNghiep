@@ -92,6 +92,17 @@ namespace Electronic_WMS.Service.Service
                             };
             return listBrand;
         }
+        public IEnumerable<BrandCombobox> GetParentBrandCombobox()
+        {
+            var listBrand = from b in _iBrandRepository.GetList()
+                            where b.ParentId == 0
+                            select new BrandCombobox
+                            {
+                                BrandId = b.BrandId,
+                                BrandName = b.BrandName
+                            };
+            return listBrand;
+        }
 
         public ResponseModel Insert(Brand brand)
         {
@@ -112,7 +123,7 @@ namespace Electronic_WMS.Service.Service
                 BrandId = brand.BrandId,
                 BrandName = brand.BrandName,
                 ParentId = brand.ParentId,
-                Status = brand.Status
+                Status = (int)CommonStatus.IsActive
             };
 
             var status = _iBrandRepository.Insert(brandEntity);
@@ -156,7 +167,6 @@ namespace Electronic_WMS.Service.Service
             // Update Brand 
             brandDetail.BrandName = brand.BrandName;
             brandDetail.ParentId = brand.ParentId;
-            brandDetail.Status = brand.Status;
 
             var status = _iBrandRepository.Update(brandDetail);
             if (status == 0)

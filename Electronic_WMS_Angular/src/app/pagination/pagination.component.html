@@ -1,0 +1,19 @@
+<div class="paging-body">
+    <div class="pagination">
+        <ul>
+            <li class="numb" (click)="previousPage()" [ngClass]="{ disabled: currentPage === 1 }">
+                <span style="font-size: 14px;">Prev</span>
+            </li>
+            <li class="numb" 
+                *ngFor="let page of getPages()" 
+                (click)="changePage.emit(page)"
+                [ngClass]="{ active: currentPage === page}"
+                >
+                <span>{{page}}</span>
+            </li>
+            <li class="numb" (click)="nextPage()" [ngClass]="{ disabled: currentPage === totalPages }">
+                <span style="font-size: 14px;">Next</span>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,3 +1,39 @@
 @import url(../assets/css/style.css);
 /* @import url(../assets/css/style.min.css); */
 /* @import url(../assets/css/style.min.css.map); */
+
+.codepen {
+    background-image: url(../assets/img/svg/Bulk/codepen.svg);
+    width: 24px;
+    height: 24px;
+}
+  
+.codesanbox {
+    background-image: url(../assets/img/svg/Bulk/codesandbox.svg);
+    width: 24px;
+    height: 24px;
+}
+
+.archive {
+    background-image: url(../assets/img/svg/Bulk/archive.svg);
+    width: 24px;
+    height: 24px;
+}
+  
+.truck {
+    background-image: url(../assets/img/svg/Bulk/truck.svg);
+    width: 24px;
+    height: 24px;
+}
+  
+.clipboard {
+    background-image: url(../assets/img/svg/Bulk/clipboard.svg);
+    width: 24px;
+    height: 24px;
+}
+
+.role {
+    background-image: url(../assets/img/svg/Bulk/github.svg);
+    width: 24px;
+    height: 24px;
+}

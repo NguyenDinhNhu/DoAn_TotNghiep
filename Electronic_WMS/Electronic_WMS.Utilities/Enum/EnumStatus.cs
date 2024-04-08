@@ -25,5 +25,6 @@ namespace Electronic_WMS.Utilities.Enum
         IsDelete = 0,
         IsStock = 1,
         IsReleased = 2,
+        IsCreate = 3
     }
 }

@@ -11,6 +11,7 @@ namespace Electronic_WMS.Service.IService
     {
         public GetListBrand GetList(SearchVM search);
         public IEnumerable<BrandCombobox> GetListCombobox();
+        public IEnumerable<BrandCombobox> GetParentBrandCombobox();
         public Brand GetById(int id);
         public ResponseModel Insert(Brand brand);
         public ResponseModel Update(Brand brand);

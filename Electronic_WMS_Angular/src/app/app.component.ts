@@ -11,9 +11,7 @@ export class AppComponent {
   title = 'Electronic_WMS_Angular';
   ngOnInit(): void {
     CustomFunc();
-  }
-
-  ngAfterViewInit() {
     feather.replace();
   }
+
 }

@@ -29,6 +29,13 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet(nameof(GetParentBrandCombobox))]
+        public IActionResult GetParentBrandCombobox()
+        {
+            var result = _iBrandService.GetParentBrandCombobox();
+            return Ok(result);
+        }
+
         [HttpGet(nameof(GetBrand))]
         public IActionResult GetBrand([FromQuery] int id)
         {

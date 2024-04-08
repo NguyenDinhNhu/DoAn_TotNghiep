@@ -12,6 +12,7 @@ namespace Electronic_WMS.Service.IService
     {
         public GetListCategory GetList(SearchVM search);
         public IEnumerable<CategoryCombobox> GetListCombobox();
+        public IEnumerable<CategoryCombobox> GetCategoryParentCombobox();
         public Category GetById(int id);
         public ResponseModel Insert(Category cate);
         public ResponseModel Update(Category cate);

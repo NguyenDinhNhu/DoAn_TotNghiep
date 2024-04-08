@@ -91,6 +91,17 @@ namespace Electronic_WMS.Service.Service
                                CateName = c.CateName
                            };
             return listCate;
+        } 
+        public IEnumerable<CategoryCombobox> GetCategoryParentCombobox()
+        {
+            var listCate = from c in _iCategoryRepository.GetList()
+                           where c.ParentId == 0
+                           select new CategoryCombobox
+                           {
+                               CateId = c.CateId,
+                               CateName = c.CateName
+                           };
+            return listCate;
         }
 
         public ResponseModel Insert(Category cate)

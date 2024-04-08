@@ -259,7 +259,7 @@ namespace Electronic_WMS.Service.Service
                             {
                                 SerialNumber = seri.SerialNumber,
                                 CreatedDate = DateTime.Now,
-                                Status = (int)SeriStatus.IsStock,
+                                Status = (int)SeriStatus.IsCreate,
                                 ProductId = inventoryLine.ProductId,
                                 WareHouseId = inventory.WareHouseId,
                                 InventoryLineId = inventoryLine.InventoryLineId
@@ -343,7 +343,7 @@ namespace Electronic_WMS.Service.Service
                                 {
                                     var serialNumber = _iSerialNumberRepository.GetById(seri.SerialId);
                                     serialNumber.SerialNumber = seri.SerialNumber;
-                                    serialNumber.Status = (int)SeriStatus.IsStock;
+                                    serialNumber.Status = (int)SeriStatus.IsCreate;
                                     serialNumber.ProductId = invLineDetail.ProductId;
                                     serialNumber.WareHouseId = invDetail.WareHouseId;
                                     serialNumber.InventoryLineId = invLineDetail.InventoryLineId;
@@ -364,7 +364,7 @@ namespace Electronic_WMS.Service.Service
                                     {
                                         SerialNumber = seri.SerialNumber,
                                         CreatedDate = DateTime.Now,
-                                        Status = (int)SeriStatus.IsStock,
+                                        Status = (int)SeriStatus.IsCreate,
                                         ProductId = invLineDetail.ProductId,
                                         WareHouseId = invDetail.WareHouseId,
                                         InventoryLineId = invLineDetail.InventoryLineId
