@@ -124,7 +124,7 @@ namespace Electronic_WMS.Service.Service
                 Address = wh.Address,
                 CreatedDate = DateTime.Now,
                 CreatedBy = 1,
-                Status = wh.Status
+                Status = (int)CommonStatus.IsActive
             };
 
             var status = _iWareHouseRepository.Insert(whEntity);
@@ -156,7 +156,7 @@ namespace Electronic_WMS.Service.Service
             }
             // Check WareHouseName in database
             var checkWHName = _iWareHouseRepository.GetByName(wh.Name);
-            if (checkWHName != null && (checkWHName.WareHouseId != wh.WareHouseId && checkWHName.Name == wh.Name))
+            if (checkWHName != null && checkWHName.WareHouseId != wh.WareHouseId)
             {
                 return new ResponseModel
                 {
@@ -170,7 +170,6 @@ namespace Electronic_WMS.Service.Service
             whDetail.Address = wh.Address;
             whDetail.UpdatedDate = DateTime.Now;
             whDetail.UpdatedBy = 1;
-            whDetail.Status = wh.Status;
 
             var status = _iWareHouseRepository.Update(whDetail);
             if (status == 0)

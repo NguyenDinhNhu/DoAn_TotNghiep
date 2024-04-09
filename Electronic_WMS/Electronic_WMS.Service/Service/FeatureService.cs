@@ -109,7 +109,7 @@ namespace Electronic_WMS.Service.Service
             {
                 FeatureId = feature.FeatureId,
                 FeatureName = feature.FeatureName,
-                Status = feature.Status
+                Status = (int)CommonStatus.IsActive,
             };
 
             var status = _iFeatureRepository.Insert(featureEntity);
@@ -141,7 +141,7 @@ namespace Electronic_WMS.Service.Service
             }
             // Check FeatureName in database
             var checkFeatureName = _iFeatureRepository.GetByName(feature.FeatureName);
-            if (checkFeatureName != null && (checkFeatureName.FeatureId != feature.FeatureId && checkFeatureName.FeatureName == feature.FeatureName))
+            if (checkFeatureName != null && checkFeatureName.FeatureId != feature.FeatureId)
             {
                 return new ResponseModel
                 {
@@ -152,7 +152,6 @@ namespace Electronic_WMS.Service.Service
 
             // Update Feature 
             featureDetail.FeatureName = feature.FeatureName;
-            featureDetail.Status = feature.Status;
 
             var status = _iFeatureRepository.Update(featureDetail);
             if (status == 0)

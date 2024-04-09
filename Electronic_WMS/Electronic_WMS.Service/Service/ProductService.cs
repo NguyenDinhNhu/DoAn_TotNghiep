@@ -151,7 +151,7 @@ namespace Electronic_WMS.Service.Service
                 Price = prod.Price,
                 Unit = prod.Unit,
                 Quantity = 0,
-                Status = prod.Status,
+                Status = (int)CommonStatus.IsActive,
                 CateId = prod.CateId,
                 BrandId = prod.BrandId,
             };
@@ -241,7 +241,6 @@ namespace Electronic_WMS.Service.Service
             prodDetail.Price = prod.Price;
             prodDetail.Unit = prod.Unit;
             prodDetail.Quantity = prod.Quantity;
-            prodDetail.Status = prod.Status;
             prodDetail.CateId = prod.CateId;
             prodDetail.BrandId = prod.BrandId;
             String avatar = XString.ToAscii(prod.ProductName);

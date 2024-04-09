@@ -1,0 +1,121 @@
+<div class="container">
+    <h2 class="main-title">List Brands</h2>
+    <div class="start-cards">
+        <article class="stat-cards-item">
+            <div class="d-flex justify-content-between w-100">
+                <div class="search-wrapper">
+                    <i data-feather="search" aria-hidden="true"></i>
+                    <input type="text" (keyup.enter)="search()" [(ngModel)]="textSearch" placeholder="Enter keywords ..." required>
+                </div>
+                <button class="btn btn-primary" style="padding: 10px 8px;" (click)="OpenModal()">
+                    <i data-feather="plus-circle" aria-hidden="true" style="width: 16px; height: 16px;"></i>
+                    Add New Feature
+                </button>
+            </div>
+            <table class="table table-bordered mt-4" >
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Feature Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let fea of listFeature;">
+                        <td>{{fea.featureId}}</td>
+                        <td>{{fea.featureName}}</td>
+                        <td>
+                            <button class="btn btn-warning" style="padding: 8px 8px; margin-right: 4px;" (click)="OpenModalEdit(fea.featureId)"> 
+                                <i data-feather="edit" aria-hidden="true"
+                                    style="width: 16px; height: 16px; color: #fff;"></i>
+                            </button>
+                            <button class="btn btn-danger" style="padding: 8px 8px;" (click)="deleteFeature(fea.featureId)">
+                                <i data-feather="trash-2" aria-hidden="true"
+                                    style="width: 16px; height: 16px; color: #fff"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-between w-100">
+                <div class="d-flex" style="align-items: center;">
+                    <p style="margin-right: 2px;">Show</p>
+                    <select (change)="onChangePageSize($event)">
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                    <p style="margin-left: 2px;">entries of {{totalItem}} total item</p>
+                </div>
+                <app-pagination
+                    [currentPage]="currentPage"
+                    [pageSize]="pageSize"
+                    [totalItem]="totalItem"
+                    (changePage)="changePage($event)"
+                ></app-pagination>
+            </div>
+        </article>
+    </div>
+
+    <!-- The Modal -->
+    <div class="modal" id="myModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Add New Feature</h4>
+                    <button type="button" class="btn-close" (click)="CloseModal()"></button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form action="" [formGroup]="addFeatureForm">
+                        <div class="mb-3">
+                            <label for="" class="mb-2 font-weight-bold">Feature Name</label>
+                            <input name="" class="form-control" type="text" formControlName="FeatureName" />
+                            <div *ngIf="submitedAdd && f.FeatureName.errors">
+                                <small *ngIf="f.FeatureName.errors['required']" style="color: red;">Feature Name cannot be empty</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" (click)="CloseModal()"
+                        style="padding: 8px 8px; margin-right: 4px;">Close</button>
+                    <button type="submit" class="btn btn-primary" style="padding: 8px 8px;" (click)="addFeature()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="editModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Feature</h4>
+                    <button type="button" class="btn-close" (click)="CloseModalEdit()"></button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form action="" [formGroup]="editFeatureForm">
+                        <div class="mb-3">
+                            <input name="" class="form-control" type="text" formControlName="FeatureId" hidden="true"/>
+                            <label for="" class="mb-2 font-weight-bold">Feature Name</label>
+                            <input name="" class="form-control" type="text" formControlName="FeatureName" />
+                            <div *ngIf="submitedEdit && v.FeatureName.errors">
+                                <small *ngIf="v.FeatureName.errors['required']" style="color: red;">Feature Name cannot be empty</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" (click)="CloseModalEdit()"
+                        style="padding: 8px 8px; margin-right: 4px;">Close</button>
+                    <button type="submit" class="btn btn-primary" style="padding: 8px 8px;" (click)="editFeature()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

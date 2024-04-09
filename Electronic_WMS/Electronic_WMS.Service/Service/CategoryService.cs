@@ -123,7 +123,7 @@ namespace Electronic_WMS.Service.Service
                 CateId = cate.CateId,
                 CateName = cate.CateName,
                 ParentId = cate.ParentId,
-                Status = cate.Status,
+                Status = (int)CommonStatus.IsActive,
             };
 
             var status = _iCategoryRepository.Insert(category);
@@ -155,7 +155,7 @@ namespace Electronic_WMS.Service.Service
             }
             // Check CateName in database
             var checkCateName = _iCategoryRepository.GetByName(cate.CateName);
-            if (checkCateName != null && (checkCateName.CateId != cate.CateId && checkCateName.CateName == cate.CateName))
+            if (checkCateName != null && checkCateName.CateId != cate.CateId)
             {
                 return new ResponseModel
                 {
@@ -167,7 +167,6 @@ namespace Electronic_WMS.Service.Service
             // Update Category 
             category.CateName = cate.CateName;
             category.ParentId = cate.ParentId;
-            category.Status = cate.Status;
 
             var status = _iCategoryRepository.Update(category);
             if (status == 0)

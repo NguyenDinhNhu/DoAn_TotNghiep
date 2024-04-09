@@ -13,13 +13,19 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ListBrandComponent } from './brand/list-brand/list-brand.component';
 import { PaginationComponent } from './pagination/pagination.component';
 import { ToastrModule } from 'ngx-toastr';
+import { CategoryComponent } from './category/category.component';
+import { FeatureComponent } from './feature/feature.component';
+import { RolesComponent } from './roles/roles.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     ListBrandComponent,
-    PaginationComponent
+    PaginationComponent,
+    CategoryComponent,
+    FeatureComponent,
+    RolesComponent
   ],
   imports: [
     BrowserModule,

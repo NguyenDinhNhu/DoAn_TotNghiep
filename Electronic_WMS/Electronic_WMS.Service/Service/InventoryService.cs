@@ -297,13 +297,12 @@ namespace Electronic_WMS.Service.Service
                 };
             }
 
-            // Update Product 
+            // Update  
             invDetail.SourceLocation = inv.SourceLocation;
             invDetail.WareHouseId = inv.WareHouseId;
             invDetail.UpdatedDate = DateTime.Now;
             invDetail.UpdatedBy = 1;
             invDetail.Type = inv.Type;
-            invDetail.Status = inv.Status;
             var status = _iInventoryRepository.Update(invDetail);
             if (status == 0)
             {
@@ -410,7 +409,7 @@ namespace Electronic_WMS.Service.Service
                                 {
                                     SerialNumber = seri.SerialNumber,
                                     CreatedDate = DateTime.Now,
-                                    Status = (int)SeriStatus.IsStock,
+                                    Status = (int)SeriStatus.IsCreate,
                                     ProductId = inventoryLine.ProductId,
                                     WareHouseId = invDetail.WareHouseId,
                                     InventoryLineId = inventoryLine.InventoryLineId

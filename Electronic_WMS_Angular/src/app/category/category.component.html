@@ -1,0 +1,141 @@
+<div class="container">
+    <h2 class="main-title">List Brands</h2>
+    <div class="start-cards">
+        <article class="stat-cards-item">
+            <div class="d-flex justify-content-between w-100">
+                <div class="search-wrapper">
+                    <i data-feather="search" aria-hidden="true"></i>
+                    <input type="text" (keyup.enter)="search()" [(ngModel)]="textSearch" placeholder="Enter keywords ..." required>
+                </div>
+                <button class="btn btn-primary" style="padding: 10px 8px;" (click)="OpenModal()">
+                    <i data-feather="plus-circle" aria-hidden="true" style="width: 16px; height: 16px;"></i>
+                    Add New Category
+                </button>
+            </div>
+            <table class="table table-bordered mt-4" >
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category Name</th>
+                        <th>Parent Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let cate of listCategory;">
+                        <td>{{cate.cateId}}</td>
+                        <td>{{cate.cateName}}</td>
+                        <td>{{cate.parentName}}</td>
+                        <td>
+                            <button class="btn btn-warning" style="padding: 8px 8px; margin-right: 4px;" (click)="OpenModalEdit(cate.cateId)"> 
+                                <i data-feather="edit" aria-hidden="true"
+                                    style="width: 16px; height: 16px; color: #fff;"></i>
+                            </button>
+                            <button class="btn btn-danger" style="padding: 8px 8px;" (click)="deleteCategory(cate.cateId)">
+                                <i data-feather="trash-2" aria-hidden="true"
+                                    style="width: 16px; height: 16px; color: #fff"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-between w-100">
+                <div class="d-flex" style="align-items: center;">
+                    <p style="margin-right: 2px;">Show</p>
+                    <select (change)="onChangePageSize($event)">
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                    <p style="margin-left: 2px;">entries of {{totalItem}} total item</p>
+                </div>
+                <app-pagination
+                    [currentPage]="currentPage"
+                    [pageSize]="pageSize"
+                    [totalItem]="totalItem"
+                    (changePage)="changePage($event)"
+                ></app-pagination>
+            </div>
+        </article>
+    </div>
+
+    <!-- The Modal -->
+    <div class="modal" id="myModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Add New Category</h4>
+                    <button type="button" class="btn-close" (click)="CloseModal()"></button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form action="" [formGroup]="addCateForm">
+                        <div class="mb-3">
+                            <label for="" class="mb-2 font-weight-bold">Category Name</label>
+                            <input name="" class="form-control" type="text" formControlName="CateName" />
+                            <div *ngIf="submitedAdd && f.CateName.errors">
+                                <small *ngIf="f.CateName.errors['required']" style="color: red;">Category Name cannot be empty</small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="mb-2 font-weight-bold">Parent Level</label>
+                            <div class="combo-section">
+                                <igx-simple-combo [data]="cateParentCombobox" [displayKey]="'cateName'" [valueKey]="'cateId'" formControlName="ParentLevel"></igx-simple-combo>
+                            </div>
+                            <div *ngIf="submitedAdd && f.ParentLevel.errors">
+                                <small *ngIf="f.ParentLevel.errors['required']" style="color: red;">Parent Level cannot be empty</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" (click)="CloseModal()"
+                        style="padding: 8px 8px; margin-right: 4px;">Close</button>
+                    <button type="submit" class="btn btn-primary" style="padding: 8px 8px;" (click)="addCategory()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="editModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Category</h4>
+                    <button type="button" class="btn-close" (click)="CloseModalEdit()"></button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form action="" [formGroup]="editCateForm">
+                        <div class="mb-3">
+                            <input name="" class="form-control" type="text" formControlName="CateId" hidden="true"/>
+                            <label for="" class="mb-2 font-weight-bold">Category Name</label>
+                            <input name="" class="form-control" type="text" formControlName="CateName" />
+                            <div *ngIf="submitedEdit && v.CateName.errors">
+                                <small *ngIf="v.CateName.errors['required']" style="color: red;">Category Name cannot be empty</small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="mb-2 font-weight-bold">Parent Level</label>
+                            <div class="combo-section">
+                                <igx-simple-combo [data]="cateParentCombobox" [displayKey]="'cateName'" [valueKey]="'cateId'" formControlName="ParentLevel"></igx-simple-combo>
+                            </div>
+                            <div *ngIf="submitedEdit && v.ParentLevel.errors">
+                                <small *ngIf="v.ParentLevel.errors['required']" style="color: red;">Parent Level cannot be empty</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" (click)="CloseModalEdit()"
+                        style="padding: 8px 8px; margin-right: 4px;">Close</button>
+                    <button type="submit" class="btn btn-primary" style="padding: 8px 8px;" (click)="editCategory()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

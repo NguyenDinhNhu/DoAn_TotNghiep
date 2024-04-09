@@ -111,7 +111,7 @@ namespace Electronic_WMS.Service.Service
             {
                 RoleId = role.RoleId,
                 RoleName = role.RoleName,
-                Status = role.Status
+                Status = (int)CommonStatus.IsActive,
             };
 
             var status = _iRolesRepository.Insert(roleEntity);
@@ -143,7 +143,7 @@ namespace Electronic_WMS.Service.Service
             }
             // Check RoleName in database
             var checkRoleName = _iRolesRepository.GetByName(role.RoleName);
-            if (checkRoleName != null && (checkRoleName.RoleId != role.RoleId && checkRoleName.RoleName == role.RoleName))
+            if (checkRoleName != null && checkRoleName.RoleId != role.RoleId)
             {
                 return new ResponseModel
                 {
@@ -154,7 +154,6 @@ namespace Electronic_WMS.Service.Service
 
             // Update Role 
             roleDetail.RoleName = role.RoleName;
-            roleDetail.Status = role.Status;
 
             var status = _iRolesRepository.Update(roleDetail);
             if (status == 0)

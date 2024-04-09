@@ -155,7 +155,7 @@ namespace Electronic_WMS.Service.Service
             }
             // Check BrandName in database
             var checkBrandName = _iBrandRepository.GetByName(brand.BrandName);
-            if (checkBrandName != null && (checkBrandName.BrandId != brand.BrandId && checkBrandName.BrandName == brand.BrandName))
+            if (checkBrandName != null && checkBrandName.BrandId != brand.BrandId)
             {
                 return new ResponseModel
                 {

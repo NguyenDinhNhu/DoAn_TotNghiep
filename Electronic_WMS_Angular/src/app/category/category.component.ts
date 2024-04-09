@@ -1,80 +1,80 @@
 import { Component } from '@angular/core';
-import * as feather from 'feather-icons';
-import { BrandAPIService } from '../BrandAPIService';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { CategoryAPIService } from './CategoryAPIService';
+import * as feather from 'feather-icons';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-list-brand',
-  templateUrl: './list-brand.component.html',
-  styleUrls: ['./list-brand.component.css']
+  selector: 'app-category',
+  templateUrl: './category.component.html',
+  styleUrls: ['./category.component.css']
 })
-export class ListBrandComponent {
-  // Search - Get List Brand
+export class CategoryComponent {
+  // Search - Get List Category
   public pageSize: number = 10;
   public currentPage: number = 1;
   public textSearch!: string;
-  public listBrand: any[] = [];
+  public listCategory: any[] = [];
   public totalItem: number = 0;
   // combobox
-  public brandParentCombobox: any[] = [ 
-    { brandName: 'Highest Level', brandId: 0}];
-  
-  // Form add 
-  public brandName!: string;
+  public cateParentCombobox: any[] = [ 
+    { cateName: 'Highest Level', cateId: 0}];
+
+  public cateName!: string;
   public parentLevel!: number;
+  public cateId!: number;
+  // Form add 
   public submitedAdd: boolean = false;
 
-  addBrandForm = this.fb.group({
-    BrandName: ['', Validators.required],
+  addCateForm = this.fb.group({
+    CateName: ['', Validators.required],
     ParentLevel: ['', Validators.required],
   });
 
   // Form edit
-  public brandId!: number;
   public submitedEdit: boolean = false;
 
-  editBrandForm = this.fb.group({
-    BrandId: ['', Validators.required],
-    BrandName: ['', Validators.required],
+  editCateForm = this.fb.group({
+    CateId: ['', Validators.required],
+    CateName: ['', Validators.required],
     ParentLevel: ['', Validators.required],
   });
 
   constructor(
     private toastr: ToastrService,
     private fb: FormBuilder, 
-    private brandService: BrandAPIService,
+    private categoryService: CategoryAPIService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) { }
 
-  get f() {return this.addBrandForm.controls;}
-  get v() {return this.editBrandForm.controls;}
+  get f() {return this.addCateForm.controls;}
+  get v() {return this.editCateForm.controls;}
 
   ngOnInit(): void {
     feather.replace();
-    this.getAllBrand();
-    this.getParentBrandCombobox();
+    this.getAllCategory();
+    this.getParentCategoryCombobox();
   }
-  
-  // Add Brand
-  addBrand(): void {
+
+  // Add 
+  addCategory(): void {
     this.submitedAdd = true;
     
-    if(!this.addBrandForm.invalid){
-      console.log(this.addBrandForm.value);
-      this.brandName = this.addBrandForm.value.BrandName!.trim();
-      this.parentLevel = parseInt(this.addBrandForm.value.ParentLevel!);
-      //call api add brand
-      this.brandService.insertBrand( { 
-        BrandName: this.brandName,
+    if(!this.addCateForm.invalid){
+      console.log(this.addCateForm.value);
+      this.cateName = this.addCateForm.value.CateName!.trim();
+      this.parentLevel = parseInt(this.addCateForm.value.ParentLevel!);
+      //call api add category
+      this.categoryService.insertCategory( { 
+        CateName: this.cateName,
         ParentId: this.parentLevel }).subscribe(res => {
           if(res.statusCode == 200){
             this.toastr.success(res.statusMessage, "Success");
             this.submitedAdd = false;
-            this.getAllBrand();
+            this.getAllCategory();
             this.CloseModal();
           }
           else if (res.statusCode = 400){
@@ -87,24 +87,24 @@ export class ListBrandComponent {
     }
   }
 
-  // Edit Brand
-  editBrand(): void {
+  // Edit 
+  editCategory(): void {
     this.submitedEdit = true;
     
-    if(!this.editBrandForm.invalid){
-      console.log(this.editBrandForm.value);
-      this.brandId = parseInt(this.editBrandForm.value.BrandId!);
-      this.brandName = this.editBrandForm.value.BrandName?.trim()!;
-      this.parentLevel = parseInt(this.editBrandForm.value.ParentLevel!);
-      //call api update brand
-      this.brandService.updateBrand( { 
-        BrandId: this.brandId,
-        BrandName: this.brandName,
+    if(!this.editCateForm.invalid){
+      console.log(this.editCateForm.value);
+      this.cateId = parseInt(this.editCateForm.value.CateId!);
+      this.cateName = this.editCateForm.value.CateName?.trim()!;
+      this.parentLevel = parseInt(this.editCateForm.value.ParentLevel!);
+      //call api update category
+      this.categoryService.updateCategory( { 
+        CateId: this.cateId,
+        CateName: this.cateName,
         ParentId: this.parentLevel }).subscribe(res => {
           if(res.statusCode == 200){
             this.toastr.success(res.statusMessage, "Success");
             this.submitedAdd = false;
-            this.getAllBrand();
+            this.getAllCategory();
             this.CloseModalEdit();
           }
           else if (res.statusCode = 400){
@@ -120,8 +120,8 @@ export class ListBrandComponent {
     }
   }
 
-  // Delete Brand
-  deleteBrand(id: number): void {
+  // Delete 
+  deleteCategory(id: number): void {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -132,10 +132,10 @@ export class ListBrandComponent {
       confirmButtonText: "Confirm"
     }).then((result) => {
       if (result.isConfirmed) {
-        this.brandService.deleteBrand(id).subscribe(res => {
+        this.categoryService.deleteCategory(id).subscribe(res => {
           if(res.statusCode == 200){
             this.toastr.success(res.statusMessage, "Success");
-            this.getAllBrand();
+            this.getAllCategory();
             this.CloseModalEdit();
           }
           else if (res.statusCode = 404){
@@ -149,9 +149,9 @@ export class ListBrandComponent {
     });
   }
 
-  getAllBrand(): any {
-    this.brandService.getListBrand({PageSize: this.pageSize, CurrentPage: this.currentPage, TextSearch: this.textSearch}).subscribe(res => {
-      this.listBrand = res.listBrand;
+  getAllCategory(): any {
+    this.categoryService.getListCategory({PageSize: this.pageSize, CurrentPage: this.currentPage, TextSearch: this.textSearch}).subscribe(res => {
+      this.listCategory = res.listCate;
       this.totalItem = res.total;
       setTimeout(() => {
         feather.replace();
@@ -161,18 +161,18 @@ export class ListBrandComponent {
     })
   }
 
-  getParentBrandCombobox(): any {
-    this.brandService.getParentBrandCombobox().subscribe(res => {
-      res.unshift(this.brandParentCombobox[0]) // unshift: thêm vào đầu danh sách
-      this.brandParentCombobox = res;
+  getParentCategoryCombobox(): any {
+    this.categoryService.getParentCategoryCombobox().subscribe(res => {
+      res.unshift(this.cateParentCombobox[0]) // unshift: thêm vào đầu danh sách
+      this.cateParentCombobox = res;
     })
   }
   // pagination
   changePage(page: number): void{
     this.currentPage = page;    
     console.log(this.currentPage);
-    this.brandService.getListBrand({PageSize: this.pageSize, CurrentPage: this.currentPage, TextSearch: this.textSearch}).subscribe(res => {
-      this.listBrand = res.listBrand;
+    this.categoryService.getListCategory({PageSize: this.pageSize, CurrentPage: this.currentPage, TextSearch: this.textSearch}).subscribe(res => {
+      this.listCategory = res.listCate;
       this.totalItem = res.total;
       setTimeout(() => {
         feather.replace();
@@ -182,8 +182,8 @@ export class ListBrandComponent {
 
   onChangePageSize(event: any) {
     this.pageSize = event.target.value;
-    this.brandService.getListBrand({PageSize: this.pageSize, CurrentPage: this.currentPage, TextSearch: this.textSearch}).subscribe(res => {
-      this.listBrand = res.listBrand;
+    this.categoryService.getListCategory({PageSize: this.pageSize, CurrentPage: this.currentPage, TextSearch: this.textSearch}).subscribe(res => {
+      this.listCategory = res.listCate;
       this.totalItem = res.total;
       setTimeout(() => {
         feather.replace();
@@ -192,8 +192,8 @@ export class ListBrandComponent {
   }
 
   search(): void {
-    this.brandService.getListBrand({PageSize: this.pageSize, CurrentPage: this.currentPage, TextSearch: this.textSearch.trim()}).subscribe(res => {
-      this.listBrand = res.listBrand;
+    this.categoryService.getListCategory({PageSize: this.pageSize, CurrentPage: this.currentPage, TextSearch: this.textSearch.trim()}).subscribe(res => {
+      this.listCategory = res.listCate;
       this.totalItem = res.total;
       setTimeout(() => {
         feather.replace();
@@ -201,14 +201,14 @@ export class ListBrandComponent {
     })
   }
 
-  // Popup Modal Add Brand
+  // Popup Modal Add Brand  
   OpenModal() {
     const modelDiv = document.getElementById("myModal");
     if(modelDiv != null) {
       modelDiv.style.display = "block";
       modelDiv.style.backgroundColor = "rgba(136,136,136,0.8)";
     }
-    this.addBrandForm.reset();
+    this.addCateForm.reset();
   }
 
   CloseModal() {
@@ -217,7 +217,7 @@ export class ListBrandComponent {
       modelDiv.style.display = "none";
     }
   }
-  
+
   OpenModalEdit(id: number) {
     const modelDiv = document.getElementById("editModal");
     if(modelDiv != null) {
@@ -225,10 +225,10 @@ export class ListBrandComponent {
       modelDiv.style.backgroundColor = "rgba(136,136,136,0.8)";
     }
 
-    this.brandService.getBrand(id).subscribe(res => {
-      this.editBrandForm = this.fb.group({
-        BrandId: [res.brandId, Validators.required],
-        BrandName: [res.brandName, Validators.required],
+    this.categoryService.getCategory(id).subscribe(res => {
+      this.editCateForm = this.fb.group({
+        CateId: [res.cateId, Validators.required],
+        CateName: [res.cateName, Validators.required],
         ParentLevel: [res.parentId, Validators.required]
       });
     })
@@ -240,5 +240,5 @@ export class ListBrandComponent {
       modelDiv.style.display = "none";
     }
   }
-  
+
 }

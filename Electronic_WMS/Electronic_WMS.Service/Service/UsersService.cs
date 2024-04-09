@@ -153,7 +153,7 @@ namespace Electronic_WMS.Service.Service
                 Email = user.Email,
                 Address = user.Address,
                 Phone = user.Phone,
-                Status = user.Status,
+                Status = (int)CommonStatus.IsActive,
                 CreatedDate = DateTime.Now,
                 CreatedBy = 1,
                 RoleId = user.RoleId,
@@ -203,7 +203,7 @@ namespace Electronic_WMS.Service.Service
 
             // Check UserName in database
             var checkUserName = _iUsersRepository.GetByUserNameOrEmail(user.UserName);
-            if (checkUserName != null && (checkUserName.UserId != user.UserId && checkUserName.UserName == user.UserName))
+            if (checkUserName != null && checkUserName.UserId != user.UserId)
             {
                 return new ResponseModel
                 {
@@ -214,7 +214,7 @@ namespace Electronic_WMS.Service.Service
 
             // Check Email in database
             var checkEmail = _iUsersRepository.GetByUserNameOrEmail(user.Email);
-            if (checkEmail != null && (checkEmail.Email != user.Email && checkEmail.Email == user.Email))
+            if (checkEmail != null && checkEmail.Email != user.Email)
             {
                 return new ResponseModel
                 {
@@ -230,7 +230,6 @@ namespace Electronic_WMS.Service.Service
             uDetail.Email = user.Email;
             uDetail.Address = user.Address;
             uDetail.Phone = user.Phone;
-            uDetail.Status = user.Status;
             uDetail.UpdatedDate = DateTime.Now;
             uDetail.UpdatedBy = 1;
             uDetail.RoleId = user.RoleId;
