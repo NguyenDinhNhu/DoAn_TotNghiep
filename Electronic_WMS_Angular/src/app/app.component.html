@@ -45,6 +45,12 @@
               </a>
             </li>
             <li>
+              <a class="check-menu-active" [routerLink]="['/warehouse/index']">
+                <span class="icon category" aria-hidden="true"></span>
+                Warehouse
+              </a>
+            </li>
+            <li>
               <a class="show-cat-btn" href="##">
                 <span class="icon codesanbox" aria-hidden="true"></span>Product
                 <span class="category__btn transparent-btn" title="Open list">
@@ -58,23 +64,6 @@
                 </li>
                 <li>
                   <a class="check-menu-active" href="media-02.html">Add New Product</a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a class="show-cat-btn" href="##">
-                <span class="icon category" aria-hidden="true"></span>WareHouses
-                <span class="category__btn transparent-btn" title="Open list">
-                  <span class="sr-only">Open list</span>
-                  <span class="icon arrow-down" aria-hidden="true"></span>
-                </span>
-              </a>
-              <ul class="cat-sub-menu">
-                <li>
-                  <a class="check-menu-active" href="extention-01.html">All WareHouses</a>
-                </li>
-                <li>
-                  <a class="check-menu-active" href="extention-02.html">Add New Warehouse</a>
                 </li>
               </ul>
             </li>
@@ -119,10 +108,10 @@
               </a>
               <ul class="cat-sub-menu">
                 <li>
-                  <a class="check-menu-active" href="users-01.html">All Users</a>
+                  <a class="check-menu-active" [routerLink]="['/user/index']">All Users</a>
                 </li>
                 <li>
-                  <a class="check-menu-active" href="users-02.html">Add new user</a>
+                  <a class="check-menu-active" [routerLink]="['/user/add']">Add new user</a>
                 </li>
               </ul>
             </li>

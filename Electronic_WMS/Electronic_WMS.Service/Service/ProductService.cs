@@ -254,10 +254,6 @@ namespace Electronic_WMS.Service.Service
                 }
                 prodDetail.Image = fileName;
             }
-            else
-            {
-                prodDetail.Image = null;
-            }
             var status = _iProductRepository.Update(prodDetail);
             if (status == 0)
             {

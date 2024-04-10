@@ -69,7 +69,7 @@ namespace Electronic_WMS.Service.Service
                 UpdatedDate = user.UpdatedDate,
                 UpdatedBy = user.UpdatedBy,
                 RoleId = user.RoleId,
-                RoleName = _iRolesRepository.GetById(user.UserId).RoleName,
+                RoleName = _iRolesRepository.GetById(user.RoleId).RoleName,
             };
             return userDetail;
         }
@@ -93,7 +93,7 @@ namespace Electronic_WMS.Service.Service
                            UpdatedDate = user.UpdatedDate,
                            UpdatedBy = user.UpdatedBy,
                            RoleId = user.RoleId,
-                           RoleName = _iRolesRepository.GetById(user.UserId).RoleName,
+                           RoleName = _iRolesRepository.GetById(user.RoleId).RoleName,
                        };
             var total = list.Count();
             if (search.TextSearch == null)
@@ -214,7 +214,7 @@ namespace Electronic_WMS.Service.Service
 
             // Check Email in database
             var checkEmail = _iUsersRepository.GetByUserNameOrEmail(user.Email);
-            if (checkEmail != null && checkEmail.Email != user.Email)
+            if (checkEmail != null && checkEmail.UserId != user.UserId)
             {
                 return new ResponseModel
                 {
@@ -243,10 +243,6 @@ namespace Electronic_WMS.Service.Service
                     user.FileImage.CopyTo(stream);
                 }
                 uDetail.Image = fileName;
-            }
-            else
-            {
-                uDetail.Image = null;
             }
             var status = _iUsersRepository.Update(uDetail);
             if (status == 0)

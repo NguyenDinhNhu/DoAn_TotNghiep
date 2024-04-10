@@ -201,7 +201,7 @@ export class CategoryComponent {
     })
   }
 
-  // Popup Modal Add Brand  
+  // Popup Modal Add   
   OpenModal() {
     const modelDiv = document.getElementById("myModal");
     if(modelDiv != null) {

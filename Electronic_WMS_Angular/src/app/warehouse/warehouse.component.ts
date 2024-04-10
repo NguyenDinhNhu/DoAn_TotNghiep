@@ -1,70 +1,76 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { RolesAPIService } from './RolesAPIService';
+import { WareHouseAPIService } from './WareHouseAPIService';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, Validators } from '@angular/forms';
 import * as feather from 'feather-icons';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-roles',
-  templateUrl: './roles.component.html',
-  styleUrls: ['./roles.component.css']
+  selector: 'app-warehouse',
+  templateUrl: './warehouse.component.html',
+  styleUrls: ['./warehouse.component.css']
 })
-export class RolesComponent {
+export class WarehouseComponent {
   // Search - Get List 
   public pageSize: number = 10;
   public currentPage: number = 1;
   public textSearch!: string;
-  public listRoles: any[] = [];
+  public listWareHouse: any[] = [];
   public totalItem: number = 0;
 
-  public roleName!: string;
-  public roleId!: number;
+  public wareHouseName!: string;
+  public address!: string;
+  public wareHouseId!: number;
   // Form add 
   public submitedAdd: boolean = false;
 
-  addRoleForm = this.fb.group({
-    RoleName: ['', Validators.required]
+  addWHForm = this.fb.group({
+    WareHouseName: ['', Validators.required],
+    Address: ['', Validators.required]
   });
 
   // Form edit
   public submitedEdit: boolean = false;
 
-  editRoleForm = this.fb.group({
-    RoleId: ['', Validators.required],
-    RoleName: ['', Validators.required]
+  editWHForm = this.fb.group({
+    WareHouseId: ['', Validators.required],
+    WareHouseName: ['', Validators.required],
+    Address: ['', Validators.required]
   });
 
   constructor(
     private toastr: ToastrService,
     private fb: FormBuilder, 
-    private rolesService: RolesAPIService,
+    private whService: WareHouseAPIService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) { }
 
-  get f() {return this.addRoleForm.controls;}
-  get v() {return this.editRoleForm.controls;}
+  get f() {return this.addWHForm.controls;}
+  get v() {return this.editWHForm.controls;}
 
   ngOnInit(): void {
     feather.replace();
-    this.getAllRoles();
+    this.getAllWareHouse();
   }
 
   // Add 
-  addRole(): void {
+  addWareHouse(): void {
     this.submitedAdd = true;
     
-    if(!this.addRoleForm.invalid){
-      console.log(this.addRoleForm.value);
-      this.roleName = this.addRoleForm.value.RoleName!.trim();
+    if(!this.addWHForm.invalid){
+      console.log(this.addWHForm.value);
+      this.wareHouseName = this.addWHForm.value.WareHouseName!.trim();
+      this.address = this.addWHForm.value.Address!.trim();
       //call api add 
-      this.rolesService.insertRole( {RoleName: this.roleName}).subscribe(res => {
+      this.whService.insertWareHouse( 
+      { Name: this.wareHouseName,
+       Address: this.address}).subscribe(res => {
         if(res.statusCode == 200){
           this.toastr.success(res.statusMessage, "Success");
           this.submitedAdd = false;
-          this.getAllRoles();
+          this.getAllWareHouse();
           this.CloseModal();
         }
         else if (res.statusCode = 400){
@@ -78,21 +84,23 @@ export class RolesComponent {
   }
 
   // Edit 
-  editRole(): void {
+  editWareHouse(): void {
     this.submitedEdit = true;
     
-    if(!this.editRoleForm.invalid){
-      console.log(this.editRoleForm.value);
-      this.roleId = parseInt(this.editRoleForm.value.RoleId!);
-      this.roleName = this.editRoleForm.value.RoleName?.trim()!;
+    if(!this.editWHForm.invalid){
+      console.log(this.editWHForm.value);
+      this.wareHouseId = parseInt(this.editWHForm.value.WareHouseId!);
+      this.wareHouseName = this.editWHForm.value.WareHouseName?.trim()!;
+      this.address = this.editWHForm.value.Address?.trim()!;
       //call api update 
-      this.rolesService.updateRole( { 
-        RoleId: this.roleId,
-        RoleName: this.roleName }).subscribe(res => {
+      this.whService.updateWareHouse( { 
+        WareHouseId: this.wareHouseId,
+        Name: this.wareHouseName,
+        Address: this.address }).subscribe(res => {
           if(res.statusCode == 200){
             this.toastr.success(res.statusMessage, "Success");
             this.submitedAdd = false;
-            this.getAllRoles();
+            this.getAllWareHouse();
             this.CloseModalEdit();
           }
           else if (res.statusCode = 400){
@@ -108,8 +116,8 @@ export class RolesComponent {
     }
   }
 
-  // Delete
-  deleteRole(id: number): void {
+  // delete
+  deleteWareHouse(id: number): void {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -120,11 +128,10 @@ export class RolesComponent {
       confirmButtonText: "Confirm"
     }).then((result) => {
       if (result.isConfirmed) {
-        this.rolesService.deleteRole(id).subscribe(res => {
+        this.whService.deleteWareHouse(id).subscribe(res => {
           if(res.statusCode == 200){
             this.toastr.success(res.statusMessage, "Success");
-            this.getAllRoles();
-            this.CloseModalEdit();
+            this.getAllWareHouse();
           }
           else if (res.statusCode = 404){
             this.toastr.warning(res.statusMessage, "Warning");
@@ -137,9 +144,9 @@ export class RolesComponent {
     });
   }
 
-  getAllRoles(): any {
-    this.rolesService.getListRole({PageSize: this.pageSize, CurrentPage: this.currentPage, TextSearch: this.textSearch}).subscribe(res => {
-      this.listRoles = res.listRole;
+  getAllWareHouse(): any {
+    this.whService.getListWareHouse({PageSize: this.pageSize, CurrentPage: this.currentPage, TextSearch: this.textSearch}).subscribe(res => {
+      this.listWareHouse = res.listWareHouse;
       this.totalItem = res.total;
       setTimeout(() => {
         feather.replace();
@@ -153,8 +160,8 @@ export class RolesComponent {
   changePage(page: number): void{
     this.currentPage = page;    
     console.log(this.currentPage);
-    this.rolesService.getListRole({PageSize: this.pageSize, CurrentPage: this.currentPage, TextSearch: this.textSearch}).subscribe(res => {
-      this.listRoles = res.listRole;
+    this.whService.getListWareHouse({PageSize: this.pageSize, CurrentPage: this.currentPage, TextSearch: this.textSearch}).subscribe(res => {
+      this.listWareHouse = res.listWareHouse;
       this.totalItem = res.total;
       setTimeout(() => {
         feather.replace();
@@ -164,8 +171,8 @@ export class RolesComponent {
 
   onChangePageSize(event: any) {
     this.pageSize = event.target.value;
-    this.rolesService.getListRole({PageSize: this.pageSize, CurrentPage: this.currentPage, TextSearch: this.textSearch}).subscribe(res => {
-      this.listRoles = res.listRole;
+    this.whService.getListWareHouse({PageSize: this.pageSize, CurrentPage: this.currentPage, TextSearch: this.textSearch}).subscribe(res => {
+      this.listWareHouse = res.listWareHouse;
       this.totalItem = res.total;
       setTimeout(() => {
         feather.replace();
@@ -174,8 +181,8 @@ export class RolesComponent {
   }
 
   search(): void {
-    this.rolesService.getListRole({PageSize: this.pageSize, CurrentPage: this.currentPage, TextSearch: this.textSearch.trim()}).subscribe(res => {
-      this.listRoles = res.listRole;
+    this.whService.getListWareHouse({PageSize: this.pageSize, CurrentPage: this.currentPage, TextSearch: this.textSearch.trim()}).subscribe(res => {
+      this.listWareHouse = res.listWareHouse;
       this.totalItem = res.total;
       setTimeout(() => {
         feather.replace();
@@ -183,14 +190,14 @@ export class RolesComponent {
     })
   }
 
-  // Popup Modal Add  
+  // Popup Modal Add Brand  
   OpenModal() {
     const modelDiv = document.getElementById("myModal");
     if(modelDiv != null) {
       modelDiv.style.display = "block";
       modelDiv.style.backgroundColor = "rgba(136,136,136,0.8)";
     }
-    this.addRoleForm.reset();
+    this.addWHForm.reset();
   }
 
   CloseModal() {
@@ -207,10 +214,11 @@ export class RolesComponent {
       modelDiv.style.backgroundColor = "rgba(136,136,136,0.8)";
     }
 
-    this.rolesService.getRole(id).subscribe(res => {
-      this.editRoleForm = this.fb.group({
-        RoleId: [res.roleId, Validators.required],
-        RoleName: [res.roleName, Validators.required]
+    this.whService.getWareHouse(id).subscribe(res => {
+      this.editWHForm = this.fb.group({
+        WareHouseId: [res.wareHouseId, Validators.required],
+        WareHouseName: [res.name, Validators.required],
+        Address: [res.address, Validators.required]
       });
     })
   }
@@ -221,5 +229,4 @@ export class RolesComponent {
       modelDiv.style.display = "none";
     }
   }
-
 }

@@ -1,0 +1,92 @@
+<div class="container">
+    <div class="d-flex justify-content-between w-100">
+        <h2 class="main-title">Edit user</h2>
+        <div>
+            <button type="submit" class="btn btn-warning" style="padding: 10px 8px; margin-right: 8px;" (click)="onSubmit()">
+                <i data-feather="save" aria-hidden="true" style="width: 16px; height: 16px; color: #fff;"></i>
+                <span style="color: #fff;">Save</span>
+            </button>
+            <button class="btn btn-danger" style="padding: 10px 8px;" [routerLink]="['/user/index']">
+                <i data-feather="corner-down-left" aria-hidden="true" style="width: 16px; height: 16px;"></i>
+                Back to list
+            </button>
+        </div>
+    </div>
+    <div class="start-cards">
+        <article class="stat-cards-item">
+            <form action="" [formGroup]="editUser" class="w-100">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <input name="" class="form-control" type="text" formControlName="UserId" hidden="true"/>
+                            <label for="" class="mb-2 font-weight-bold">FullName</label>
+                            <input name="" class="form-control" type="text" formControlName="FullName" />
+                            <div *ngIf="submited && f.FullName.errors">
+                                <small *ngIf="f.FullName.errors['required']" style="color: red;">FullName cannot be
+                                    empty</small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="mb-2 font-weight-bold">UserName</label>
+                            <input name="" class="form-control" type="text" formControlName="UserName" />
+                            <div *ngIf="submited && f.UserName.errors">
+                                <small *ngIf="f.UserName.errors['required']" style="color: red;">UserName cannot be
+                                    empty</small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="mb-2 font-weight-bold">PassWord</label>
+                            <input name="" class="form-control" type="text" formControlName="PassWord" />
+                            <div *ngIf="submited && f.PassWord.errors">
+                                <small *ngIf="f.PassWord.errors['required']" style="color: red;">PassWord cannot be
+                                    empty</small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="mb-2 font-weight-bold">Address</label>
+                            <input name="" class="form-control" type="text" formControlName="Address" />
+                            <div *ngIf="submited && f.Address.errors">
+                                <small *ngIf="f.Address.errors['required']" style="color: red;">Address cannot be empty</small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="mb-2 font-weight-bold">Email</label>
+                            <input name="" class="form-control" type="email" formControlName="Email" />
+                            <div *ngIf="submited && f.Email.errors">
+                                <small *ngIf="f.Email.errors['required']" style="color: red;">Email cannot be empty</small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="mb-2 font-weight-bold">PhoneNumber</label>
+                            <input name="" class="form-control" type="text" formControlName="Phone" />
+                            <div *ngIf="submited && f.Phone.errors">
+                                <small *ngIf="f.Phone.errors['required']" style="color: red;">PhoneNumber cannot be
+                                    empty</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="mb-2 font-weight-bold" for="">Avatar</label>
+                            <div class="">
+                                <input class="control-label" id="" name="" type="file" (change)="onChange($event)"
+                                    accept="image/*" style="width: 100%;">
+                                <span class="field-validation-valid text-danger" data-valmsg-for="Image"
+                                    data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="mb-2 font-weight-bold">Role</label>
+                            <div class="combo-section">
+                                <igx-simple-combo [data]="ListRoleCombobox" [displayKey]="'roleName'" [valueKey]="'roleId'" formControlName="RoleId"></igx-simple-combo>
+                            </div>
+                            <div *ngIf="submited && f.RoleId.errors">
+                                <small *ngIf="f.RoleId.errors['required']" style="color: red;">Please select user permissions</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </article>
+    </div>
+</div>

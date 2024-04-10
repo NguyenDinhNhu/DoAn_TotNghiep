@@ -2247,6 +2247,10 @@ label {
   opacity: 1;
 }
 
+.cat-sub-menu a.active{
+  opacity: 1 !important;
+}
+
 .cat-sub-menu a {
   opacity: 0;
   visibility: hidden;

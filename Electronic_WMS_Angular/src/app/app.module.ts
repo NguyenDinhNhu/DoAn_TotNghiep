@@ -16,6 +16,10 @@ import { ToastrModule } from 'ngx-toastr';
 import { CategoryComponent } from './category/category.component';
 import { FeatureComponent } from './feature/feature.component';
 import { RolesComponent } from './roles/roles.component';
+import { WarehouseComponent } from './warehouse/warehouse.component';
+import { ListUserComponent } from './users/list-user/list-user.component';
+import { AddUserComponent } from './users/add-user/add-user.component';
+import { EditUserComponent } from './users/edit-user/edit-user.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +29,11 @@ import { RolesComponent } from './roles/roles.component';
     PaginationComponent,
     CategoryComponent,
     FeatureComponent,
-    RolesComponent
+    RolesComponent,
+    WarehouseComponent,
+    ListUserComponent,
+    AddUserComponent,
+    EditUserComponent,
   ],
   imports: [
     BrowserModule,

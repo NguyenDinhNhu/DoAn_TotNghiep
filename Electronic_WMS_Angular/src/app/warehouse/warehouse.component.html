@@ -1,0 +1,144 @@
+<div class="container">
+    <h2 class="main-title">List Warehouse</h2>
+    <div class="start-cards">
+        <article class="stat-cards-item">
+            <div class="d-flex justify-content-between w-100">
+                <div class="search-wrapper">
+                    <i data-feather="search" aria-hidden="true"></i>
+                    <input type="text" (keyup.enter)="search()" [(ngModel)]="textSearch"
+                        placeholder="Enter keywords ..." required>
+                </div>
+                <button class="btn btn-primary" style="padding: 10px 8px;" (click)="OpenModal()">
+                    <i data-feather="plus-circle" aria-hidden="true" style="width: 16px; height: 16px;"></i>
+                    Add New Warehouse
+                </button>
+            </div>
+            <table class="table table-bordered mt-4">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Warehouse Name</th>
+                        <th>Address</th>
+                        <th>Created Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let wh of listWareHouse;">
+                        <td>{{wh.wareHouseId}}</td>
+                        <td>{{wh.name}}</td>
+                        <td>{{wh.address}}</td>
+                        <td>{{ wh.createdDate | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
+                        <td>
+                            <button class="btn btn-warning" style="padding: 8px 8px; margin-right: 4px;" (click)="OpenModalEdit(wh.wareHouseId)">
+                                <i data-feather="edit" aria-hidden="true"
+                                    style="width: 16px; height: 16px; color: #fff;"></i>
+                            </button>
+                            <button class="btn btn-danger" style="padding: 8px 8px;"
+                                (click)="deleteWareHouse(wh.wareHouseId)">
+                                <i data-feather="trash-2" aria-hidden="true"
+                                    style="width: 16px; height: 16px; color: #fff"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-between w-100">
+                <div class="d-flex" style="align-items: center;">
+                    <p style="margin-right: 2px;">Show</p>
+                    <select (change)="onChangePageSize($event)">
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                    <p style="margin-left: 2px;">entries of {{totalItem}} total item</p>
+                </div>
+                <app-pagination [currentPage]="currentPage" [pageSize]="pageSize" [totalItem]="totalItem"
+                    (changePage)="changePage($event)"></app-pagination>
+            </div>
+        </article>
+
+        <!-- The Modal -->
+        <div class="modal" id="myModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add New WareHouse</h4>
+                        <button type="button" class="btn-close" (click)="CloseModal()"></button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <form action="" [formGroup]="addWHForm">
+                            <div class="mb-3">
+                                <label for="" class="mb-2 font-weight-bold">WareHouse Name</label>
+                                <input name="" class="form-control" type="text" formControlName="WareHouseName" />
+                                <div *ngIf="submitedAdd && f.WareHouseName.errors">
+                                    <small *ngIf="f.WareHouseName.errors['required']" style="color: red;">WareHouse Name cannot be
+                                        empty</small>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="mb-2 font-weight-bold">Address</label>
+                                <input name="" class="form-control" type="text" formControlName="Address" />
+                                <div *ngIf="submitedAdd && f.Address.errors">
+                                    <small *ngIf="f.Address.errors['required']" style="color: red;">Address cannot be
+                                        empty</small>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" (click)="CloseModal()"
+                            style="padding: 8px 8px; margin-right: 4px;">Close</button>
+                        <button type="submit" class="btn btn-primary" style="padding: 8px 8px;"
+                            (click)="addWareHouse()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="editModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Edit Warehouse</h4>
+                        <button type="button" class="btn-close" (click)="CloseModalEdit()"></button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <form action="" [formGroup]="editWHForm">
+                            <div class="mb-3">
+                                <input name="" class="form-control" type="text" formControlName="WareHouseId"
+                                    hidden="true" />
+                                <label for="" class="mb-2 font-weight-bold">WareHouse Name</label>
+                                <input name="" class="form-control" type="text" formControlName="WareHouseName" />
+                                <div *ngIf="submitedEdit && v.WareHouseName.errors">
+                                    <small *ngIf="v.WareHouseName.errors['required']" style="color: red;">WareHouse Name cannot be
+                                        empty</small>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="mb-2 font-weight-bold">Address</label>
+                                <input name="" class="form-control" type="text" formControlName="Address" />
+                                <div *ngIf="submitedEdit && v.Address.errors">
+                                    <small *ngIf="v.Address.errors['required']" style="color: red;">Address cannot be
+                                        empty</small>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" (click)="CloseModalEdit()"
+                            style="padding: 8px 8px; margin-right: 4px;">Close</button>
+                        <button type="submit" class="btn btn-primary" style="padding: 8px 8px;"
+                            (click)="editWareHouse()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
