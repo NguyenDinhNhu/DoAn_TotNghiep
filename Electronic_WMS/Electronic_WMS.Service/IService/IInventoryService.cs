@@ -14,6 +14,6 @@ namespace Electronic_WMS.Service.IService
         public ResponseModel Insert(InsertOrUpdateInventory inv);
         public ResponseModel Update(InsertOrUpdateInventory inv);
         public ResponseModel Delete(int id);
-        public ResponseModel ChangeStatus(int id, int status);
+        public ResponseModel ChangeStatus(ChangeStatusInventory change);
     }
 }

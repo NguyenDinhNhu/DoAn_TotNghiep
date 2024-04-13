@@ -20,6 +20,9 @@ import { WarehouseComponent } from './warehouse/warehouse.component';
 import { ListUserComponent } from './users/list-user/list-user.component';
 import { AddUserComponent } from './users/add-user/add-user.component';
 import { EditUserComponent } from './users/edit-user/edit-user.component';
+import { ListProductComponent } from './product/list-product/list-product.component';
+import { AddProductComponent } from './product/add-product/add-product.component';
+import { ProductFeatureComponent } from './product-feature/product-feature.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +37,9 @@ import { EditUserComponent } from './users/edit-user/edit-user.component';
     ListUserComponent,
     AddUserComponent,
     EditUserComponent,
+    ListProductComponent,
+    AddProductComponent,
+    ProductFeatureComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,123 @@
+<div class="container">
+    <div class="d-flex justify-content-between w-100">
+        <h2 class="main-title">Add user</h2>
+        <div>
+            <button type="submit" class="btn btn-warning" style="padding: 10px 8px; margin-right: 8px;"
+                (click)="onSubmit()">
+                <i data-feather="save" aria-hidden="true" style="width: 16px; height: 16px; color: #fff;"></i>
+                <span style="color: #fff;">Save</span>
+            </button>
+            <button class="btn btn-danger" style="padding: 10px 8px;" [routerLink]="['/product/index']">
+                <i data-feather="corner-down-left" aria-hidden="true" style="width: 16px; height: 16px;"></i>
+                Back to list
+            </button>
+        </div>
+    </div>
+    <div class="start-cards">
+        <article class="stat-cards-item">
+            <form action="" [formGroup]="addProduct" class="w-100">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <label for="" class="mb-2 font-weight-bold">Product Name</label>
+                            <input name="" class="form-control" type="text" formControlName="ProductName" />
+                            <div *ngIf="submited && f.ProductName.errors">
+                                <small *ngIf="f.ProductName.errors['required']" style="color: red;">ProductName cannot
+                                    be
+                                    empty</small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="mb-2 font-weight-bold">Description</label>
+                            <input name="" class="form-control" type="text" formControlName="Description" />
+                            <div *ngIf="submited && f.Description.errors">
+                                <small *ngIf="f.Description.errors['required']" style="color: red;">Description cannot
+                                    be
+                                    empty</small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="mb-2 font-weight-bold">Price</label>
+                            <input name="" class="form-control" type="number" formControlName="Price" />
+                            <div *ngIf="submited && f.Price.errors">
+                                <small *ngIf="f.Price.errors['required']" style="color: red;">Price cannot be
+                                    empty</small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="mb-2 font-weight-bold">Unit</label>
+                            <input name="" class="form-control" type="text" formControlName="Unit" />
+                            <div *ngIf="submited && f.Unit.errors">
+                                <small *ngIf="f.Unit.errors['required']" style="color: red;">Unit cannot be
+                                    empty</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="mb-2 font-weight-bold" for="">Product Image</label>
+                            <div class="">
+                                <input class="control-label" id="" name="" type="file" (change)="onChange($event)"
+                                    accept="image/*" style="width: 100%;">
+                                <span class="field-validation-valid text-danger" data-valmsg-for="Image"
+                                    data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="mb-2 font-weight-bold">Category</label>
+                            <div class="combo-section">
+                                <igx-simple-combo [data]="ListCateCombobox" [displayKey]="'cateName'"
+                                    [valueKey]="'cateId'" formControlName="CateId"></igx-simple-combo>
+                            </div>
+                            <div *ngIf="submited && f.CateId.errors">
+                                <small *ngIf="f.CateId.errors['required']" style="color: red;">Please select
+                                    category</small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="mb-2 font-weight-bold">Brand</label>
+                            <div class="combo-section">
+                                <igx-simple-combo [data]="ListBrandCombobox" [displayKey]="'brandName'"
+                                    [valueKey]="'brandId'" formControlName="BrandId"></igx-simple-combo>
+                            </div>
+                            <div *ngIf="submited && f.BrandId.errors">
+                                <small *ngIf="f.BrandId.errors['required']" style="color: red;">Please select
+                                    brand</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead class="text text-primary">
+                        <tr>
+                            <th>Feature</th>
+                            <th>Value</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let row of rows; let i = index;">
+                            <td>
+                                <igx-simple-combo [data]="ListFeatureCombobox" [displayKey]="'featureName'"
+                                    [valueKey]="'featureId'"></igx-simple-combo>
+                            </td>
+                            <td>
+                                <input class="form-control" type="text" />
+                            </td>
+                            <td>
+                                <button class="btn btn-danger" style="padding: 8px 8px;"
+                                    (click)="deleteRow(i)">Remove</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <button class="btn btn-primary" style="padding: 8px 8px; margin-right: 4px;"
+                                    (click)="addRow()">Add row</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </article>
+    </div>
+</div>

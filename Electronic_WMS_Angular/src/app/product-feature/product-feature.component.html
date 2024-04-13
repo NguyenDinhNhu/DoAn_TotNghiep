@@ -1,0 +1,160 @@
+<div class="container">
+    <div class="d-flex justify-content-between w-100">
+        <h2 class="main-title">List Product Feature</h2>
+        <div class="">
+            <button class="btn btn-primary" style="padding: 10px 8px; margin-right: 8px;" (click)="OpenModal()">
+                <i data-feather="plus-circle" aria-hidden="true" style="width: 16px; height: 16px;"></i>
+                Add New Product Feature
+            </button>
+            <button class="btn btn-danger" style="padding: 10px 8px;" [routerLink]="['/product/index']">
+                <i data-feather="corner-down-left" aria-hidden="true" style="width: 16px; height: 16px;"></i>
+                Back to list product
+            </button>
+        </div>
+    </div>
+    <div class="start-cards">
+        <article class="stat-cards-item">
+            <table class="table table-bordered mt-4">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Product Name</th>
+                        <th>Feature Name</th>
+                        <th>Value</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let pf of listPF;">
+                        <td>{{pf.productFeatureId}}</td>
+                        <td>{{pf.productName}}</td>
+                        <td>{{ pf.featureName }}</td>
+                        <td>{{ pf.value }}</td>
+                        <td>
+                            <button class="btn btn-warning" style="padding: 8px 8px; margin-right: 4px;"
+                                (click)="OpenModalEdit(pf.productFeatureId)">
+                                <i data-feather="edit" aria-hidden="true"
+                                    style="width: 16px; height: 16px; color: #fff;"></i>
+                            </button>
+                            <button class="btn btn-danger" style="padding: 8px 8px;"
+                                (click)="deleteProductFeature(pf.productFeatureId)">
+                                <i data-feather="trash-2" aria-hidden="true"
+                                    style="width: 16px; height: 16px; color: #fff"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- The Modal -->
+            <div class="modal" id="myModal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add New Product Feature</h4>
+                            <button type="button" class="btn-close" (click)="CloseModal()"></button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <form action="" [formGroup]="addPFForm">
+                                <div class="mb-3">
+                                    <label for="" class="mb-2 font-weight-bold">Product: </label>
+                                    <div class="combo-section">
+                                        <igx-simple-combo [data]="listProductCombobox" [displayKey]="'productName'"
+                                            [valueKey]="'productId'" formControlName="ProductId" [ngClass]="{'disabled-combo': isDisabled}"></igx-simple-combo>
+                                    </div>
+                                    <div *ngIf="submitedAdd && f.ProductId.errors">
+                                        <small *ngIf="f.ProductId.errors['required']" style="color: red;">Product
+                                            cannot be empty</small>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="" class="mb-2 font-weight-bold">Feature: </label>
+                                    <div class="combo-section">
+                                        <igx-simple-combo [data]="listFeatureCombobox" [displayKey]="'featureName'"
+                                            [valueKey]="'featureId'" formControlName="FeatureId"></igx-simple-combo>
+                                    </div>
+                                    <div *ngIf="submitedAdd && f.FeatureId.errors">
+                                        <small *ngIf="f.FeatureId.errors['required']" style="color: red;">Feature
+                                            cannot be empty</small>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="" class="mb-2 font-weight-bold">Value: </label>
+                                    <input name="" class="form-control" type="text" formControlName="Value" />
+                                    <div *ngIf="submitedAdd && f.Value.errors">
+                                        <small *ngIf="f.Value.errors['required']" style="color: red;">Value
+                                            cannot be empty</small>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" (click)="CloseModal()"
+                                style="padding: 8px 8px; margin-right: 4px;">Close</button>
+                            <button type="submit" class="btn btn-primary" style="padding: 8px 8px;"
+                                (click)="addProductFeature()">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal" id="editModal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Edit Product Feature</h4>
+                            <button type="button" class="btn-close" (click)="CloseModalEdit()"></button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <form action="" [formGroup]="editPFForm">
+                                <div class="mb-3">
+                                    <input name="" class="form-control" type="text" formControlName="ProductFeatureId"
+                                        hidden="true" />
+                                    <label for="" class="mb-2 font-weight-bold">Product: </label>
+                                    <div class="combo-section">
+                                        <igx-simple-combo [data]="listProductCombobox" [displayKey]="'productName'"
+                                            [valueKey]="'productId'" formControlName="ProductId" [ngClass]="{'disabled-combo': isDisabled}"></igx-simple-combo>
+                                    </div>
+                                    <div *ngIf="submitedEdit && v.ProductId.errors">
+                                        <small *ngIf="v.ProductId.errors['required']" style="color: red;">Product
+                                            cannot be empty</small>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="" class="mb-2 font-weight-bold">Feature: </label>
+                                    <div class="combo-section">
+                                        <igx-simple-combo [data]="listFeatureCombobox" [displayKey]="'featureName'"
+                                            [valueKey]="'featureId'" formControlName="FeatureId" [ngClass]="{'disabled-combo': isDisabled}"></igx-simple-combo>
+                                    </div>
+                                    <div *ngIf="submitedEdit && v.FeatureId.errors">
+                                        <small *ngIf="v.FeatureId.errors['required']" style="color: red;">Feature
+                                            cannot be empty</small>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="" class="mb-2 font-weight-bold">Value: </label>
+                                    <input name="" class="form-control" type="text" formControlName="Value" />
+                                    <div *ngIf="submitedEdit && v.Value.errors">
+                                        <small *ngIf="v.Value.errors['required']" style="color: red;">Value
+                                            cannot be empty</small>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" (click)="CloseModalEdit()"
+                                style="padding: 8px 8px; margin-right: 4px;">Close</button>
+                            <button type="submit" class="btn btn-primary" style="padding: 8px 8px;"
+                                (click)="editProductFeature()">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+<div class="container">
+    <h2 class="main-title">List Product</h2>
+    <div class="start-cards">
+        <article class="stat-cards-item">
+            <div class="d-flex justify-content-between w-100">
+                <div class="search-wrapper">
+                    <i data-feather="search" aria-hidden="true"></i>
+                    <input type="text" (keyup.enter)="search()" [(ngModel)]="textSearch"
+                        placeholder="Enter keywords ..." required>
+                </div>
+                <button class="btn btn-primary" style="padding: 10px 8px;" [routerLink]="['/product/add']">
+                    <i data-feather="plus-circle" aria-hidden="true" style="width: 16px; height: 16px;"></i>
+                    Add New Product
+                </button>
+            </div>
+            <table class="table table-bordered mt-4">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Created Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let prod of listProduct;">
+                        <td>{{prod.productId}}</td>
+                        <td><img src="../../../assets/img/product/{{prod.image}}" alt="" style="width: 50px; height: 50px;"></td>
+                        <td>{{prod.productName}}</td>
+                        <!-- <td>{{prod.price | currency:'VND':'symbol':'1.0-0'}}</td> -->
+                        <td>{{formatVND(prod.price)}}</td>
+                        <td>{{ prod.quantity }}</td>
+                        <td>{{ prod.createdDate | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
+                        <td>
+                            <button class="btn btn-success" style="padding: 8px 8px; margin-right: 4px;">
+                                <i data-feather="map-pin" aria-hidden="true"
+                                    style="width: 16px; height: 16px; color: #fff;"></i>
+                            </button>
+                            <button class="btn btn-primary" style="padding: 8px 8px; margin-right: 4px;" [routerLink]="['/product-feature/index', prod.productId]">
+                                <i data-feather="info" aria-hidden="true"
+                                    style="width: 16px; height: 16px; color: #fff;"></i>
+                            </button>
+                            <button class="btn btn-warning" style="padding: 8px 8px; margin-right: 4px;" [routerLink]="['/product/edit', prod.productId]">
+                                <i data-feather="edit" aria-hidden="true"
+                                    style="width: 16px; height: 16px; color: #fff;"></i>
+                            </button>
+                            <button class="btn btn-danger" style="padding: 8px 8px;"
+                                (click)="deleteProduct(prod.productId)">
+                                <i data-feather="trash-2" aria-hidden="true"
+                                    style="width: 16px; height: 16px; color: #fff"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-between w-100">
+                <div class="d-flex" style="align-items: center;">
+                    <p style="margin-right: 2px;">Show</p>
+                    <select (change)="onChangePageSize($event)">
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                    <p style="margin-left: 2px;">entries of {{totalItem}} total item</p>
+                </div>
+                <app-pagination [currentPage]="currentPage" [pageSize]="pageSize" [totalItem]="totalItem"
+                    (changePage)="changePage($event)"></app-pagination>
+            </div>
+        </article>
+    </div>
+</div>

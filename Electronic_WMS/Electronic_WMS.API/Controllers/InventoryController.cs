@@ -49,5 +49,12 @@ namespace Electronic_WMS.API.Controllers
             var result = _iInventoryService.GetById(id);
             return Ok(result);
         }
+
+        [HttpPost(nameof(ChangeStatus))]
+        public IActionResult ChangeStatus([FromBody] ChangeStatusInventory change)
+        {
+            var result = _iInventoryService.ChangeStatus(change);
+            return Ok(result);
+        }
     }
 }

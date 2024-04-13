@@ -12,8 +12,18 @@ namespace Electronic_WMS.Models.Models
         public IEnumerable<ProductVM> ListProduct { get; set; }
         public int Total { get; set; }
     }
-
     public class ProductVM
+    {
+        public int ProductId { get; set; }
+        public string ProductName { get; set; }
+        public string Image { get; set;}
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int Status {  get; set; }
+
+    }
+    public class ProductDetailVM
     {
         public int ProductId { get; set; }
         public string ProductName { get; set; }
@@ -31,6 +41,7 @@ namespace Electronic_WMS.Models.Models
         public int BrandId { get; set; }
         public string BrandName { get; set;}
         public string CateName { get; set;}
+        public List<ProductFeatureVM> ListProductFeature { get; set; }
     }
 
     public class ProductCombobox

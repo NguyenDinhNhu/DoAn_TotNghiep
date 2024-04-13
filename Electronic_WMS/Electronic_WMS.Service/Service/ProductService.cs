@@ -21,13 +21,15 @@ namespace Electronic_WMS.Service.Service
         private readonly ICategoryRepository _iCategoryRepository;
         private readonly IBrandRepository _iBrandRepository;
         private readonly IProductFeatureRepository _iProductFeatureRepository;
+        private readonly IFeatureRepository _iFeatureRepository;
         public ProductService(IProductRepository iProductRepository, ICategoryRepository iCategoryRepository, 
-            IBrandRepository iBrandRepository, IProductFeatureRepository iProductFeatureRepository)
+            IBrandRepository iBrandRepository, IProductFeatureRepository iProductFeatureRepository, IFeatureRepository iFeatureRepository)
         {
             _iProductRepository = iProductRepository;
             _iCategoryRepository = iCategoryRepository;
             _iBrandRepository = iBrandRepository;
             _iProductFeatureRepository = iProductFeatureRepository;
+            _iFeatureRepository = iFeatureRepository;
         }
         public ResponseModel Delete(int id)
         {
@@ -57,10 +59,10 @@ namespace Electronic_WMS.Service.Service
             };
         }
 
-        public ProductVM GetById(int id)
+        public ProductDetailVM GetById(int id)
         {
             var prod = _iProductRepository.GetById(id);
-            var prodDetail = new ProductVM
+            var prodDetail = new ProductDetailVM
             {
                 ProductId = prod.ProductId,
                 ProductName = prod.ProductName,
@@ -78,6 +80,15 @@ namespace Electronic_WMS.Service.Service
                 BrandId = prod.BrandId,
                 BrandName = _iBrandRepository.GetById(prod.BrandId).BrandName,
                 CateName = _iCategoryRepository.GetById(prod.CateId).CateName,
+                ListProductFeature = (from pf in _iProductFeatureRepository.GetListByProductId(prod.ProductId)
+                                      select new ProductFeatureVM {
+                                        ProductFeatureId = pf.ProductFeatureId,
+                                        ProductId = pf.ProductId,
+                                        FeatureId = pf.FeatureId,
+                                        ProductName = prod.ProductName,
+                                        FeatureName = _iFeatureRepository.GetById(pf.FeatureId).FeatureName,
+                                        Value = pf.Value,
+                                      }).ToList(),
             };
             return prodDetail;
         }
@@ -85,24 +96,18 @@ namespace Electronic_WMS.Service.Service
         public GetListProduct GetList(SearchVM search)
         {
             var list = from prod in _iProductRepository.GetList()
+                       join c in _iCategoryRepository.GetList() on prod.CateId equals c.CateId
+                       join b in _iBrandRepository.GetList() on prod.BrandId equals b.BrandId
+                       where c.Status == (int)CommonStatus.IsActive && b.Status == (int)CommonStatus.IsActive
                        select new ProductVM
                        {
                            ProductId = prod.ProductId,
                            ProductName = prod.ProductName,
                            Image = prod.Image,
                            CreatedDate = prod.CreatedDate,
-                           UpdatedDate = prod.UpdatedDate,
-                           CreatedBy = prod.CreatedBy,
-                           UpdatedBy = prod.UpdatedBy,
-                           Description = prod.Description,
                            Price = prod.Price,
-                           Unit = prod.Unit,
                            Quantity = prod.Quantity,
                            Status = prod.Status,
-                           CateId = prod.CateId,
-                           BrandId = prod.BrandId,
-                           BrandName = _iBrandRepository.GetById(prod.BrandId).BrandName,
-                           CateName = _iCategoryRepository.GetById(prod.CateId).CateName,
                        };
             var total = list.Count();
             if (search.TextSearch == null)

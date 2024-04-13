@@ -35,6 +35,7 @@ namespace Electronic_WMS.API.Configurations
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IProductFeatureService, ProductFeatureService>();
             services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<ISerialNumberService, SerialNumberService>();
         }
     }
 }

@@ -30,7 +30,12 @@ namespace Electronic_WMS.Repository.Repository
 
         public IEnumerable<SerialNumberEntity> GetListByInventoryLineId(int inventoryLineId)
         {
-            return _db.SerialNumberEntities.Where(x => x.Status != (int)SeriStatus.IsDelete && x.InventoryLineId == inventoryLineId).ToList();
+            return _db.SerialNumberEntities.Where(x => x.InventoryLineId == inventoryLineId).ToList();
+        }
+
+        public SerialNumberEntity GetByLocation(string location)
+        {
+            return _db.SerialNumberEntities.Where(x => x.Status == (int)SeriStatus.IsStock && x.Location.ToLower() == location.ToLower()).FirstOrDefault();
         }
 
         public int Insert(SerialNumberEntity seri)

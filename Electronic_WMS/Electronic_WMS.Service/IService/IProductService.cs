@@ -11,7 +11,7 @@ namespace Electronic_WMS.Service.IService
     {
         public GetListProduct GetList(SearchVM search);
         public IEnumerable<ProductCombobox> GetListCombobox();
-        public ProductVM GetById(int id);
+        public ProductDetailVM GetById(int id);
         public ResponseModel Insert(InsertOrUpdateProduct prod);
         public ResponseModel Update(InsertOrUpdateProduct prod);
         public ResponseModel Delete(int id);

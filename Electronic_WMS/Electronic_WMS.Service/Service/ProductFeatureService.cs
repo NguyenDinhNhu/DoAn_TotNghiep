@@ -104,49 +104,30 @@ namespace Electronic_WMS.Service.Service
             return list;
         }
 
-        public ResponseModel Insert(List<ProductFeature> listPF)
+        public ResponseModel Insert(ProductFeature pf)
         {
-            if (listPF.Count() > 0)
+            // Check Product Feature in database
+            var checkPFValue = _iProductFeatureRepository.GetList()
+                .Where(x => x.ProductId == pf.ProductId && x.FeatureId == pf.FeatureId).FirstOrDefault();
+            if (checkPFValue != null)
             {
-                foreach (var pf in listPF)
-                {
-                    // Check Product Feature in database
-                    var checkPFValue = _iProductFeatureRepository.GetList()
-                        .Where(x => x.ProductId == pf.ProductId && x.FeatureId == pf.FeatureId && x.Value == pf.Value).FirstOrDefault();
-                    if (checkPFValue != null)
-                    {
-                        return new ResponseModel
-                        {
-                            StatusCode = 400,
-                            StatusMessage = "Product already exists this feature value!"
-                        };
-                    }
-
-                    // Insert Product Feature 
-                    var pfEntity = new ProductFeatureEntity
-                    {
-                        ProductId = pf.ProductId,
-                        FeatureId = pf.FeatureId,
-                        Value = pf.Value
-                    };
-
-                    var status = _iProductFeatureRepository.Insert(pfEntity);
-                    if (status == 0)
-                    {
-                        return new ResponseModel
-                        {
-                            StatusCode = 500,
-                            StatusMessage = "Error!"
-                        };
-                    }
-                }
                 return new ResponseModel
                 {
-                    StatusCode = 200,
-                    StatusMessage = "Create Successfully!"
+                    StatusCode = 400,
+                    StatusMessage = "Product already exists this feature: " + _iFeatureRepository.GetById(pf.FeatureId).FeatureName
                 };
             }
-            else
+
+            // Insert Product Feature 
+            var pfEntity = new ProductFeatureEntity
+            {
+                ProductId = pf.ProductId,
+                FeatureId = pf.FeatureId,
+                Value = pf.Value
+            };
+
+            var status = _iProductFeatureRepository.Insert(pfEntity);
+            if (status == 0)
             {
                 return new ResponseModel
                 {
@@ -154,6 +135,12 @@ namespace Electronic_WMS.Service.Service
                     StatusMessage = "Error!"
                 };
             }
+
+            return new ResponseModel
+            {
+                StatusCode = 200,
+                StatusMessage = "Create Successfully!"
+            };
         }
 
         public ResponseModel Update(ProductFeature pf)

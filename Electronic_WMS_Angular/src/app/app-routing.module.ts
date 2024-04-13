@@ -9,6 +9,9 @@ import { WarehouseComponent } from './warehouse/warehouse.component';
 import { ListUserComponent } from './users/list-user/list-user.component';
 import { AddUserComponent } from './users/add-user/add-user.component';
 import { EditUserComponent } from './users/edit-user/edit-user.component';
+import { ListProductComponent } from './product/list-product/list-product.component';
+import { AddProductComponent } from './product/add-product/add-product.component';
+import { ProductFeatureComponent } from './product-feature/product-feature.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent},
@@ -20,6 +23,9 @@ const routes: Routes = [
   { path: 'user/index', component: ListUserComponent},
   { path: 'user/add', component: AddUserComponent},
   { path: 'user/edit/:userId', component: EditUserComponent},
+  { path: 'product/index', component: ListProductComponent},
+  { path: 'product/add', component: AddProductComponent},
+  { path: 'product-feature/index/:productId', component: ProductFeatureComponent},
 ];
 
 @NgModule({

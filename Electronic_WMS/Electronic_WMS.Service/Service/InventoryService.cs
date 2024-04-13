@@ -36,9 +36,9 @@ namespace Electronic_WMS.Service.Service
             _iWareHouseRepository = iWareHouseRepository;
         }
 
-        public ResponseModel ChangeStatus(int id, int status)
+        public ResponseModel ChangeStatus(ChangeStatusInventory change)
         {
-            var inv = _iInventoryRepository.GetById(id);
+            var inv = _iInventoryRepository.GetById(change.InventoryId);
             if (inv == null)
             {
                 return new ResponseModel
@@ -47,28 +47,85 @@ namespace Electronic_WMS.Service.Service
                     StatusMessage = "Inventory Not Found!"
                 };
             }
-            if (status == (int)InventoryStatus.IsCancle)
+            if (change.Status == (int)InventoryStatus.IsCancle)
             {
-                inv.Status = status;
+                inv.Status = change.Status;
+                var invDetail = _iInventoryLineRepository.GetListByInventoryId(change.InventoryId).ToList();
+                if (invDetail.Count() > 0)
+                {
+                    foreach (var i in invDetail)
+                    {
+                        var lstSeri = _iSerialNumberRepository.GetListByInventoryLineId(i.InventoryLineId).ToList();
+                        if (lstSeri.Count > 0)
+                        {
+                            foreach (var s in lstSeri)
+                            {
+                                var seriUpdate = _iSerialNumberRepository.GetById(s.SerialId);
+                                seriUpdate.Status = (int)SeriStatus.IsDelete;
+                                var updateSerial = _iSerialNumberRepository.Update(seriUpdate);
+                                if (updateSerial == 0)
+                                {
+                                    return new ResponseModel
+                                    {
+                                        StatusCode = 500,
+                                        StatusMessage = "Eror!"
+                                    };
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            else if (status == (int)InventoryStatus.IsComplete)
+            else if (change.Status == (int)InventoryStatus.IsComplete)
             {
-                inv.Status = status;
-                var invDetail = _iInventoryLineRepository.GetListByInventoryId(id);
-                if (invDetail != null)
+                inv.Status = change.Status;
+                var invDetail = _iInventoryLineRepository.GetListByInventoryId(change.InventoryId).ToList();
+                if (invDetail.Count() > 0)
                 {
                     foreach (var i in invDetail)
                     {
                         var product = _iProductRepository.GetById(i.ProductId);
-                        if (product != null) 
+                        var lstSeri = _iSerialNumberRepository.GetListByInventoryLineId(i.InventoryLineId).ToList();
+                        if (inv.Type == 1) // Receipts
                         {
-                            if (inv.Type == 1) // Receipts
+                            product.Quantity += i.Quantity;
+                            if (lstSeri.Count() > 0)
                             {
-                                product.Quantity += i.Quantity;
+                                foreach (var s in lstSeri)
+                                {
+                                    var seriUpdate = _iSerialNumberRepository.GetById(s.SerialId);
+                                    seriUpdate.Status = (int)SeriStatus.IsStock;
+                                    var updateSerial = _iSerialNumberRepository.Update(seriUpdate);
+                                    if (updateSerial == 0)
+                                    {
+                                        return new ResponseModel
+                                        {
+                                            StatusCode = 500,
+                                            StatusMessage = "Eror!"
+                                        };
+                                    }
+                                }
                             }
-                            else if (inv.Type == 2) // Deliveries
+                        }
+                        else if (inv.Type == 2) //Deliveries
+                        {
+                            product.Quantity -= i.Quantity;
+                            if (lstSeri.Count() > 0)
                             {
-                                product.Quantity -= i.Quantity;
+                                foreach (var s in lstSeri)
+                                {
+                                    var seriUpdate = _iSerialNumberRepository.GetById(s.SerialId);
+                                    seriUpdate.Status = (int)SeriStatus.IsReleased;
+                                    var updateSerial = _iSerialNumberRepository.Update(seriUpdate);
+                                    if (updateSerial == 0)
+                                    {
+                                        return new ResponseModel
+                                        {
+                                            StatusCode = 500,
+                                            StatusMessage = "Eror!"
+                                        };
+                                    }
+                                }
                             }
                         }
                         var updateProduct = _iProductRepository.Update(product);
