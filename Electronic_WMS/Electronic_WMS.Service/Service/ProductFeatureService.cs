@@ -77,15 +77,12 @@ namespace Electronic_WMS.Service.Service
                            FeatureName = _iFeatureRepository.GetById(pf.FeatureId).FeatureName,
                            Value = pf.Value,
                        };
+            if (!string.IsNullOrEmpty(search.TextSearch))
+            {
+                list = list.Where(x => x.Value.ToLower().Contains(search.TextSearch.ToLower()));
+            }
             var total = list.Count();
-            if (search.TextSearch == null)
-            {
-                list = list.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
-            }
-            else
-            {
-                list = list.Where(x => x.Value.ToLower().Contains(search.TextSearch.ToLower())).Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
-            }
+            list = list.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
             return new GetListProductFeature { ListProductFeature = list, Total = total };
         }
 

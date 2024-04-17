@@ -12,6 +12,7 @@ import { EditUserComponent } from './users/edit-user/edit-user.component';
 import { ListProductComponent } from './product/list-product/list-product.component';
 import { AddProductComponent } from './product/add-product/add-product.component';
 import { ProductFeatureComponent } from './product-feature/product-feature.component';
+import { EditProductComponent } from './product/edit-product/edit-product.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent},
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'user/edit/:userId', component: EditUserComponent},
   { path: 'product/index', component: ListProductComponent},
   { path: 'product/add', component: AddProductComponent},
+  { path: 'product/edit/:productId', component: EditProductComponent},
   { path: 'product-feature/index/:productId', component: ProductFeatureComponent},
 ];
 

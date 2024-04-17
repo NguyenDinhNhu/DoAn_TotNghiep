@@ -31,15 +31,12 @@ namespace Electronic_WMS.Service.Service
                                 WareHouseId = s.WareHouseId,
                                 WareHouseName = _iWareHouseRepository.GetById(s.WareHouseId).Name,
                             };
+            if (!string.IsNullOrEmpty(search.TextSearch))
+            {
+                listSeri = listSeri.Where(s => s.SerialNumber.ToLower().Contains(search.TextSearch.ToLower()));
+            }
             var total = listSeri.Count();
-            if (search.TextSearch == null)
-            {
-                listSeri = listSeri.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
-            }
-            else
-            {
-                listSeri = listSeri.Where(s => s.SerialNumber.ToLower().Contains(search.TextSearch.ToLower())).Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
-            }
+            listSeri = listSeri.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
             return new GetListSerialByProductId { ListSerial = listSeri, Total = total };
         }
 

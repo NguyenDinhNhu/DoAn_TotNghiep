@@ -9,6 +9,7 @@ namespace Electronic_WMS.Models.Models
     public class InventorySearch : SearchVM
     {
         public int Type { get; set; }
+        public int Status { get; set; }
     }
     public class GetListInventory
     {

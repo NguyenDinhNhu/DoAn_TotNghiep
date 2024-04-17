@@ -109,15 +109,12 @@ namespace Electronic_WMS.Service.Service
                            Quantity = prod.Quantity,
                            Status = prod.Status,
                        };
+            if (!string.IsNullOrEmpty(search.TextSearch))
+            {
+                list = list.Where(x => x.ProductName.ToLower().Contains(search.TextSearch.ToLower()));
+            }
             var total = list.Count();
-            if (search.TextSearch == null)
-            {
-                list = list.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
-            }
-            else
-            {
-                list = list.Where(x => x.ProductName.ToLower().Contains(search.TextSearch.ToLower())).Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
-            }
+            list = list.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
             return new GetListProduct { ListProduct = list, Total = total};
         }
 
@@ -238,7 +235,6 @@ namespace Electronic_WMS.Service.Service
             //}
 
             // Update Product 
-            prodDetail.ProductName = prod.ProductName;
             prodDetail.ProductName = prod.ProductName;
             prodDetail.UpdatedDate = DateTime.Now;
             prodDetail.UpdatedBy = 1;

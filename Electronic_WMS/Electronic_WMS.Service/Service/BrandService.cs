@@ -70,15 +70,12 @@ namespace Electronic_WMS.Service.Service
                                ParentName = b.ParentId == 0 ? "Highest level" : _iBrandRepository.GetParentName(b.ParentId),
                                Status = b.Status
                            };
+            if (!string.IsNullOrEmpty(search.TextSearch))
+            {
+                listBrand = listBrand.Where(b => b.BrandName.ToLower().Contains(search.TextSearch.ToLower()));
+            }
             var total = listBrand.Count();
-            if (search.TextSearch == null)
-            {
-                listBrand = listBrand.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
-            }
-            else
-            {
-                listBrand = listBrand.Where(b => b.BrandName.ToLower().Contains(search.TextSearch.ToLower())).Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
-            }
+            listBrand = listBrand.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
             return new GetListBrand { ListBrand = listBrand, Total = total};
         }
 

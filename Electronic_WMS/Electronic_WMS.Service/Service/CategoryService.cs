@@ -70,15 +70,12 @@ namespace Electronic_WMS.Service.Service
                                 ParentName = c.ParentId == 0? "Highest level" : _iCategoryRepository.GetParentName(c.ParentId),
                                 Status = c.Status,
                             };
+            if (!string.IsNullOrEmpty(search.TextSearch))
+            {
+                listCate = listCate.Where(b => b.CateName.ToLower().Contains(search.TextSearch.ToLower()));
+            }
             var total = listCate.Count();
-            if (search.TextSearch == null)
-            {
-                listCate = listCate.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
-            }
-            else
-            {
-                listCate = listCate.Where(b => b.CateName.ToLower().Contains(search.TextSearch.ToLower())).Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
-            }
+            listCate = listCate.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
             return new GetListCategory { ListCate = listCate, Total = total};
         }
 

@@ -1,6 +1,6 @@
 <div class="container">
     <div class="d-flex justify-content-between w-100">
-        <h2 class="main-title">Add Product</h2>
+        <h2 class="main-title">Edit Product</h2>
         <div>
             <button type="submit" class="btn btn-warning" style="padding: 10px 8px; margin-right: 8px;"
                 (click)="onSubmit()">
@@ -15,10 +15,11 @@
     </div>
     <div class="start-cards">
         <article class="stat-cards-item">
-            <form action="" [formGroup]="addProduct" class="w-100">
+            <form action="" [formGroup]="editProduct" class="w-100">
                 <div class="row">
                     <div class="col-md-8">
                         <div class="mb-3">
+                            <input type="text" formControlName="ProductId" hidden="true">
                             <label for="" class="mb-2 font-weight-bold">Product Name</label>
                             <input name="" class="form-control" type="text" formControlName="ProductName" />
                             <div *ngIf="submited && f.ProductName.errors">
@@ -41,6 +42,14 @@
                             <input name="" class="form-control" type="number" formControlName="Price" />
                             <div *ngIf="submited && f.Price.errors">
                                 <small *ngIf="f.Price.errors['required']" style="color: red;">Price cannot be
+                                    empty</small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="mb-2 font-weight-bold">Quantity</label>
+                            <input name="" class="form-control" type="number" formControlName="Quantity" />
+                            <div *ngIf="submited && f.Quantity.errors">
+                                <small *ngIf="f.Quantity.errors['required']" style="color: red;">Price cannot be
                                     empty</small>
                             </div>
                         </div>
@@ -92,40 +101,19 @@
             <table class="table table-bordered">
                 <thead class="text text-primary">
                     <tr>
+                        <th>ProductFeatureId</th>
                         <th>Feature</th>
                         <th>Value</th>
-                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let row of rows; let i = index;">
+                    <tr *ngFor="let row of rows;">
+                        <td><input type="text" value="{{row.ProductFeatureId}}" [(ngModel)]="row.ProductFeatureId" disabled></td>
                         <td>
                             <igx-simple-combo [data]="ListFeatureCombobox" [displayKey]="'featureName'"
-                                [valueKey]="'featureId'" [(ngModel)]="row.FeatureId"></igx-simple-combo>
-                            <!-- <div *ngIf="submited && f.FeatureId.errors">
-                                <small *ngIf="f.FeatureId.errors['required']" style="color: red;">Please select
-                                    Feature</small>
-                            </div> -->
+                            [valueKey]="'featureId'" [(ngModel)]="row.FeatureId" [ngClass]="{'disabled-combo': true}"></igx-simple-combo>
                         </td>
-                        <td>
-                            <input class="form-control" type="text" [(ngModel)]="row.Value"/>
-                            <!-- <div *ngIf="submited && f.Value.errors">
-                                <small *ngIf="f.Value.errors['required']" style="color: red;">Value cannot be empty</small>
-                            </div> -->
-                        </td>
-                        <td>
-                            <button class="btn btn-danger" style="padding: 8px 8px;"
-                                (click)="deleteRow(i)">Remove</button>
-                        </td>
-                        <!-- <td *ngIf="row.submited && (!row.FeatureId || !row.Value)">
-                            <div style="color: red;">Please fill in all fields in this row</div>
-                        </td> -->
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            <button class="btn btn-primary" style="padding: 8px 8px; margin-right: 4px;"
-                                (click)="addRow()">Add row</button>
-                        </td>
+                        <td><input class="form-control" type="text" [(ngModel)]="row.Value"/></td>
                     </tr>
                 </tbody>
             </table>

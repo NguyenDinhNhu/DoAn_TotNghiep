@@ -242,24 +242,22 @@ namespace Electronic_WMS.Service.Service
                             Type = inv.Type,
                             Status = inv.Status
                        };
-            if(search.Type == 0)
+            if (search.Type != 0)
             {
-                list = list.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
+                list = list.Where(x => x.Type == search.Type);
             }
-            else
+
+            if (search.Status != 0)
             {
-                list = list.Where(x => x.Type == search.Type).Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
+                list = list.Where(x => x.Status == search.Status);
+            }
+
+            if (!string.IsNullOrEmpty(search.TextSearch))
+            {
+                list = list.Where(x => x.CustomerName.ToLower().Contains(search.TextSearch.ToLower()));
             }
             var total = list.Count();
-
-            if (search.TextSearch == null)
-            {
-                list = list.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
-            }
-            else
-            {
-                list = list.Where(x => x.CustomerName.ToLower().Contains(search.TextSearch.ToLower())).Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
-            }
+            list = list.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
             return new GetListInventory { ListInventory = list, Total = total};
         }
 
