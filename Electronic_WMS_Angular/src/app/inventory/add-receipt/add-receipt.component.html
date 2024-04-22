@@ -1,0 +1,87 @@
+<div class="container">
+    <div class="d-flex justify-content-between w-100">
+        <h2 class="main-title">Add New Receipt</h2>
+        <div>
+            <button type="submit" class="btn btn-warning" style="padding: 10px 8px; margin-right: 8px;"
+                (click)="onSubmit()">
+                <i data-feather="save" aria-hidden="true" style="width: 16px; height: 16px; color: #fff;"></i>
+                <span style="color: #fff;">Save</span>
+            </button>
+            <button class="btn btn-danger" style="padding: 10px 8px;" [routerLink]="['/receipts/index']">
+                <i data-feather="corner-down-left" aria-hidden="true" style="width: 16px; height: 16px;"></i>
+                Back to list
+            </button>
+        </div>
+    </div>
+    <div class="start-cards">
+        <article class="stat-cards-item">
+            <form action="" [formGroup]="addReceipt" class="w-100">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="combo-section">
+                            <label for="" class="mb-2 font-weight-bold">Supplier: </label>
+                            <igx-simple-combo [data]="ListSupplierCombobox" [displayKey]="'fullName'"
+                                [valueKey]="'userId'" formControlName="UserId"></igx-simple-combo>
+                        </div>
+                        <div *ngIf="submited && f.UserId.errors">
+                            <small *ngIf="f.UserId.errors['required']" style="color: red;">Please select
+                                Supplier</small>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="combo-section">
+                            <label for="" class="mb-2 font-weight-bold">WareHouse: </label>
+                            <igx-simple-combo [data]="ListWHCombobox" [displayKey]="'name'"
+                                [valueKey]="'wareHouseId'" formControlName="WareHouseId"></igx-simple-combo>
+                        </div>
+                        <div *ngIf="submited && f.WareHouseId.errors">
+                            <small *ngIf="f.WareHouseId.errors['required']" style="color: red;">Please select
+                                Warehouse</small>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <h2 class="main-title" style="margin-top: 12px;">List Product: </h2>
+            <table class="table table-bordered">
+                <thead class="text text-primary">
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of ListInventoryLine; let i = index;">
+                        <td>
+                            <igx-simple-combo [data]="ListProductCombobox" [displayKey]="'productName'"
+                                [valueKey]="'productId'" [(ngModel)]="row.ProductId"></igx-simple-combo>
+                            <!-- <div *ngIf="submited && f.FeatureId.errors">
+                                <small *ngIf="f.FeatureId.errors['required']" style="color: red;">Please select
+                                    Feature</small>
+                            </div> -->
+                        </td>
+                        <td>
+                            <input class="form-control" type="number" [(ngModel)]="row.Quantity"/>
+                            <!-- <div *ngIf="submited && f.Value.errors">
+                                <small *ngIf="f.Value.errors['required']" style="color: red;">Value cannot be empty</small>
+                            </div> -->
+                        </td>
+                        <td>
+                            <button class="btn btn-danger" style="padding: 8px 8px;"
+                                (click)="deleteRow(i)">Remove</button>
+                        </td>
+                        <!-- <td *ngIf="row.submited && (!row.FeatureId || !row.Value)">
+                            <div style="color: red;">Please fill in all fields in this row</div>
+                        </td> -->
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <button class="btn btn-primary" style="padding: 8px 8px; margin-right: 4px;"
+                                (click)="addRow()">Add row</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </article>
+    </div>
+</div>

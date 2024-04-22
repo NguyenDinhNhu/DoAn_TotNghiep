@@ -64,4 +64,10 @@ namespace Electronic_WMS.Models.Models
         public IFormFile? FileImage { get; set; }
         public string? ListProductFeature { get; set; }  
     }
+
+    public class CheckQuantity
+    {
+        public string ProductName { get; set; }
+        public int Quantity { get; set; }
+    }
 }

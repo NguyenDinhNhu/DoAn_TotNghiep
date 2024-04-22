@@ -21,12 +21,19 @@ namespace Electronic_WMS.API.Controllers
         {
             var result = _iSerialNumberService.GetListByProductId(search);
             return Ok(result);
+        } 
+        
+        [HttpPost(nameof(GetListSerialCombobox))]
+        public IActionResult GetListSerialCombobox([FromBody] SearchListSerialCombobox search)
+        {
+            var result = _iSerialNumberService.GetListSerialCombobox(search);
+            return Ok(result);
         }
 
-        [HttpPost(nameof(Updatelocation))]
-        public IActionResult Updatelocation([FromBody] UpdateLocation location)
+        [HttpPost(nameof(UpdateLocation))]
+        public IActionResult UpdateLocation([FromBody] List<UpdateLocation> listSeri)
         {
-            var result = _iSerialNumberService.UpdateLocation(location);
+            var result = _iSerialNumberService.UpdateLocation(listSeri);
             return Ok(result);
         }
     }

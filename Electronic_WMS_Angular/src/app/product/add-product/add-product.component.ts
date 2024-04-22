@@ -113,8 +113,8 @@ export class AddProductComponent {
 
     // Nếu bất kỳ dòng nào không hợp lệ, không thực hiện gửi form và hiển thị thông báo lỗi
     if (this.rows.some(row => row.submited)) {
-        this.toastr.error('Please fill out all fields in each row of the product specification table', 'Error');
-        return;
+      this.toastr.error('Please fill out all fields in each row of the product specification table', 'Error');
+      return;
     }
 
     console.log(this.addProduct.invalid)

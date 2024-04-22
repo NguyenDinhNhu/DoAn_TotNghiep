@@ -7,24 +7,24 @@
                     <i data-feather="search" aria-hidden="true"></i>
                     <input type="text" (keyup.enter)="search()" [(ngModel)]="textSearch" placeholder="Enter keywords ..." required>
                 </div>
-                <button class="btn btn-primary" style="padding: 10px 8px;" (click)="OpenModal()">
+                <!-- <button class="btn btn-primary" style="padding: 10px 8px;" (click)="OpenModal()">
                     <i data-feather="plus-circle" aria-hidden="true" style="width: 16px; height: 16px;"></i>
                     Add New Role
-                </button>
+                </button> -->
             </div>
             <table class="table table-bordered mt-4" >
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Role Name</th>
-                        <th>Action</th>
+                        <!-- <th>Action</th> -->
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let role of listRoles;">
                         <td>{{role.roleId}}</td>
                         <td>{{role.roleName}}</td>
-                        <td>
+                        <!-- <td>
                             <button class="btn btn-warning" style="padding: 8px 8px; margin-right: 4px;" (click)="OpenModalEdit(role.roleId)"> 
                                 <i data-feather="edit" aria-hidden="true"
                                     style="width: 16px; height: 16px; color: #fff;"></i>
@@ -33,7 +33,7 @@
                                 <i data-feather="trash-2" aria-hidden="true"
                                     style="width: 16px; height: 16px; color: #fff"></i>
                             </button>
-                        </td>
+                        </td> -->
                     </tr>
                 </tbody>
             </table>

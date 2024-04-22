@@ -26,6 +26,9 @@ import { ProductFeatureComponent } from './product-feature/product-feature.compo
 import { EditProductComponent } from './product/edit-product/edit-product.component';
 import { ListReceiptsComponent } from './inventory/list-receipts/list-receipts.component';
 import { ListDeliveriesComponent } from './inventory/list-deliveries/list-deliveries.component';
+import { AddReceiptComponent } from './inventory/add-receipt/add-receipt.component';
+import { AddDeliveryComponent } from './inventory/add-delivery/add-delivery.component';
+import { SerialNumberComponent } from './serial-number/serial-number.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +49,9 @@ import { ListDeliveriesComponent } from './inventory/list-deliveries/list-delive
     EditProductComponent,
     ListReceiptsComponent,
     ListDeliveriesComponent,
+    AddReceiptComponent,
+    AddDeliveryComponent,
+    SerialNumberComponent,
   ],
   imports: [
     BrowserModule,

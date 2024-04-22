@@ -13,6 +13,10 @@ import { ListProductComponent } from './product/list-product/list-product.compon
 import { AddProductComponent } from './product/add-product/add-product.component';
 import { ProductFeatureComponent } from './product-feature/product-feature.component';
 import { EditProductComponent } from './product/edit-product/edit-product.component';
+import { ListReceiptsComponent } from './inventory/list-receipts/list-receipts.component';
+import { ListDeliveriesComponent } from './inventory/list-deliveries/list-deliveries.component';
+import { AddReceiptComponent } from './inventory/add-receipt/add-receipt.component';
+import { AddDeliveryComponent } from './inventory/add-delivery/add-delivery.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent},
@@ -28,6 +32,10 @@ const routes: Routes = [
   { path: 'product/add', component: AddProductComponent},
   { path: 'product/edit/:productId', component: EditProductComponent},
   { path: 'product-feature/index/:productId', component: ProductFeatureComponent},
+  { path: 'receipts/index', component: ListReceiptsComponent},
+  { path: 'deliveries/index', component: ListDeliveriesComponent},
+  { path: 'receipts/add', component: AddReceiptComponent},
+  { path: 'deliveries/add', component: AddDeliveryComponent},
 ];
 
 @NgModule({

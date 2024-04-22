@@ -17,7 +17,7 @@ namespace Electronic_WMS.Utilities.Enum
         IsDelete = 0,
         IsReady = 1,
         IsComplete = 2,
-        IsCancle = 3,
+        IsCancel = 3,
     }
 
     public enum SeriStatus
@@ -25,6 +25,7 @@ namespace Electronic_WMS.Utilities.Enum
         IsDelete = 0,
         IsStock = 1,
         IsReleased = 2,
-        IsCreate = 3
+        IsCreate = 3,
+        IsProcessing = 4
     }
 }

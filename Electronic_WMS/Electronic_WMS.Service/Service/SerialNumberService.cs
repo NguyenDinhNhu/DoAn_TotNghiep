@@ -40,33 +40,64 @@ namespace Electronic_WMS.Service.Service
             return new GetListSerialByProductId { ListSerial = listSeri, Total = total };
         }
 
-        public ResponseModel UpdateLocation(UpdateLocation location)
+        public IEnumerable<ListSerialCombobox> GetListSerialCombobox(SearchListSerialCombobox search)
         {
-            var seri = _iSerialNumberRepository.GetById(location.SerialId);
-            if (seri == null)
+            var listSeri = from s in _iSerialNumberRepository.GetListByProductId(search.ProductId)
+                           where s.WareHouseId == search.WareHouseId
+                           select new ListSerialCombobox
+                           {
+                               SerialId = s.SerialId,
+                               SerialNumber = s.SerialNumber
+                           };
+            return listSeri;
+        }
+
+        public ResponseModel UpdateLocation(List<UpdateLocation> listSeri)
+        {
+            if (listSeri.Count > 0)
             {
+                foreach (var location in listSeri)
+                {
+                    var seri = _iSerialNumberRepository.GetById(location.SerialId);
+                    if (seri == null)
+                    {
+                        return new ResponseModel
+                        {
+                            StatusCode = 404,
+                            StatusMessage = "Serial does not exists!"
+                        };
+                    }
+                    // Check Location in database
+                    var checkLocation = _iSerialNumberRepository.GetByLocation(location.Location);
+                    if (checkLocation != null && checkLocation.SerialId != location.SerialId)
+                    {
+                        return new ResponseModel
+                        {
+                            StatusCode = 400,
+                            StatusMessage = "This location cannot be selected!"
+                        };
+                    }
+
+                    // Update  
+                    seri.Location = location.Location;
+
+                    var status = _iSerialNumberRepository.Update(seri);
+                    if (status == 0)
+                    {
+                        return new ResponseModel
+                        {
+                            StatusCode = 500,
+                            StatusMessage = "Error!"
+                        };
+                    }
+                }
                 return new ResponseModel
                 {
-                    StatusCode = 404,
-                    StatusMessage = "Serial does not exists!"
+                    StatusCode = 200,
+                    StatusMessage = "Update Successfully!"
                 };
             }
-            // Check Location in database
-            var checkLocation = _iSerialNumberRepository.GetByLocation(location.Location);
-            if (checkLocation != null && checkLocation.SerialId != location.SerialId)
-            {
-                return new ResponseModel
-                {
-                    StatusCode = 400,
-                    StatusMessage = "This location cannot be selected!"
-                };
-            }
-
-            // Update Brand 
-            seri.Location = location.Location;
-
-            var status = _iSerialNumberRepository.Update(seri);
-            if (status == 0)
+            else
             {
                 return new ResponseModel
                 {
@@ -74,11 +105,6 @@ namespace Electronic_WMS.Service.Service
                     StatusMessage = "Error!"
                 };
             }
-            return new ResponseModel
-            {
-                StatusCode = 200,
-                StatusMessage = "Update Successfully!"
-            };
         }
     }
 }

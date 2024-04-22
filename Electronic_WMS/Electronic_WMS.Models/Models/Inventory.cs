@@ -26,6 +26,7 @@ namespace Electronic_WMS.Models.Models
     {
         public int InventoryId { get; set; }
         public int SourceLocation { get; set; }
+        public string WareHouseName { get; set; }
         public string CustomerName { get; set; }
         public DateTime CreatedDate { get; set; }
         public int Type { get; set; }

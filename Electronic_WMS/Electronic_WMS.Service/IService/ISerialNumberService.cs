@@ -10,6 +10,7 @@ namespace Electronic_WMS.Service.IService
     public interface ISerialNumberService
     {
         public GetListSerialByProductId GetListByProductId(SearchSeriVM search);
-        public ResponseModel UpdateLocation(UpdateLocation location);
+        public IEnumerable<ListSerialCombobox> GetListSerialCombobox(SearchListSerialCombobox search);
+        public ResponseModel UpdateLocation(List<UpdateLocation> listSeri);
     }
 }

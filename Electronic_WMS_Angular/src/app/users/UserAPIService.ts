@@ -14,8 +14,8 @@ export class UserAPIService {
     return this.http.post<any>('http://localhost:5091/api/Users/GetList', search);
   }
 
-  getListSupplierOrShop(): Observable<any> {
-    return this.http.get<any>('http://localhost:5091/api/Users/GetListSupplierOrShop');
+  getListSupplierOrShop(roleId: number): Observable<any> {
+    return this.http.post<any>('http://localhost:5091/api/Users/GetListSupplierOrShop', roleId);
   }
 
   getUser(id: number): Observable<any> {

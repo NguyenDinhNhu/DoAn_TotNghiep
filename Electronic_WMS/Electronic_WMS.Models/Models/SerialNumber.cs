@@ -33,15 +33,26 @@ namespace Electronic_WMS.Models.Models
         public int WareHouseId { get; set; }
         public string WareHouseName { get; set; }
     }
-        
+
     public class SearchSeriVM : SearchVM
     {
-        public int ProductId { get; set;}
+        public int ProductId { get; set; }
     }
 
     public class UpdateLocation
     {
+        public int SerialId { get; set; }
+        public string Location { get; set; }
+    }
+
+    public class ListSerialCombobox
+    {
         public int SerialId { get; set;}
-        public string Location { get; set; } 
+        public string SerialNumber { get; set; }
+    }
+    public class SearchListSerialCombobox
+    {
+        public int ProductId { get; set;}
+        public int WareHouseId { get; set;}
     }
 }
