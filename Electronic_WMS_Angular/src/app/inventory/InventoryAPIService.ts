@@ -26,6 +26,10 @@ export class InventoryAPIService {
     return this.http.post<any>('http://localhost:5091/api/Inventory/Update', inv);
   }
 
+  changeStatusInventory(inv: any): Observable<any> {
+    return this.http.post<any>('http://localhost:5091/api/Inventory/ChangeStatus', inv);
+  }
+
   deleteInventory(id: number): Observable<any> {
     const params = new HttpParams().set('id', id.toString());
     return this.http.patch<any>('http://localhost:5091/api/Inventory/Delete', {}, {params});

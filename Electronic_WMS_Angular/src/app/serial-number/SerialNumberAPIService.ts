@@ -21,4 +21,8 @@ export class SerialNumberAPIService {
   updateLocation(seri: any): Observable<any> {
     return this.http.post<any>('http://localhost:5091/api/SerialNumber/UpdateLocation', seri);
   }
+
+  getSerial(id: number): Observable<any> {
+    return this.http.get<any>('http://localhost:5091/api/SerialNumber/GetSerial?id=' + id);
+  }
 }

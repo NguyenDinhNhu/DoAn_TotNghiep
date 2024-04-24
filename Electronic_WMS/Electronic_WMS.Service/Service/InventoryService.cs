@@ -258,7 +258,7 @@ namespace Electronic_WMS.Service.Service
                             InventoryId = inv.InventoryId,
                             SourceLocation = inv.SourceLocation,
                             CustomerName = _iUserRepository.GetById(inv.SourceLocation).FullName,
-                            WareHouseName = _iWareHouseRepository.GetById(inv.SourceLocation).Name,
+                            WareHouseName = _iWareHouseRepository.GetById(inv.WareHouseId).Name,
                             CreatedDate = inv.CreatedDate,
                             Type = inv.Type,
                             Status = inv.Status
@@ -299,18 +299,21 @@ namespace Electronic_WMS.Service.Service
             if (inv.Type == 2)
             {
                 List<CheckQuantity> lstProductError = new List<CheckQuantity>();
-                foreach (var item in inv.ListInventoryLine)
+                if (inv.ListInventoryLine.Count > 0)
                 {
-                    var quantityStock = _iSerialNumberRepository.GetListByProductId(item.ProductId)
-                        .Where(x => x.WareHouseId == inv.WareHouseId).Count();
-                    if (item.Quantity > quantityStock)
+                    foreach (var item in inv.ListInventoryLine)
                     {
-                        var productError = new CheckQuantity
+                        var quantityStock = _iSerialNumberRepository.GetListByProductId(item.ProductId)
+                            .Where(x => x.WareHouseId == inv.WareHouseId).Count();
+                        if (item.Quantity > quantityStock)
                         {
-                            ProductName = _iProductRepository.GetById(item.ProductId).ProductName,
-                            Quantity = quantityStock,
-                        };
-                        lstProductError.Add(productError);
+                            var productError = new CheckQuantity
+                            {
+                                ProductName = _iProductRepository.GetById(item.ProductId).ProductName,
+                                Quantity = quantityStock,
+                            };
+                            lstProductError.Add(productError);
+                        }
                     }
                 }
                 if (lstProductError.Count > 0)
@@ -320,6 +323,41 @@ namespace Electronic_WMS.Service.Service
                     foreach (var error in lstProductError)
                     {
                         errorMessage.AppendLine($"- Product: {error.ProductName} remaining {error.Quantity}");
+                    }
+                    return new ResponseModel
+                    {
+                        StatusCode = 400,
+                        StatusMessage = errorMessage.ToString()
+                    };
+                }
+            }
+            if (inv.Type == 1)
+            {
+                List<string> lstSeriError = new List<string>();
+                if (inv.ListInventoryLine.Count > 0)
+                {
+                    foreach (var item in inv.ListInventoryLine)
+                    {
+                        if (item.ListSerialNumber.Count > 0)
+                        {
+                            foreach (var i in item.ListSerialNumber)
+                            {
+                                var checkSeri = _iSerialNumberRepository.GetBySerialNumber(i.SerialNumber);
+                                if (checkSeri != null)
+                                {
+                                    lstSeriError.Add(i.SerialNumber);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (lstSeriError.Count > 0)
+                {
+                    StringBuilder errorMessage = new StringBuilder();
+                    errorMessage.AppendLine("Existing serial numbers:");
+                    foreach (var error in lstSeriError)
+                    {
+                        errorMessage.AppendLine($"- {error}");
                     }
                     return new ResponseModel
                     {
@@ -435,18 +473,21 @@ namespace Electronic_WMS.Service.Service
             if (inv.Type == 2)
             {
                 List<CheckQuantity> lstProductError = new List<CheckQuantity>();
-                foreach (var item in inv.ListInventoryLine)
+                if (inv.ListInventoryLine.Count > 0)
                 {
-                    var quantityStock = _iSerialNumberRepository.GetListByProductId(item.ProductId)
-                        .Where(x => x.WareHouseId == inv.WareHouseId).Count();
-                    if (item.Quantity > quantityStock)
+                    foreach (var item in inv.ListInventoryLine)
                     {
-                        var productError = new CheckQuantity
+                        var quantityStock = _iSerialNumberRepository.GetListByProductId(item.ProductId)
+                            .Where(x => x.WareHouseId == inv.WareHouseId).Count();
+                        if (item.Quantity > quantityStock)
                         {
-                            ProductName = _iProductRepository.GetById(item.ProductId).ProductName,
-                            Quantity = quantityStock,
-                        };
-                        lstProductError.Add(productError);
+                            var productError = new CheckQuantity
+                            {
+                                ProductName = _iProductRepository.GetById(item.ProductId).ProductName,
+                                Quantity = quantityStock,
+                            };
+                            lstProductError.Add(productError);
+                        }
                     }
                 }
                 if (lstProductError.Count > 0)
@@ -456,6 +497,41 @@ namespace Electronic_WMS.Service.Service
                     foreach (var error in lstProductError)
                     {
                         errorMessage.AppendLine($"- Product: {error.ProductName} remaining {error.Quantity}");
+                    }
+                    return new ResponseModel
+                    {
+                        StatusCode = 400,
+                        StatusMessage = errorMessage.ToString()
+                    };
+                }
+            }
+            if (inv.Type == 1)
+            {
+                List<string> lstSeriError = new List<string>();
+                if (inv.ListInventoryLine.Count > 0)
+                {
+                    foreach (var item in inv.ListInventoryLine)
+                    {
+                        if (item.ListSerialNumber.Count > 0)
+                        {
+                            foreach (var i in item.ListSerialNumber)
+                            {
+                                var checkSeri = _iSerialNumberRepository.GetBySerialNumber(i.SerialNumber);
+                                if (checkSeri != null && i.SerialId != checkSeri.SerialId)
+                                {
+                                    lstSeriError.Add(i.SerialNumber);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (lstSeriError.Count > 0)
+                {
+                    StringBuilder errorMessage = new StringBuilder();
+                    errorMessage.AppendLine("Existing serial numbers:");
+                    foreach (var error in lstSeriError)
+                    {
+                        errorMessage.AppendLine($"- Serial Number: {error}");
                     }
                     return new ResponseModel
                     {
@@ -570,7 +646,7 @@ namespace Electronic_WMS.Service.Service
                         {
                             ProductId = invLine.ProductId,
                             Quantity = invLine.Quantity,
-                            Price = invLine.Price,
+                            Price = _iProductRepository.GetById(invLine.ProductId).Price,
                             InventoryId = invDetail.InventoryId
                         };
                         //Insert InventoryLine

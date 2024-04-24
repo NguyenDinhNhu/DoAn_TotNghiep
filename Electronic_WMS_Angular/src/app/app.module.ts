@@ -29,6 +29,7 @@ import { ListDeliveriesComponent } from './inventory/list-deliveries/list-delive
 import { AddReceiptComponent } from './inventory/add-receipt/add-receipt.component';
 import { AddDeliveryComponent } from './inventory/add-delivery/add-delivery.component';
 import { SerialNumberComponent } from './serial-number/serial-number.component';
+import { EditReceiptComponent } from './inventory/edit-receipt/edit-receipt.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { SerialNumberComponent } from './serial-number/serial-number.component';
     AddReceiptComponent,
     AddDeliveryComponent,
     SerialNumberComponent,
+    EditReceiptComponent,
   ],
   imports: [
     BrowserModule,

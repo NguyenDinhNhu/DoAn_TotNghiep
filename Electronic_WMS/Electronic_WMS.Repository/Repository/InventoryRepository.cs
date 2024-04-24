@@ -31,7 +31,7 @@ namespace Electronic_WMS.Repository.Repository
 
         public IEnumerable<InventoryEntity> GetList()
         {
-            return _db.InventoryEntities.Where(x => x.Status != (int)InventoryStatus.IsDelete).OrderBy(x => x.CreatedDate).ToList();
+            return _db.InventoryEntities.Where(x => x.Status != (int)InventoryStatus.IsDelete).OrderByDescending(x => x.CreatedDate).ToList();
         }
 
         public int Insert(InventoryEntity inv)

@@ -42,6 +42,7 @@ namespace Electronic_WMS.Models.Models
     public class UpdateLocation
     {
         public int SerialId { get; set; }
+        public int WareHouseId { get; set; }
         public string Location { get; set; }
     }
 

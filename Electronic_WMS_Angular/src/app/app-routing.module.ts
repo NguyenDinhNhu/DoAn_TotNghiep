@@ -17,6 +17,8 @@ import { ListReceiptsComponent } from './inventory/list-receipts/list-receipts.c
 import { ListDeliveriesComponent } from './inventory/list-deliveries/list-deliveries.component';
 import { AddReceiptComponent } from './inventory/add-receipt/add-receipt.component';
 import { AddDeliveryComponent } from './inventory/add-delivery/add-delivery.component';
+import { EditReceiptComponent } from './inventory/edit-receipt/edit-receipt.component';
+import { SerialNumberComponent } from './serial-number/serial-number.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent},
@@ -36,6 +38,8 @@ const routes: Routes = [
   { path: 'deliveries/index', component: ListDeliveriesComponent},
   { path: 'receipts/add', component: AddReceiptComponent},
   { path: 'deliveries/add', component: AddDeliveryComponent},
+  { path: 'receipts/edit/:receiptId', component: EditReceiptComponent},
+  { path: 'serial-number/index/:productId', component: SerialNumberComponent},
 ];
 
 @NgModule({

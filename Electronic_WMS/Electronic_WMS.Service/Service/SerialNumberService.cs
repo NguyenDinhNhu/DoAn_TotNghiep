@@ -19,6 +19,22 @@ namespace Electronic_WMS.Service.Service
             _iSerialNumberRepository = iSerialNumberRepository;
             _iWareHouseRepository = iWareHouseRepository;
         }
+
+        public SerialNumberVM GetById(int id)
+        {
+            var s = _iSerialNumberRepository.GetById(id);
+            var SeriDetail = new SerialNumberVM
+            {
+                SerialId = s.SerialId,
+                SerialNumber = s.SerialNumber,
+                CreatedDate = s.CreatedDate,
+                Location = s.Location,
+                WareHouseId = s.WareHouseId,
+                WareHouseName = _iWareHouseRepository.GetById(s.WareHouseId).Name,
+            };
+            return SeriDetail;
+        }
+
         public GetListSerialByProductId GetListByProductId(SearchSeriVM search)
         {
             var listSeri = from s in _iSerialNumberRepository.GetListByProductId(search.ProductId)
@@ -56,6 +72,30 @@ namespace Electronic_WMS.Service.Service
         {
             if (listSeri.Count > 0)
             {
+                List<string> lstLocation = new List<string>();
+                foreach (var item in listSeri)
+                {
+                    // Check Location in database
+                    var checkLocation = _iSerialNumberRepository.GetByLocationInWH(item.Location, item.WareHouseId);
+                    if (checkLocation != null && checkLocation.SerialId != item.SerialId)
+                    {
+                        lstLocation.Add(checkLocation.Location);
+                    }
+                }
+                if (lstLocation.Count > 0)
+                {
+                    StringBuilder errorMessage = new StringBuilder();
+                    errorMessage.AppendLine("These positions already exist in the warehouse: ");
+                    foreach (var error in lstLocation)
+                    {
+                        errorMessage.AppendLine($"- {error}");
+                    }
+                    return new ResponseModel
+                    {
+                        StatusCode = 400,
+                        StatusMessage = errorMessage.ToString()
+                    };
+                }
                 foreach (var location in listSeri)
                 {
                     var seri = _iSerialNumberRepository.GetById(location.SerialId);
@@ -65,16 +105,6 @@ namespace Electronic_WMS.Service.Service
                         {
                             StatusCode = 404,
                             StatusMessage = "Serial does not exists!"
-                        };
-                    }
-                    // Check Location in database
-                    var checkLocation = _iSerialNumberRepository.GetByLocation(location.Location);
-                    if (checkLocation != null && checkLocation.SerialId != location.SerialId)
-                    {
-                        return new ResponseModel
-                        {
-                            StatusCode = 400,
-                            StatusMessage = "This location cannot be selected!"
                         };
                     }
 

@@ -1,1 +1,106 @@
-<p>serial-number works!</p>
+<div class="container">
+    <h2 class="main-title">List Serial Number</h2>
+    <div class="start-cards">
+        <article class="stat-cards-item">
+            <div class="d-flex justify-content-between w-100">
+                <div class="search-wrapper">
+                    <i data-feather="search" aria-hidden="true"></i>
+                    <input type="text" (keyup.enter)="search()" [(ngModel)]="textSearch"
+                        placeholder="Enter keywords ..." required>
+                </div>
+                <!-- <button class="btn btn-primary" style="padding: 10px 8px;" [routerLink]="['/serial-number/add']">
+                    <i data-feather="plus-circle" aria-hidden="true" style="width: 16px; height: 16px;"></i>
+                    Add New Seri
+                </button> -->
+                <button class="btn btn-danger" style="padding: 10px 8px;" [routerLink]="['/product/index']">
+                    <i data-feather="corner-down-left" aria-hidden="true" style="width: 16px; height: 16px;"></i>
+                    Back to list product
+                </button>
+            </div>
+            <table class="table table-bordered mt-4">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Serial Number</th>
+                        <th>WareHouse</th>
+                        <th>Location</th>
+                        <th>Created Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let seri of listSerial;">
+                        <td>{{seri.serialId}}</td>
+                        <td>{{seri.serialNumber}}</td>
+                        <td>{{seri.wareHouseName}}</td>
+                        <td>{{ seri.location }}</td>
+                        <td>{{ seri.createdDate | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
+                        <td>
+                            <button class="btn btn-warning" style="padding: 8px 8px; margin-right: 4px;"
+                                (click)="OpenModalEdit(seri.serialId)">
+                                <i data-feather="edit" aria-hidden="true"
+                                    style="width: 16px; height: 16px; color: #fff;"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-between w-100">
+                <div class="d-flex" style="align-items: center;">
+                    <p style="margin-right: 2px;">Show</p>
+                    <select (change)="onChangePageSize($event)">
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                    <p style="margin-left: 2px;">entries of {{totalItem}} total item</p>
+                </div>
+                <app-pagination [currentPage]="currentPage" [pageSize]="pageSize" [totalItem]="totalItem"
+                    (changePage)="changePage($event)"></app-pagination>
+            </div>
+            <div class="modal" id="editModal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Update The Location Of The Serial Number</h4>
+                            <button type="button" class="btn-close" (click)="CloseModalEdit()"></button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <form action="" [formGroup]="editForm">
+                                <div class="mb-3">
+                                    <label for="" class="mb-2 font-weight-bold">SerialId: </label>
+                                    <input name="" class="form-control disabled-combo" type="text" formControlName="SerialId"/>
+                                </div>
+                                <div class="mb-3">
+                                    <!-- <label for="" class="mb-2 font-weight-bold">WareHouseId: </label> -->
+                                    <input name="" class="form-control disabled-combo" type="text" formControlName="WareHouseId" hidden="true"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="" class="mb-2 font-weight-bold">Serial Number: </label>
+                                    <input name="" class="form-control disabled-combo" type="text" formControlName="SerialNumber"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="" class="mb-2 font-weight-bold">Location: </label>
+                                    <input name="" class="form-control" type="text" formControlName="Location" />
+                                    <div *ngIf="submitedEdit && v.Location.errors">
+                                        <small *ngIf="v.Location.errors['required']" style="color: red;">Location
+                                            cannot be empty</small>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" (click)="CloseModalEdit()"
+                                style="padding: 8px 8px; margin-right: 4px;">Close</button>
+                            <button type="submit" class="btn btn-primary" style="padding: 8px 8px;"
+                                (click)="editSerial()">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</div>

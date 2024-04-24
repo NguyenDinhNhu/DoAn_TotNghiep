@@ -12,7 +12,8 @@ namespace Electronic_WMS.Repository.IRepository
         public IEnumerable<SerialNumberEntity> GetListByProductId(int productId);
         public IEnumerable<SerialNumberEntity> GetListByInventoryLineId(int inventoryLineId);
         public SerialNumberEntity GetById(int id);
-        public SerialNumberEntity GetByLocation(string location);
+        public SerialNumberEntity GetByLocationInWH(string location, int wareHouseId);
+        public SerialNumberEntity GetBySerialNumber(string serialNumber);
         public int Insert(SerialNumberEntity seri);
         public int Update(SerialNumberEntity seri);
         public int Delete(SerialNumberEntity seri);

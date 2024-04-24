@@ -16,6 +16,13 @@ namespace Electronic_WMS.API.Controllers
             _iSerialNumberService = iSerialNumberService;
         }
 
+        [HttpGet(nameof(GetSerial))]
+        public IActionResult GetSerial([FromQuery] int id)
+        {
+            var result = _iSerialNumberService.GetById(id);
+            return Ok(result);
+        }  
+        
         [HttpPost(nameof(GetListByProductId))]
         public IActionResult GetListByProductId([FromBody] SearchSeriVM search)
         {

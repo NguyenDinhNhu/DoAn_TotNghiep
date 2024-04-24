@@ -25,7 +25,7 @@ namespace Electronic_WMS.Repository.Repository
 
         public IEnumerable<SerialNumberEntity> GetListByProductId(int productId)
         {
-            return _db.SerialNumberEntities.Where(x => x.Status == (int)SeriStatus.IsStock && x.ProductId != productId).ToList();
+            return _db.SerialNumberEntities.Where(x => x.Status == (int)SeriStatus.IsStock && x.ProductId == productId).ToList();
         }
 
         public IEnumerable<SerialNumberEntity> GetListByInventoryLineId(int inventoryLineId)
@@ -33,9 +33,13 @@ namespace Electronic_WMS.Repository.Repository
             return _db.SerialNumberEntities.Where(x => x.InventoryLineId == inventoryLineId).ToList();
         }
 
-        public SerialNumberEntity GetByLocation(string location)
+        public SerialNumberEntity GetByLocationInWH(string location, int wareHouseId)
         {
-            return _db.SerialNumberEntities.Where(x => x.Status == (int)SeriStatus.IsStock && x.Location.ToLower() == location.ToLower()).FirstOrDefault();
+            return _db.SerialNumberEntities.Where(x => x.Status == (int)SeriStatus.IsStock && x.Location.ToLower() == location.ToLower() && x.WareHouseId == wareHouseId).FirstOrDefault();
+        }
+        public SerialNumberEntity GetBySerialNumber(string serialNumber)
+        {
+            return _db.SerialNumberEntities.Where(x => x.Status != (int)SeriStatus.IsDelete && x.SerialNumber.ToLower() == serialNumber.ToLower()).FirstOrDefault();
         }
 
         public int Insert(SerialNumberEntity seri)

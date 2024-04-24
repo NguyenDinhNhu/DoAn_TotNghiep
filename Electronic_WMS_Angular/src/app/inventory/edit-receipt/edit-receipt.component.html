@@ -1,6 +1,6 @@
 <div class="container">
     <div class="d-flex justify-content-between w-100">
-        <h2 class="main-title">Add New Receipt</h2>
+        <h2 class="main-title">Edit Receipt</h2>
         <div>
             <button type="submit" class="btn btn-warning" style="padding: 10px 8px; margin-right: 8px;"
                 (click)="onSubmit()">
@@ -15,9 +15,10 @@
     </div>
     <div class="start-cards">
         <article class="stat-cards-item">
-            <form action="" [formGroup]="addReceipt" class="w-100">
+            <form action="" [formGroup]="editReceipt" class="w-100">
                 <div class="row">
                     <div class="col-md-6 mb-3">
+                        <input type="text" class="form-control" formControlName="InventoryId" hidden="true">
                         <div class="combo-section">
                             <label for="" class="mb-2 font-weight-bold">Supplier: </label>
                             <igx-simple-combo [data]="ListSupplierCombobox" [displayKey]="'fullName'"
@@ -55,7 +56,7 @@
                     <tr *ngFor="let row of ListInventoryLine; let i = index;">
                         <td>
                             <igx-simple-combo [data]="ListProductCombobox" [displayKey]="'productName'"
-                                [valueKey]="'productId'" [(ngModel)]="row.ProductId"></igx-simple-combo>
+                                [valueKey]="'productId'" [(ngModel)]="row.ProductId" [ngClass]="{'disabled-combo': row.shouldDisableCombo}"></igx-simple-combo>
                             <!-- <div *ngIf="submited && f.ProductId.errors">
                                 <small *ngIf="f.ProductId.errors['required']" style="color: red;">Please select
                                     Feature</small>
@@ -77,7 +78,7 @@
                         </td>
                         <td>
                             <button class="btn btn-danger" style="padding: 8px 8px;"
-                                (click)="deleteRow(i)">Remove</button>
+                                (click)="deleteRow(i)" [ngClass]="{'disabled-combo': row.shouldDisableCombo}">Remove</button>
                         </td>
                         <!-- <td *ngIf="row.submited && (!row.FeatureId || !row.Value)">
                             <div style="color: red;">Please fill in all fields in this row</div>
@@ -104,9 +105,15 @@
                     <!-- Modal body -->
                     <div class="modal-body">
                         <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>SerialId</th>
+                                    <th>Serial Number</th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 <tr *ngFor="let seri of ListSerial; let i = index;">
-                                    <td>{{i + 1}}</td>
+                                    <td>{{seri.SerialId}}</td>
                                     <td>
                                         <input class="form-control" type="text" [(ngModel)]="seri.SerialNumber"/>
                                         <!-- <div *ngIf="submited && f.Quantity.errors">

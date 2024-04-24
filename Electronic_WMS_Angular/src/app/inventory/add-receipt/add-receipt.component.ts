@@ -15,7 +15,7 @@ import { ProductAPIService } from 'src/app/product/ProductAPIService';
 })
 export class AddReceiptComponent {
   public submited: boolean = false;
-  public SourceLocation!: Number;
+  public SourceLocation!: number;
   public WarehouseId!: number;
 
   // table edit
@@ -23,13 +23,16 @@ export class AddReceiptComponent {
   public Quantity!: number;
   public ProductId!: number;
 
+  public ListSerial: any[] = []; 
+  public SerialNumber!: string;
+
   // Combobox
   public ListSupplierCombobox: any[] = [];
   public ListWHCombobox: any[] = [];
   public ListProductCombobox: any[] = [];
 
   addReceipt = this.fb.group({
-    UserId: ['', Validators.required],
+    SourceLocation: ['', Validators.required],
     WareHouseId: ['', Validators.required]
   });
   
@@ -73,7 +76,7 @@ export class AddReceiptComponent {
   get f() {return this.addReceipt.controls;}
   
   addRow() {
-    let row = {ProductId: 0, Quantity: 0, submited: false};
+    let row = {ProductId: 0, Quantity: 0, ListSerialNumber: [], submited: false};
     this.ListInventoryLine.push(row);
   }
 
@@ -86,45 +89,76 @@ export class AddReceiptComponent {
     this.submited = true;
 
     this.ListInventoryLine.forEach(row => {
-      if (!row.ProductId || !row.Quantity) {
+      if (!row.ProductId || !row.Quantity || row.ListSerialNumber.length != row.Quantity) {
         row.submited = true;
       } else {
         row.submited = false; // Reset submited for valid rows
       }
+
+      row.ListSerialNumber.forEach(e => {
+        if (!e.SerialNumber) {
+          row.submited = true;
+        } else {
+          e.submited = false; // Reset submited for valid rows
+        }
+      });
     });
 
     // Nếu bất kỳ dòng nào không hợp lệ, không thực hiện gửi form và hiển thị thông báo lỗi
     if (this.ListInventoryLine.some(row => row.submited)) {
-      this.toastr.error('Please fill out all fields in each row of the list product table and quantity must be > 0', 'Error');
+      this.toastr.error('Please fill out all fields in each row of the list product table & list serial number and quantity must be > 0', 'Error');
       return;
     }
 
     if(!this.addReceipt.invalid){
       console.log(this.addReceipt.value);
-      this.SourceLocation = parseInt(this.addReceipt.value.UserId!);
+      this.SourceLocation = parseInt(this.addReceipt.value.SourceLocation!);
       this.WarehouseId = parseInt(this.addReceipt.value.WareHouseId!);
       
       console.log(this.SourceLocation, this.WarehouseId, this.ListInventoryLine);
       //add
-      // this.inventoryService.insertInventory({
-      //   SourceLocation: this.SourceLocation,
-      //   WareHouseId: this.WarehouseId,
-      //   Type: 1,
-      //   ListInventoryLine: this.ListInventoryLine
-      // }).subscribe(res => {
-      //   if(res.statusCode == 200){
-      //     this.submited = false;
-      //     this.router.navigate(['/product/index']).then(() => {
-      //       this.toastr.success(res.statusMessage, "Success");
-      //     });
-      //   }
-      //   else if(res.statusCode == 400){
-      //     this.toastr.warning(res.statusMessage, "Warning");
-      //   }
-      //   else if(res.statusCode == 500){
-      //     this.toastr.error(res.statusMessage, "Error");
-      //   }
-      // })
+      this.inventoryService.insertInventory({
+        SourceLocation: this.SourceLocation,
+        WareHouseId: this.WarehouseId,
+        Type: 1,
+        ListInventoryLine: this.ListInventoryLine
+      }).subscribe(res => {
+        if(res.statusCode == 200){
+          this.submited = false;
+          this.router.navigate(['/receipts/index']).then(() => {
+            this.toastr.success(res.statusMessage, "Success");
+          });
+        }
+        else if(res.statusCode == 400){
+          this.toastr.warning(res.statusMessage, "Warning");
+        }
+        else if(res.statusCode == 500){
+          this.toastr.error(res.statusMessage, "Error");
+        }
+      })
+    }
+  }
+
+  // Popup Modal
+  OpenModal(row: any) {
+    const modelDiv = document.getElementById("myModal");
+    if(modelDiv != null) {
+      modelDiv.style.display = "block";
+      modelDiv.style.backgroundColor = "rgba(136,136,136,0.8)";
+    }
+
+    this.ListSerial = row.ListSerialNumber;
+    for (let i = this.ListSerial.length; i < row.Quantity; i++) {
+      let row = {SerialNumber: '', submited: false};
+      this.ListSerial.push(row);
+    }
+    console.log(this.ListSerial)
+  }
+
+  CloseModal() {
+    const modelDiv = document.getElementById("myModal");
+    if(modelDiv != null) {
+      modelDiv.style.display = "none";
     }
   }
 }
