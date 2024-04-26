@@ -20,5 +20,6 @@ namespace Electronic_WMS.Models.Entities
         public string? Location { get; set; }
         public int WareHouseId { get; set; }
         public int InventoryLineId { get; set; }
+        public int? InventoryLineId2 { get; set; }
     }
 }

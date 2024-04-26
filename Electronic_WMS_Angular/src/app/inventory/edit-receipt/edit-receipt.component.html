@@ -22,7 +22,7 @@
                         <div class="combo-section">
                             <label for="" class="mb-2 font-weight-bold">Supplier: </label>
                             <igx-simple-combo [data]="ListSupplierCombobox" [displayKey]="'fullName'"
-                                [valueKey]="'userId'" formControlName="SourceLocation"></igx-simple-combo>
+                                [valueKey]="'userId'" formControlName="SourceLocation" [ngClass]="{'disabled-combo': true}"></igx-simple-combo>
                         </div>
                         <div *ngIf="submited && f.SourceLocation.errors">
                             <small *ngIf="f.SourceLocation.errors['required']" style="color: red;">Please select
@@ -33,7 +33,7 @@
                         <div class="combo-section">
                             <label for="" class="mb-2 font-weight-bold">WareHouse: </label>
                             <igx-simple-combo [data]="ListWHCombobox" [displayKey]="'name'"
-                                [valueKey]="'wareHouseId'" formControlName="WareHouseId"></igx-simple-combo>
+                                [valueKey]="'wareHouseId'" formControlName="WareHouseId" [ngClass]="{'disabled-combo': true}"></igx-simple-combo>
                         </div>
                         <div *ngIf="submited && f.WareHouseId.errors">
                             <small *ngIf="f.WareHouseId.errors['required']" style="color: red;">Please select
@@ -63,7 +63,7 @@
                             </div> -->
                         </td>
                         <td>
-                            <input class="form-control" type="number" [(ngModel)]="row.Quantity"/>
+                            <input class="form-control" type="number" [(ngModel)]="row.Quantity" min="0"/>
                             <!-- <div *ngIf="submited && f.Quantity.errors">
                                 <small *ngIf="f.Quantity.errors['required']" style="color: red;">Quantity cannot be empty</small>
                             </div> -->

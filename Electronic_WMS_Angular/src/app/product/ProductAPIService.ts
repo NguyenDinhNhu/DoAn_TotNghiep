@@ -14,6 +14,10 @@ export class ProductAPIService {
     return this.http.post<any>('http://localhost:5091/api/Product/GetList', search);
   }
 
+  getListProductStock(search: any): Observable<any> {
+    return this.http.post<any>('http://localhost:5091/api/Product/GetListProductStock', search);
+  }
+
   getListProductCombobox(): Observable<any> {
     return this.http.get<any>('http://localhost:5091/api/Product/GetListCombobox');
   }

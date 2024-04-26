@@ -30,7 +30,7 @@ namespace Electronic_WMS.Repository.Repository
 
         public IEnumerable<SerialNumberEntity> GetListByInventoryLineId(int inventoryLineId)
         {
-            return _db.SerialNumberEntities.Where(x => x.InventoryLineId == inventoryLineId).ToList();
+            return _db.SerialNumberEntities.Where(x => x.InventoryLineId == inventoryLineId || x.InventoryLineId2 == inventoryLineId).ToList();
         }
 
         public SerialNumberEntity GetByLocationInWH(string location, int wareHouseId)

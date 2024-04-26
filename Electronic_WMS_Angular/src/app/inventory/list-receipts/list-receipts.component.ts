@@ -126,6 +126,33 @@ export class ListReceiptsComponent {
     });
   }
 
+  exportPDFInventory(id: number): void {
+    this.inventoryService.exportInventoryToPDF(id).subscribe(
+      (data: Blob) => {
+
+        const now = new Date();
+        const dateTimeStr = now.toISOString().slice(0, 19).replace(/[-T:/]/g, ""); // Format: YYYYMMDDHHmmss
+        const fileName = `invoice_${dateTimeStr}.pdf`; // Tạo tên file với ngày giờ
+  
+        // Tạo một URL tạm thời từ dữ liệu Blob nhận được
+        const url = window.URL.createObjectURL(data);
+        // Tạo một đối tượng a để tạo một liên kết trực tiếp đến file PDF
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName; // Tên file PDF khi được tải xuống
+        // Thêm liên kết vào DOM và kích hoạt sự kiện click để tải xuống file PDF
+        document.body.appendChild(link);
+        link.click();
+        // Xóa liên kết và URL tạm thời sau khi đã tải xuống xong
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+        this.toastr.error("Exported fail!", "Error");
+      }
+    );
+  }
+
   getAllReceipts(): any {
     this.inventoryService.getListInventoryByType({
       PageSize: this.pageSize, 
@@ -212,6 +239,8 @@ export class ListReceiptsComponent {
     
     let toastrSent = false; // Biến cờ để kiểm tra xem đã gửi toastr hay chưa
     let hasError = false;
+    let hasDuplicateLocation = false;
+    
     this.ListInventoryLine.forEach(row => {
       row.submited = true; // Đánh dấu rằng đã submit form
       const isInvalidRow = !row.ListSerialNumber.every(seri => {
@@ -222,9 +251,26 @@ export class ListReceiptsComponent {
         hasError = true; // Đánh dấu rằng có lỗi được thông báo
         this.toastr.error('Please fill out all fields in each row of the list serial', 'Error');
       }
+
+      let locations = new Set(); // Set để lưu trữ các location đã xuất hiện trong dòng
+
+      // Duyệt qua từng location trong dòng hiện tại
+      row.ListSerialNumber.forEach(serial => {
+          // Nếu location đã xuất hiện trước đó trong cùng một dòng, đặt biến cờ là true
+          if (locations.has(serial.Location)) {
+              hasDuplicateLocation = true;
+          } else {
+              locations.add(serial.Location); // Thêm location vào set
+          }
+      });
     });
 
-    
+    // Nếu có location trùng nhau, hiển thị thông báo và không thực hiện hành động tiếp theo
+    if (hasDuplicateLocation) {
+      this.toastr.error('Duplicate locations are not allowed in the same row.', 'Error');
+      return;
+    }
+
     // Nếu không có lỗi nào được thông báo, thêm dữ liệu vào ListSerial
     if (!hasError) {
       this.ListSerial = [];

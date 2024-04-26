@@ -19,6 +19,10 @@ import { AddReceiptComponent } from './inventory/add-receipt/add-receipt.compone
 import { AddDeliveryComponent } from './inventory/add-delivery/add-delivery.component';
 import { EditReceiptComponent } from './inventory/edit-receipt/edit-receipt.component';
 import { SerialNumberComponent } from './serial-number/serial-number.component';
+import { MoveHistoryComponent } from './report/move-history/move-history.component';
+import { EditDeliveryComponent } from './inventory/edit-delivery/edit-delivery.component';
+import { StockComponent } from './report/stock/stock.component';
+import { InventoryDetailComponent } from './inventory/inventory-detail/inventory-detail.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent},
@@ -39,7 +43,11 @@ const routes: Routes = [
   { path: 'receipts/add', component: AddReceiptComponent},
   { path: 'deliveries/add', component: AddDeliveryComponent},
   { path: 'receipts/edit/:receiptId', component: EditReceiptComponent},
+  { path: 'deliveries/edit/:deliveryId', component: EditDeliveryComponent},
+  { path: 'inventory/detail/:inventoryId', component: InventoryDetailComponent},
   { path: 'serial-number/index/:productId', component: SerialNumberComponent},
+  { path: 'report/move-history', component: MoveHistoryComponent},
+  { path: 'report/stock', component: StockComponent},
 ];
 
 @NgModule({

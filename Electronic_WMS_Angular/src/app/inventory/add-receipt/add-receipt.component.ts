@@ -84,6 +84,16 @@ export class AddReceiptComponent {
     this.ListInventoryLine.splice(index, 1);
   }
 
+  hasDuplicateProductIds(): boolean {
+    const productIds: number[] = [];
+    for (const row of this.ListInventoryLine) {
+      if (productIds.includes(row.ProductId)) {
+        return true; // Nếu đã tồn tại ProductId trong mảng, trả về true
+      }
+      productIds.push(row.ProductId); // Nếu chưa, thêm ProductId vào mảng
+    }
+    return false; // Không có ProductId nào trùng nhau
+  }
 
   onSubmit(): void {
     this.submited = true;
@@ -103,6 +113,13 @@ export class AddReceiptComponent {
         }
       });
     });
+
+    // Kiểm tra xem có ProductId nào trùng nhau không
+    const hasDuplicateProductId = this.hasDuplicateProductIds();
+    if (hasDuplicateProductId) {
+      this.toastr.error('Product Id must be unique for each row', 'Error');
+      return;
+    }
 
     // Nếu bất kỳ dòng nào không hợp lệ, không thực hiện gửi form và hiển thị thông báo lỗi
     if (this.ListInventoryLine.some(row => row.submited)) {

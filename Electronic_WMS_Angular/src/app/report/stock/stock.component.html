@@ -1,0 +1,49 @@
+<div class="container">
+    <h2 class="main-title">List Receipts</h2>
+    <div class="start-cards">
+        <article class="stat-cards-item">
+            <div class="d-flex justify-content-between w-100">
+                <div class="search-wrapper">
+                    <i data-feather="search" aria-hidden="true"></i>
+                    <input type="text" (keyup.enter)="search()" [(ngModel)]="textSearch"
+                        placeholder="Enter Product Name ..." required>
+                </div>
+            </div>
+            <table class="table table-bordered mt-4">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Product Name</th>
+                        <th>Inventory Quantity</th>
+                        <th>Quantity Released</th>
+                        <th>Incoming</th>
+                        <th>Outgoing</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of listItem;">
+                        <td>{{item.productId}}</td>
+                        <td>{{item.productName}}</td>
+                        <td>{{item.quantityStock}}</td>
+                        <td>{{item.quantityExported}}</td>
+                        <td>{{item.incoming}}</td>
+                        <td>{{item.outgoing}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-between w-100">
+                <div class="d-flex" style="align-items: center;">
+                    <p style="margin-right: 2px;">Show</p>
+                    <select (change)="onChangePageSize($event)">
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                    <p style="margin-left: 2px;">entries of {{totalItem}} total item</p>
+                </div>
+                <app-pagination [currentPage]="currentPage" [pageSize]="pageSize" [totalItem]="totalItem"
+                    (changePage)="changePage($event)"></app-pagination>
+            </div>
+        </article>
+    </div>
+</div>

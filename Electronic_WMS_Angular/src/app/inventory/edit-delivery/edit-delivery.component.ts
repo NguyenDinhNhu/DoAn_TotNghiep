@@ -1,19 +1,20 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import * as feather from 'feather-icons';
 import { ToastrService } from 'ngx-toastr';
 import { InventoryAPIService } from '../InventoryAPIService';
 import { UserAPIService } from 'src/app/users/UserAPIService';
 import { WareHouseAPIService } from 'src/app/warehouse/WareHouseAPIService';
 import { ProductAPIService } from 'src/app/product/ProductAPIService';
+import { SerialNumberAPIService } from 'src/app/serial-number/SerialNumberAPIService';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as feather from 'feather-icons';
 
 @Component({
-  selector: 'app-edit-receipt',
-  templateUrl: './edit-receipt.component.html',
-  styleUrls: ['./edit-receipt.component.css']
+  selector: 'app-edit-delivery',
+  templateUrl: './edit-delivery.component.html',
+  styleUrls: ['./edit-delivery.component.css']
 })
-export class EditReceiptComponent {
+export class EditDeliveryComponent {
   public submited: boolean = false;
   public InventoryId!: number;
   public SourceLocation!: number;
@@ -25,14 +26,15 @@ export class EditReceiptComponent {
   public ProductId!: number;
 
   public ListSerial: any[] = []; 
-  public SerialNumber!: string;
+  public SerialId!: string;
 
   // Combobox
-  public ListSupplierCombobox: any[] = [];
+  public ListShopCombobox: any[] = [];
   public ListWHCombobox: any[] = [];
+  public ListSerialCombobox: any[] = [];
   public ListProductCombobox: any[] = [];
 
-  editReceipt = this.fb.group({
+  editDelivery = this.fb.group({
     InventoryId: ['', Validators.required],
     SourceLocation: ['', Validators.required],
     WareHouseId: ['', Validators.required]
@@ -45,6 +47,7 @@ export class EditReceiptComponent {
     private userService: UserAPIService,
     private warehouseService: WareHouseAPIService,
     private productService: ProductAPIService,
+    private serialService: SerialNumberAPIService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) { }
@@ -59,8 +62,8 @@ export class EditReceiptComponent {
 
   getReceiptDetail(): void {
     this.activatedRoute.paramMap.subscribe(query => {
-      console.log(query.get("receiptId"));   // lay id
-      let id = query.get("receiptId");
+      console.log(query.get("deliveryId"));   // lay id
+      let id = query.get("deliveryId");
       if (id != null) {
         let receiptId = parseInt(id);
         this.inventoryService.getInventory(receiptId).subscribe(res => {
@@ -70,8 +73,8 @@ export class EditReceiptComponent {
             e.listSerialNumber.forEach(ele => {
               const r = {
                 SerialId: ele.serialId,
-                SerialNumber: ele.serialNumber,
-                submited: false
+                submited: false,
+                shouldDisableCombo: true,
               }
               ListSeri.push(r)
             })
@@ -85,7 +88,7 @@ export class EditReceiptComponent {
               }
             this.ListInventoryLine.push(row)
           });
-          this.editReceipt = this.fb.group({
+          this.editDelivery = this.fb.group({
             InventoryId: [res.inventoryId, Validators.required],
             SourceLocation: [res.sourceLocation, Validators.required],
             WareHouseId: [res.wareHouseId, Validators.required]
@@ -93,15 +96,15 @@ export class EditReceiptComponent {
         });
       }
       else if (id == null) {
-        this.toastr.warning("Receipt not found!", "Warning")
+        this.toastr.warning("Delivery not found!", "Warning")
       }
     })
   }
 
   // Get List combobox Supplier
   getListUserCombobox(): void {
-    this.userService.getListSupplierOrShop(3).subscribe(res => {
-      this.ListSupplierCombobox = res;
+    this.userService.getListSupplierOrShop(4).subscribe(res => {
+      this.ListShopCombobox = res;
     })
   }
 
@@ -117,7 +120,11 @@ export class EditReceiptComponent {
     })
   }
 
-  get f() {return this.editReceipt.controls;}
+  getListSerialCombobox(): void {
+
+  }
+
+  get f() {return this.editDelivery.controls;}
   
   addRow() {
     let row = {InventoryLineId: 0, ProductId: 0, Quantity: 0, ListSerialNumber: [], submited: false, shouldDisableCombo: false};
@@ -196,54 +203,66 @@ export class EditReceiptComponent {
       return;
     }
 
-    if(!this.editReceipt.invalid){
-      console.log(this.editReceipt.value);
-      this.InventoryId = parseInt(this.editReceipt.value.InventoryId!);
-      this.SourceLocation = parseInt(this.editReceipt.value.SourceLocation!);
-      this.WarehouseId = parseInt(this.editReceipt.value.WareHouseId!);
+    if(!this.editDelivery.invalid){
+      console.log(this.editDelivery.value);
+      this.InventoryId = parseInt(this.editDelivery.value.InventoryId!);
+      this.SourceLocation = parseInt(this.editDelivery.value.SourceLocation!);
+      this.WarehouseId = parseInt(this.editDelivery.value.WareHouseId!);
       
       console.log(this.SourceLocation, this.WarehouseId, this.ListInventoryLine);
       //edit
-      this.inventoryService.updateInventory({
-        InventoryId: this.InventoryId,
-        SourceLocation: this.SourceLocation,
-        WareHouseId: this.WarehouseId,
-        Type: 1,
-        ListInventoryLine: this.ListInventoryLine
-      }).subscribe(res => {
-        if(res.statusCode == 200){
-          this.submited = false;
-          this.router.navigate(['/receipts/index']).then(() => {
-            this.toastr.success(res.statusMessage, "Success");
-          });
-        }
-        else if(res.statusCode == 404){
-          this.toastr.warning(res.statusMessage, "Warning");
-        }
-        else if(res.statusCode == 400){
-          this.toastr.warning(res.statusMessage, "Warning");
-        }
-        else if(res.statusCode == 500){
-          this.toastr.error(res.statusMessage, "Error");
-        }
-      })
+      // this.inventoryService.updateInventory({
+      //   InventoryId: this.InventoryId,
+      //   SourceLocation: this.SourceLocation,
+      //   WareHouseId: this.WarehouseId,
+      //   Type: 1,
+      //   ListInventoryLine: this.ListInventoryLine
+      // }).subscribe(res => {
+      //   if(res.statusCode == 200){
+      //     this.submited = false;
+      //     this.router.navigate(['/receipts/index']).then(() => {
+      //       this.toastr.success(res.statusMessage, "Success");
+      //     });
+      //   }
+      //   else if(res.statusCode == 404){
+      //     this.toastr.warning(res.statusMessage, "Warning");
+      //   }
+      //   else if(res.statusCode == 400){
+      //     this.toastr.warning(res.statusMessage, "Warning");
+      //   }
+      //   else if(res.statusCode == 500){
+      //     this.toastr.error(res.statusMessage, "Error");
+      //   }
+      // })
     }
   }
 
   // Popup Modal
   OpenModal(row: any) {
+    this.submited = true;
     const modelDiv = document.getElementById("myModal");
     if(modelDiv != null) {
       modelDiv.style.display = "block";
       modelDiv.style.backgroundColor = "rgba(136,136,136,0.8)";
     }
+    
+    if(!this.editDelivery.invalid){
+      this.WarehouseId = parseInt(this.editDelivery.value.WareHouseId!);
+      this.serialService.getListSerialCombobox({ProductId: row.ProductId, WareHouseId: this.WarehouseId}).subscribe(res => {
+        this.ListSerialCombobox = res;
+        this.submited = false;
+      })
 
-    this.ListSerial = row.ListSerialNumber;
-    for (let i = this.ListSerial.length; i < row.Quantity; i++) {
-      let row = {SerialId: 0, SerialNumber: '', submited: false};
-      this.ListSerial.push(row);
+      this.ListSerial = row.ListSerialNumber;
+      for (let i = this.ListSerial.length; i < row.Quantity; i++) {
+        let row = {SerialId: 0, SerialNumber: '', submited: false, shouldDisableCombo: false};
+        this.ListSerial.push(row);
+      }
+      console.log(this.ListSerial)
     }
-    console.log(this.ListSerial)
+    else {
+      this.toastr.warning("Please select Warehouse and Product!", "Warning")
+    }
   }
 
   CloseModal() {

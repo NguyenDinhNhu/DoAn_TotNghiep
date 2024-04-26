@@ -29,6 +29,8 @@ namespace Electronic_WMS.Models.Models
         public string WareHouseName { get; set; }
         public string CustomerName { get; set; }
         public DateTime CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+        public int Quantity { get; set; }
         public int Type { get; set; }
         public int Status { get; set; }
     }

@@ -1,6 +1,6 @@
 <div class="container">
     <div class="d-flex justify-content-between w-100">
-        <h2 class="main-title">Add New Delivery</h2>
+        <h2 class="main-title">Edit Delivery</h2>
         <div>
             <button type="submit" class="btn btn-warning" style="padding: 10px 8px; margin-right: 8px;"
                 (click)="onSubmit()">
@@ -15,13 +15,13 @@
     </div>
     <div class="start-cards">
         <article class="stat-cards-item">
-            <form action="" [formGroup]="addDelivery" class="w-100">
+            <form action="" [formGroup]="editDelivery" class="w-100">
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <div class="combo-section">
                             <label for="" class="mb-2 font-weight-bold">WareHouse: </label>
-                            <igx-simple-combo [data]="ListWHCombobox" [displayKey]="'name'"
-                                [valueKey]="'wareHouseId'" formControlName="WareHouseId"></igx-simple-combo>
+                            <igx-simple-combo [data]="ListWHCombobox" [displayKey]="'name'" [valueKey]="'wareHouseId'"
+                                formControlName="WareHouseId" [ngClass]="{'disabled-combo': true}"></igx-simple-combo>
                         </div>
                         <div *ngIf="submited && f.WareHouseId.errors">
                             <small *ngIf="f.WareHouseId.errors['required']" style="color: red;">Please select
@@ -29,10 +29,11 @@
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
+                        <input type="text" class="form-control" formControlName="InventoryId" hidden="true">
                         <div class="combo-section">
                             <label for="" class="mb-2 font-weight-bold">Shop: </label>
-                            <igx-simple-combo [data]="ListShopCombobox" [displayKey]="'fullName'"
-                                [valueKey]="'userId'" formControlName="SourceLocation"></igx-simple-combo>
+                            <igx-simple-combo [data]="ListShopCombobox" [displayKey]="'fullName'" [valueKey]="'userId'"
+                                formControlName="SourceLocation" [ngClass]="{'disabled-combo': true}"></igx-simple-combo>
                         </div>
                         <div *ngIf="submited && f.SourceLocation.errors">
                             <small *ngIf="f.SourceLocation.errors['required']" style="color: red;">Please select
@@ -55,14 +56,15 @@
                     <tr *ngFor="let row of ListInventoryLine; let i = index;">
                         <td>
                             <igx-simple-combo [data]="ListProductCombobox" [displayKey]="'productName'"
-                                [valueKey]="'productId'" [(ngModel)]="row.ProductId"></igx-simple-combo>
+                                [valueKey]="'productId'" [(ngModel)]="row.ProductId"
+                                [ngClass]="{'disabled-combo': row.shouldDisableCombo}"></igx-simple-combo>
                             <!-- <div *ngIf="submited && f.ProductId.errors">
                                 <small *ngIf="f.ProductId.errors['required']" style="color: red;">Please select
                                     Feature</small>
                             </div> -->
                         </td>
                         <td>
-                            <input class="form-control" type="number" [(ngModel)]="row.Quantity" min="0"/>
+                            <input class="form-control" type="number" [(ngModel)]="row.Quantity" min="0" />
                             <!-- <div *ngIf="submited && f.Quantity.errors">
                                 <small *ngIf="f.Quantity.errors['required']" style="color: red;">Quantity cannot be empty</small>
                             </div> -->
@@ -76,8 +78,8 @@
                             </div> -->
                         </td>
                         <td>
-                            <button class="btn btn-danger" style="padding: 8px 8px;"
-                                (click)="deleteRow(i)">Remove</button>
+                            <button class="btn btn-danger" style="padding: 8px 8px;" (click)="deleteRow(i)"
+                                [ngClass]="{'disabled-combo': row.shouldDisableCombo}">Remove</button>
                         </td>
                         <!-- <td *ngIf="row.submited && (!row.FeatureId || !row.Value)">
                             <div style="color: red;">Please fill in all fields in this row</div>
@@ -104,13 +106,20 @@
                     <!-- Modal body -->
                     <div class="modal-body">
                         <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Serial Number</th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 <tr *ngFor="let seri of ListSerial; let i = index;">
-                                    <td>{{i + 1}}</td>
+                                    <td>{{ i + 1}}</td>
                                     <td>
-                                        <!-- <input class="form-control" type="text" [(ngModel)]="seri.SerialNumber"/> -->
+                                        <!-- <input class="form-control" type="text" [(ngModel)]="seri.SerialNumber" /> -->
                                         <igx-simple-combo [data]="ListSerialCombobox" [displayKey]="'serialNumber'"
-                                        [valueKey]="'serialId'" [(ngModel)]="seri.SerialId"></igx-simple-combo>
+                                            [valueKey]="'serialId'" [(ngModel)]="seri.SerialId"
+                                            [ngClass]="{'disabled-combo': seri.shouldDisableCombo}"></igx-simple-combo>
                                         <!-- <div *ngIf="submited && f.Quantity.errors">
                                             <small *ngIf="f.Quantity.errors['required']" style="color: red;">Quantity cannot be empty</small>
                                         </div> -->

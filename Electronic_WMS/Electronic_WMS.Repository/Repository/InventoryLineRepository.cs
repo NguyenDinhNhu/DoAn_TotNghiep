@@ -32,6 +32,10 @@ namespace Electronic_WMS.Repository.Repository
         {
             return _db.InventoryLineEntities.Where(x => x.InventoryId == invId).ToList();
         }
+        public IEnumerable<InventoryLineEntity> GetList()
+        {
+            return _db.InventoryLineEntities.ToList();
+        }
 
         public int Insert(InventoryLineEntity inv)
         {

@@ -23,6 +23,13 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [HttpPost(nameof(GetListProductStock))]
+        public IActionResult GetListProductStock([FromBody] SearchVM search)
+        {
+            var result = _iProductService.GetListProductStock(search);
+            return Ok(result);
+        }
+
         [HttpGet(nameof(GetProduct))]
         public IActionResult GetProduct([FromQuery] int id)
         {

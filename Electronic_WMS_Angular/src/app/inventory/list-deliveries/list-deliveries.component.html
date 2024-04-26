@@ -34,7 +34,7 @@
                     <tr *ngFor="let item of listDeliveries;">
                         <td>{{item.inventoryId}}</td>
                         <td>{{item.wareHouseName}}</td>
-                        <td>{{ item.CustomerName }}</td>
+                        <td>{{ item.customerName }}</td>
                         <td>{{ item.createdDate | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
                         <td>
                             <span *ngIf="item.status == 1" style="color: rgb(15, 3, 255);">Ready</span>
@@ -42,21 +42,34 @@
                             <span *ngIf="item.status == 3" style="color: red;">Cancel</span>
                         </td>
                         <td>
-                            <button class="btn btn-success" style="padding: 8px 8px; margin-right: 4px;">
+                            <button class="btn btn-success" style="padding: 8px 8px; margin-right: 4px;"
+                                *ngIf="item.status == 1" (click)="completeDelivery(item.inventoryId)">
                                 <i data-feather="check-circle" aria-hidden="true"
                                     style="width: 16px; height: 16px; color: #fff;"></i>
                             </button>
-                            <button class="btn btn-primary" style="padding: 8px 8px; margin-right: 4px;">
+                            <button class="btn btn-primary" style="padding: 8px 8px; margin-right: 4px;"
+                                *ngIf="item.status == 1" (click)="cancelDelivery(item.inventoryId)">
                                 <i data-feather="x-circle" aria-hidden="true"
                                     style="width: 16px; height: 16px; color: #fff;"></i>
                             </button>
-                            <button class="btn btn-warning" style="padding: 8px 8px; margin-right: 4px;" [routerLink]="['/receipts/edit', item.inventoryId]">
+                            <button class="btn btn-warning" style="padding: 8px 8px; margin-right: 4px;"
+                                *ngIf="item.status == 1" [routerLink]="['/deliveries/edit', item.inventoryId]">
                                 <i data-feather="edit" aria-hidden="true"
                                     style="width: 16px; height: 16px; color: #fff;"></i>
                             </button>
+                            <button class="btn btn-primary" style="padding: 8px 8px; margin-right: 4px;"
+                                [routerLink]="['/inventory/detail', item.inventoryId]">
+                                <i data-feather="info" aria-hidden="true"
+                                    style="width: 16px; height: 16px; color: #fff;"></i>
+                            </button>
                             <button class="btn btn-danger" style="padding: 8px 8px;" *ngIf="item.status != 2"
-                                (click)="deleteDeliveries(item.inventoryId)">
+                                (click)="deleteDelivery(item.inventoryId)">
                                 <i data-feather="trash-2" aria-hidden="true"
+                                    style="width: 16px; height: 16px; color: #fff"></i>
+                            </button>
+                            <button class="btn btn-warning" style="padding: 8px 8px;" *ngIf="item.status == 2"
+                                (click)="exportPDFInventory(item.inventoryId)">
+                                <i data-feather="file" aria-hidden="true"
                                     style="width: 16px; height: 16px; color: #fff"></i>
                             </button>
                         </td>

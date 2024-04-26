@@ -34,7 +34,7 @@ export class ListDeliveriesComponent {
   }
 
   // delete
-  deleteDeliveries(id: number): void {
+  deleteDelivery(id: number): void {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -59,6 +59,93 @@ export class ListDeliveriesComponent {
         })
       }
     });
+  }
+
+  completeDelivery(id: number): void {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Confirm"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.inventoryService.changeStatusInventory({
+          InventoryId: id,
+          Status: 2
+        }).subscribe(res => {
+          if(res.statusCode == 200){
+            this.toastr.success(res.statusMessage, "Success");
+            this.getAllDeliveries();
+          }
+          else if (res.statusCode = 404){
+            this.toastr.warning(res.statusMessage, "Warning");
+          }
+          else if (res.statusCode = 500) {
+            this.toastr.error(res.statusMessage, "Error");
+          }
+        })
+      }
+    });
+  }
+
+  cancelDelivery(id: number): void {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Confirm"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.inventoryService.changeStatusInventory({
+          InventoryId: id,
+          Status: 3
+        }).subscribe(res => {
+          if(res.statusCode == 200){
+            this.toastr.success(res.statusMessage, "Success");
+            this.getAllDeliveries();
+          }
+          else if (res.statusCode = 404) {
+            this.toastr.warning(res.statusMessage, "Warning");
+          }
+          else if (res.statusCode = 500) {
+            this.toastr.error(res.statusMessage, "Error");
+          }
+        })
+      }
+    });
+  }
+
+  exportPDFInventory(id: number): void {
+    this.inventoryService.exportInventoryToPDF(id).subscribe(
+      (data: Blob) => {
+
+        const now = new Date();
+        const dateTimeStr = now.toISOString().slice(0, 19).replace(/[-T:/]/g, ""); // Format: YYYYMMDDHHmmss
+        const fileName = `invoice_${dateTimeStr}.pdf`; // Tạo tên file với ngày giờ
+  
+        // Tạo một URL tạm thời từ dữ liệu Blob nhận được
+        const url = window.URL.createObjectURL(data);
+        // Tạo một đối tượng a để tạo một liên kết trực tiếp đến file PDF
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName; // Tên file PDF khi được tải xuống
+        // Thêm liên kết vào DOM và kích hoạt sự kiện click để tải xuống file PDF
+        document.body.appendChild(link);
+        link.click();
+        // Xóa liên kết và URL tạm thời sau khi đã tải xuống xong
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+        this.toastr.error("Exported fail!", "Error");
+      }
+    );
   }
 
   getAllDeliveries(): any {

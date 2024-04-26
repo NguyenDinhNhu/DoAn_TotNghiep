@@ -12,6 +12,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using iText.Kernel.Pdf;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+using Microsoft.EntityFrameworkCore;
+using iText.Layout;
 
 namespace Electronic_WMS.Service.Service
 {
@@ -136,6 +142,7 @@ namespace Electronic_WMS.Service.Service
                                 {
                                     var seriUpdate = _iSerialNumberRepository.GetById(s.SerialId);
                                     seriUpdate.Status = (int)SeriStatus.IsReleased;
+                                    seriUpdate.Location = "Is Realeased";
                                     var updateSerial = _iSerialNumberRepository.Update(seriUpdate);
                                     if (updateSerial == 0)
                                     {
@@ -260,6 +267,8 @@ namespace Electronic_WMS.Service.Service
                             CustomerName = _iUserRepository.GetById(inv.SourceLocation).FullName,
                             WareHouseName = _iWareHouseRepository.GetById(inv.WareHouseId).Name,
                             CreatedDate = inv.CreatedDate,
+                            UpdatedDate = inv.UpdatedDate,
+                            Quantity = _iInventoryLineRepository.GetList().Where(x => x.InventoryId ==  inv.InventoryId).Sum(x => x.Quantity),
                             Type = inv.Type,
                             Status = inv.Status
                        };
@@ -406,6 +415,7 @@ namespace Electronic_WMS.Service.Service
                             if (seri.SerialId > 0)
                             {
                                 var serialItem = _iSerialNumberRepository.GetById(seri.SerialId);
+                                serialItem.InventoryLineId2 = inventoryLine.InventoryLineId;
                                 serialItem.Status = (int)SeriStatus.IsProcessing;
                                 //Update SerialNumber when inventory type = 2: deliveries
                                 var result = _iSerialNumberRepository.Update(serialItem);
@@ -625,6 +635,7 @@ namespace Electronic_WMS.Service.Service
                                 foreach (var seri in invLine.ListSerialNumber)
                                 {
                                     var serialNumber = _iSerialNumberRepository.GetById(seri.SerialId);
+                                    serialNumber.InventoryLineId2 = invLineDetail.InventoryLineId;
                                     serialNumber.Status = (int)SeriStatus.IsProcessing;
                                     //Update SerialNumber
                                     var result = _iSerialNumberRepository.Update(serialNumber);
@@ -666,6 +677,7 @@ namespace Electronic_WMS.Service.Service
                                 if (seri.SerialId > 0)
                                 {
                                     var serialNumber = _iSerialNumberRepository.GetById(seri.SerialId);
+                                    serialNumber.InventoryLineId2 = inventoryLine.InventoryLineId;
                                     serialNumber.Status = (int)SeriStatus.IsProcessing;
                                     //Update SerialNumber
                                     var result = _iSerialNumberRepository.Update(serialNumber);
@@ -715,6 +727,67 @@ namespace Electronic_WMS.Service.Service
             };
         }
 
-        
+        public byte[] GenerateInventoryPDF(int inventoryId)
+        {
+            var invDetail = GetById(inventoryId);
+
+            if (invDetail == null)
+            {
+                // Handle case when invoice is not found
+                return null;
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                var writer = new PdfWriter(stream);
+                var pdf = new iText.Kernel.Pdf.PdfDocument(writer);
+                var document = new Document(pdf);
+
+                // Add invoice information
+                document.Add(new Paragraph($"Transaction invoice:"));
+                document.Add(new Paragraph($"Created Date: {invDetail.CreatedDate.ToString("HH:mm:ss dd-MM-yyyy")}"));
+                document.Add(new Paragraph($"Reception Date: {invDetail.UpdatedDate?.ToString("HH:mm:ss dd-MM-yyyy")}"));
+                document.Add(new Paragraph($"WareHouse Name: {invDetail.WareHouseName}"));
+                if (invDetail.Type == 1)
+                {
+                    document.Add(new Paragraph($"Supplier: {invDetail.CustomerName}"));
+                }
+                else if (invDetail.Type == 2)
+                {
+                    document.Add(new Paragraph($"Shop Name: {invDetail.CustomerName}"));
+                }
+
+                // Create a table with 3 columns
+                var table = new Table(3);
+                table.SetWidth(UnitValue.CreatePercentValue(100));
+
+                // Add header row
+                table.AddHeaderCell(new Cell().Add(new Paragraph("Product")));
+                table.AddHeaderCell(new Cell().Add(new Paragraph("Quantity")));
+                table.AddHeaderCell(new Cell().Add(new Paragraph("Serial Numbers")));
+
+                // Add invoice details
+                foreach (var invLine in invDetail.ListInventoryLine)
+                {
+                    // Add product name in the first column
+                    table.AddCell(new Cell().Add(new Paragraph(invLine.ProductName)));
+
+                    // Add quantity in the second column
+                    table.AddCell(new Cell().Add(new Paragraph(invLine.Quantity.ToString())));
+
+                    // Add serial numbers in the third column
+                    var serialNumbers = string.Join(", ", invLine.ListSerialNumber.Select(s => s.SerialNumber));
+                    table.AddCell(new Cell().Add(new Paragraph(serialNumbers)));
+                }
+
+                // Add the table to the document
+                document.Add(table);
+
+                // Close the document
+                document.Close();
+
+                return stream.ToArray();
+            }
+        }
     }
 }

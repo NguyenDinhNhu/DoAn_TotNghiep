@@ -1,0 +1,93 @@
+<div class="container" *ngIf="detailInventory">
+    <div class="d-flex justify-content-between w-100">
+        <h2 class="main-title">Detail</h2>
+        <div>
+            <button class="btn btn-danger" style="padding: 10px 8px;" [routerLink]="['/receipts/index']"
+                *ngIf="detailInventory.type == 1">
+                <i data-feather="corner-down-left" aria-hidden="true" style="width: 16px; height: 16px;"></i>
+                Back to list
+            </button>
+            <button class="btn btn-danger" style="padding: 10px 8px;" [routerLink]="['/deliveries/index']"
+                *ngIf="detailInventory.type == 2">
+                <i data-feather="corner-down-left" aria-hidden="true" style="width: 16px; height: 16px;"></i>
+                Back to list
+            </button>
+        </div>
+    </div>
+    <div class="start-cards">
+        <article class="stat-cards-item">
+            <div class="w-100">
+                <div><input type="text" [(ngModel)]="detailInventory.inventoryId" hidden="true"></div>
+                <div>
+                    <p class="mb-3 text-p" *ngIf="detailInventory.type == 1">Supplier:
+                        <span style="font-style: italic;">{{detailInventory.customerName}}</span>
+                    </p>
+                    <p class="mb-3 text-p" *ngIf="detailInventory.type == 2">Shop Name:
+                        <span style="font-style: italic;">{{detailInventory.customerName}}</span>
+                    </p>
+                </div>
+                <div>
+                    <p class="mb-3 text-p">WareHouse Name: <span
+                            style="font-style: italic;">{{detailInventory.wareHouseName}}</span></p>
+                </div>
+            </div>
+            <h2 class="main-title" style="margin-top: 12px;">List Product: </h2>
+            <table class="table table-bordered">
+                <thead class="text text-primary">
+                    <tr>
+                        <th>Product Id</th>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Serial Number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of ListInventoryLine; let i = index;">
+                        <td>{{row.ProductId}}</td>
+                        <td>{{row.ProductName}}</td>
+                        <td>{{row.Quantity}}</td>
+                        <td>
+                            <button class="btn btn-primary" style="padding: 10px 8px;" (click)="OpenModal(row)">
+                                Show
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </article>
+        <!-- The Modal -->
+        <div class="modal" id="myModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">List Serial Number</h4>
+                        <button type="button" class="btn-close" (click)="CloseModal()"></button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>SerialId</th>
+                                    <th>Serial Number</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let seri of ListSerial; let i = index;">
+                                    <td>{{seri.SerialId}}</td>
+                                    <td>{{seri.SerialNumber}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" (click)="CloseModal()"
+                            style="padding: 8px 8px; margin-right: 4px;">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -34,4 +34,8 @@ export class InventoryAPIService {
     const params = new HttpParams().set('id', id.toString());
     return this.http.patch<any>('http://localhost:5091/api/Inventory/Delete', {}, {params});
   }
+
+  exportInventoryToPDF(id: number): Observable<Blob> {
+    return this.http.get<Blob>(`http://localhost:5091/api/Inventory/ExportedPDFInventory?id=${id}`, { responseType: 'blob' as 'json' });
+  }
 }

@@ -30,6 +30,10 @@ import { AddReceiptComponent } from './inventory/add-receipt/add-receipt.compone
 import { AddDeliveryComponent } from './inventory/add-delivery/add-delivery.component';
 import { SerialNumberComponent } from './serial-number/serial-number.component';
 import { EditReceiptComponent } from './inventory/edit-receipt/edit-receipt.component';
+import { MoveHistoryComponent } from './report/move-history/move-history.component';
+import { EditDeliveryComponent } from './inventory/edit-delivery/edit-delivery.component';
+import { StockComponent } from './report/stock/stock.component';
+import { InventoryDetailComponent } from './inventory/inventory-detail/inventory-detail.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +58,10 @@ import { EditReceiptComponent } from './inventory/edit-receipt/edit-receipt.comp
     AddDeliveryComponent,
     SerialNumberComponent,
     EditReceiptComponent,
+    MoveHistoryComponent,
+    EditDeliveryComponent,
+    StockComponent,
+    InventoryDetailComponent,
   ],
   imports: [
     BrowserModule,

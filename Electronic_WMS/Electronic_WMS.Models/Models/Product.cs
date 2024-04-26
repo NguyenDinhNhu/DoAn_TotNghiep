@@ -12,6 +12,13 @@ namespace Electronic_WMS.Models.Models
         public IEnumerable<ProductVM> ListProduct { get; set; }
         public int Total { get; set; }
     }
+
+    public class GetListProductStock
+    {
+        public IEnumerable<ProductStock> ListProduct { get; set; }
+        public int Total { get; set; }
+    }
+
     public class ProductVM
     {
         public int ProductId { get; set; }
@@ -69,5 +76,15 @@ namespace Electronic_WMS.Models.Models
     {
         public string ProductName { get; set; }
         public int Quantity { get; set; }
+    }
+
+    public class ProductStock
+    {
+        public int ProductId { get; set; }
+        public string ProductName { get; set; }
+        public int QuantityStock { get; set; }
+        public int QuantityExported { get; set; }
+        public int Incoming { get; set; }
+        public int Outgoing { get; set; }
     }
 }

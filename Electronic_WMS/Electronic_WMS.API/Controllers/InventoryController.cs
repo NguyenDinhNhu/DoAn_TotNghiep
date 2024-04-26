@@ -56,5 +56,19 @@ namespace Electronic_WMS.API.Controllers
             var result = _iInventoryService.ChangeStatus(change);
             return Ok(result);
         }
+
+        [HttpGet(nameof(ExportedPDFInventory))]
+        public IActionResult ExportedPDFInventory([FromQuery] int id)
+        {
+            DateTime now = DateTime.Now;
+            string dateTimeStr = now.ToString("yyyyMMddHHmmss");
+            var result = _iInventoryService.GenerateInventoryPDF(id);
+            if (result == null)
+            {
+                return Ok(new {StatusCode = 404, StatusMessage = "Not Found!"}); // Handle case when invoice is not found
+            }
+
+            return File(result, "application/pdf", $"invoice_{dateTimeStr}.pdf");
+        }
     }
 }

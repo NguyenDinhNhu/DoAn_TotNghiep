@@ -1,0 +1,63 @@
+<div class="container">
+    <h2 class="main-title">Move History</h2>
+    <div class="start-cards">
+        <article class="stat-cards-item">
+            <div class="d-flex justify-content-between w-100">
+                <div class="search-wrapper">
+                    <i data-feather="search" aria-hidden="true"></i>
+                    <input type="text" (keyup.enter)="search()" [(ngModel)]="textSearch"
+                        placeholder="Enter Customer Name ..." required>
+                </div>
+            </div>
+            <table class="table table-bordered mt-4">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Date</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of listItem;">
+                        <td>{{item.inventoryId}}</td>
+                        <td>
+                            <p *ngIf="item.type == 1">{{ item.customerName }}</p>
+                            <p *ngIf="item.type == 2">{{ item.wareHouseName }}</p>
+                        </td>
+                        <td>
+                            <p *ngIf="item.type == 1">{{ item.wareHouseName }}</p>
+                            <p *ngIf="item.type == 2">{{ item.customerName }}</p>
+                        </td>
+                        <td>{{ item.updatedDate | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
+                        <td>
+                            <p *ngIf="item.type == 1" style="color: rgb(2, 185, 2);">{{ item.quantity }}</p>
+                            <p *ngIf="item.type == 2" style="color: red;">{{ item.quantity }}</p>
+                        </td>
+                        <td>
+                            <span
+                                style="background-color: rgb(4, 227, 4); color: #fff;
+                                 border-radius: 12px; padding: 2px 8px; font-style: italic;">Done
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-between w-100">
+                <div class="d-flex" style="align-items: center;">
+                    <p style="margin-right: 2px;">Show</p>
+                    <select (change)="onChangePageSize($event)">
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                    <p style="margin-left: 2px;">entries of {{totalItem}} total item</p>
+                </div>
+                <app-pagination [currentPage]="currentPage" [pageSize]="pageSize" [totalItem]="totalItem"
+                    (changePage)="changePage($event)"></app-pagination>
+            </div>
+        </article>
+    </div>
+</div>

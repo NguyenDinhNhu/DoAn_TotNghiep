@@ -22,14 +22,19 @@ namespace Electronic_WMS.Service.Service
         private readonly IBrandRepository _iBrandRepository;
         private readonly IProductFeatureRepository _iProductFeatureRepository;
         private readonly IFeatureRepository _iFeatureRepository;
+        private readonly IInventoryLineRepository _iInventoryLineRepository;
+        private readonly IInventoryRepository _iInventoryRepository;
         public ProductService(IProductRepository iProductRepository, ICategoryRepository iCategoryRepository, 
-            IBrandRepository iBrandRepository, IProductFeatureRepository iProductFeatureRepository, IFeatureRepository iFeatureRepository)
+            IBrandRepository iBrandRepository, IProductFeatureRepository iProductFeatureRepository, IFeatureRepository iFeatureRepository,
+            IInventoryLineRepository iInventoryLineRepository, IInventoryRepository iInventoryRepository)
         {
             _iProductRepository = iProductRepository;
             _iCategoryRepository = iCategoryRepository;
             _iBrandRepository = iBrandRepository;
             _iProductFeatureRepository = iProductFeatureRepository;
             _iFeatureRepository = iFeatureRepository;
+            _iInventoryRepository = iInventoryRepository;
+            _iInventoryLineRepository = iInventoryLineRepository;
         }
         public ResponseModel Delete(int id)
         {
@@ -116,6 +121,44 @@ namespace Electronic_WMS.Service.Service
             var total = list.Count();
             list = list.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
             return new GetListProduct { ListProduct = list, Total = total};
+        } 
+        public GetListProductStock GetListProductStock(SearchVM search)
+        {
+            var list = from prod in _iProductRepository.GetList()
+                       join c in _iCategoryRepository.GetList() on prod.CateId equals c.CateId
+                       join b in _iBrandRepository.GetList() on prod.BrandId equals b.BrandId
+                       where c.Status == (int)CommonStatus.IsActive && b.Status == (int)CommonStatus.IsActive
+                       select new ProductStock
+                       {
+                           ProductId = prod.ProductId,
+                           ProductName = prod.ProductName,
+                           QuantityStock = prod.Quantity,
+                           QuantityExported = (from inv in _iInventoryRepository.GetList()
+                                               join invLine in _iInventoryLineRepository.GetList()
+                                               on inv.InventoryId equals invLine.InventoryId
+                                               where inv.Type == 2 && inv.Status == (int)InventoryStatus.IsComplete
+                                               && invLine.ProductId == prod.ProductId
+                                               select inv.InventoryId).ToList().Count(),
+                           Incoming = (from inv in _iInventoryRepository.GetList()
+                                               join invLine in _iInventoryLineRepository.GetList()
+                                               on inv.InventoryId equals invLine.InventoryId
+                                               where inv.Type == 1 && inv.Status == (int)InventoryStatus.IsReady
+                                               && invLine.ProductId == prod.ProductId
+                                               select inv.InventoryId).ToList().Count(),
+                           Outgoing = (from inv in _iInventoryRepository.GetList()
+                                               join invLine in _iInventoryLineRepository.GetList()
+                                               on inv.InventoryId equals invLine.InventoryId
+                                               where inv.Type == 2 && inv.Status == (int)InventoryStatus.IsReady
+                                               && invLine.ProductId == prod.ProductId
+                                               select inv.InventoryId).ToList().Count(),
+                       };
+            if (!string.IsNullOrEmpty(search.TextSearch))
+            {
+                list = list.Where(x => x.ProductName.ToLower().Contains(search.TextSearch.ToLower()));
+            }
+            var total = list.Count();
+            list = list.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
+            return new GetListProductStock { ListProduct = list, Total = total};
         }
 
         public IEnumerable<ProductCombobox> GetListCombobox()
