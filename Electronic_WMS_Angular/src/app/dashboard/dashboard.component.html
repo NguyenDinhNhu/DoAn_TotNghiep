@@ -1,47 +1,36 @@
 <div class="container">
     <h2 class="main-title">Dashboard</h2>
     <div class="row stat-cards">
-        <div class="col-md-6 col-xl-3">
+        <div class="col-md-6 col-xl-4">
           <article class="stat-cards-item">
             <div class="stat-cards-icon primary">
-              <i data-feather="bar-chart-2" aria-hidden="true"></i>
+              <i data-feather="clipboard" aria-hidden="true"></i>
             </div>
             <div class="stat-cards-info">
-              <p class="stat-cards-info__num">1478 286</p>
-              <p class="stat-cards-info__title">Total visits</p>
+              <p class="stat-cards-info__title">Receipts</p>
+              <a [routerLink]="['/receipts/index']" class="stat-cards-info__num">{{CountReceiptReady}} To Process</a>
             </div>
           </article>
         </div>
-        <div class="col-md-6 col-xl-3">
+        <div class="col-md-6 col-xl-4">
           <article class="stat-cards-item">
             <div class="stat-cards-icon warning">
-              <i data-feather="file" aria-hidden="true"></i>
+              <i data-feather="mail" aria-hidden="true"></i>
             </div>
             <div class="stat-cards-info">
-              <p class="stat-cards-info__num">1478 286</p>
-              <p class="stat-cards-info__title">Total visits</p>
+              <p class="stat-cards-info__title">Delivery Orders</p>
+              <a [routerLink]="['/deliveries/index']" class="stat-cards-info__num">{{CountDeliveryReady}} To Process</a>
             </div>
           </article>
         </div>
-        <div class="col-md-6 col-xl-3">
+        <div class="col-md-6 col-xl-4">
           <article class="stat-cards-item">
             <div class="stat-cards-icon purple">
-              <i data-feather="file" aria-hidden="true"></i>
+              <i data-feather="codesandbox" aria-hidden="true"></i>
             </div>
             <div class="stat-cards-info">
-              <p class="stat-cards-info__num">1478 286</p>
-              <p class="stat-cards-info__title">Total visits</p>
-            </div>
-          </article>
-        </div>
-        <div class="col-md-6 col-xl-3">
-          <article class="stat-cards-item">
-            <div class="stat-cards-icon success">
-              <i data-feather="feather" aria-hidden="true"></i>
-            </div>
-            <div class="stat-cards-info">
-              <p class="stat-cards-info__num">1478 286</p>
-              <p class="stat-cards-info__title">Total visits</p>
+              <p class="stat-cards-info__title">Product Out Of Stock</p>
+              <a [routerLink]="['/product/index']" class="stat-cards-info__num">{{CountProductOutOfStock}} To Process</a>
             </div>
           </article>
         </div>

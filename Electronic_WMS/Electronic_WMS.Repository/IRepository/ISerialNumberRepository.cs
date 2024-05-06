@@ -10,6 +10,7 @@ namespace Electronic_WMS.Repository.IRepository
     public interface ISerialNumberRepository
     {
         public IEnumerable<SerialNumberEntity> GetListByProductId(int productId);
+        public IEnumerable<SerialNumberEntity> GetList();
         public IEnumerable<SerialNumberEntity> GetListByInventoryLineId(int inventoryLineId);
         public SerialNumberEntity GetById(int id);
         public SerialNumberEntity GetByLocationInWH(string location, int wareHouseId);

@@ -2,6 +2,7 @@
 using Electronic_WMS.Repository.IRepository;
 using Electronic_WMS.Repository.Repository;
 using Electronic_WMS.Service.IService;
+using Electronic_WMS.Utilities.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,8 +59,9 @@ namespace Electronic_WMS.Service.Service
 
         public IEnumerable<ListSerialCombobox> GetListSerialCombobox(SearchListSerialCombobox search)
         {
-            var listSeri = from s in _iSerialNumberRepository.GetListByProductId(search.ProductId)
-                           where s.WareHouseId == search.WareHouseId
+            var listSeri = from s in _iSerialNumberRepository.GetList()
+                           where s.WareHouseId == search.WareHouseId && s.ProductId == search.ProductId
+                                 && (s.Status == (int)SeriStatus.IsStock || s.Status == (int)SeriStatus.IsProcessing)
                            select new ListSerialCombobox
                            {
                                SerialId = s.SerialId,

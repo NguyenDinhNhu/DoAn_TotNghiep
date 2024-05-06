@@ -79,13 +79,13 @@ export class EditDeliveryComponent {
               ListSeri.push(r)
             })
             const row = {
-                InventoryLineId: e.inventoryLineId,
-                ProductId: e.productId,
-                Quantity: e.quantity,
-                ListSerialNumber: ListSeri,
-                submited: false,
-                shouldDisableCombo: true,
-              }
+              InventoryLineId: e.inventoryLineId,
+              ProductId: e.productId,
+              Quantity: e.quantity,
+              ListSerialNumber: ListSeri,
+              submited: false,
+              shouldDisableCombo: true,
+            }
             this.ListInventoryLine.push(row)
           });
           this.editDelivery = this.fb.group({
@@ -118,10 +118,6 @@ export class EditDeliveryComponent {
     this.productService.getListProductCombobox().subscribe(res => {
       this.ListProductCombobox = res;
     })
-  }
-
-  getListSerialCombobox(): void {
-
   }
 
   get f() {return this.editDelivery.controls;}
@@ -159,7 +155,7 @@ export class EditDeliveryComponent {
       }
 
       row.ListSerialNumber.forEach(e => {
-        if (!e.SerialNumber) {
+        if (!e.SerialId) {
           row.submited = true;
         } else {
           e.submited = false; // Reset submited for valid rows
@@ -177,10 +173,10 @@ export class EditDeliveryComponent {
       // Duyệt qua từng serial number trong dòng hiện tại
       row.ListSerialNumber.forEach(serial => {
         // Nếu serial number đã xuất hiện trước đó trong cùng một dòng, đặt biến cờ là true
-        if (serialNumbers.has(serial.SerialNumber)) {
+        if (serialNumbers.has(serial.SerialId)) {
           hasDuplicateSerial = true;
         } else {
-          serialNumbers.add(serial.SerialNumber); // Thêm serial number vào set
+          serialNumbers.add(serial.SerialId); // Thêm serial number vào set
         }
       });
     });
@@ -199,7 +195,7 @@ export class EditDeliveryComponent {
     }
     // Nếu bất kỳ dòng nào không hợp lệ, không thực hiện gửi form và hiển thị thông báo lỗi
     if (this.ListInventoryLine.some(row => row.submited)) {
-      this.toastr.error('Please fill out all fields in each row of the list product table & list serial number and quantity must be > 0', 'Error');
+      this.toastr.error('Please fill out all fields and quantity must be > 0 and quantity cannot be decreased', 'Error');
       return;
     }
 
@@ -211,29 +207,29 @@ export class EditDeliveryComponent {
       
       console.log(this.SourceLocation, this.WarehouseId, this.ListInventoryLine);
       //edit
-      // this.inventoryService.updateInventory({
-      //   InventoryId: this.InventoryId,
-      //   SourceLocation: this.SourceLocation,
-      //   WareHouseId: this.WarehouseId,
-      //   Type: 1,
-      //   ListInventoryLine: this.ListInventoryLine
-      // }).subscribe(res => {
-      //   if(res.statusCode == 200){
-      //     this.submited = false;
-      //     this.router.navigate(['/receipts/index']).then(() => {
-      //       this.toastr.success(res.statusMessage, "Success");
-      //     });
-      //   }
-      //   else if(res.statusCode == 404){
-      //     this.toastr.warning(res.statusMessage, "Warning");
-      //   }
-      //   else if(res.statusCode == 400){
-      //     this.toastr.warning(res.statusMessage, "Warning");
-      //   }
-      //   else if(res.statusCode == 500){
-      //     this.toastr.error(res.statusMessage, "Error");
-      //   }
-      // })
+      this.inventoryService.updateInventory({
+        InventoryId: this.InventoryId,
+        SourceLocation: this.SourceLocation,
+        WareHouseId: this.WarehouseId,
+        Type: 2,
+        ListInventoryLine: this.ListInventoryLine
+      }).subscribe(res => {
+        if(res.statusCode == 200){
+          this.submited = false;
+          this.router.navigate(['/deliveries/index']).then(() => {
+            this.toastr.success(res.statusMessage, "Success");
+          });
+        }
+        else if(res.statusCode == 404){
+          this.toastr.warning(res.statusMessage, "Warning");
+        }
+        else if(res.statusCode == 400){
+          this.toastr.warning(res.statusMessage, "Warning");
+        }
+        else if(res.statusCode == 500){
+          this.toastr.error(res.statusMessage, "Error");
+        }
+      })
     }
   }
 
@@ -255,7 +251,7 @@ export class EditDeliveryComponent {
 
       this.ListSerial = row.ListSerialNumber;
       for (let i = this.ListSerial.length; i < row.Quantity; i++) {
-        let row = {SerialId: 0, SerialNumber: '', submited: false, shouldDisableCombo: false};
+        let row = {SerialId: 0, submited: false, shouldDisableCombo: false};
         this.ListSerial.push(row);
       }
       console.log(this.ListSerial)

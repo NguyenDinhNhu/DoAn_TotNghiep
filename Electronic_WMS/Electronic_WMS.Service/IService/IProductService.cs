@@ -16,5 +16,6 @@ namespace Electronic_WMS.Service.IService
         public ResponseModel Insert(InsertOrUpdateProduct prod);
         public ResponseModel Update(InsertOrUpdateProduct prod);
         public ResponseModel Delete(int id);
+        public byte[] ExportStockToExcel();
     }
 }

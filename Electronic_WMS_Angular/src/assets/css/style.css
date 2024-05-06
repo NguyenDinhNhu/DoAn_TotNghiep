@@ -2680,7 +2680,7 @@ label {
 
 .stat-cards-icon.purple {
   background-color: rgba(95, 46, 234, 0.1);
-  color: #5f2eea;
+  color: #a821ec;
 }
 
 .stat-cards-icon.success {
@@ -2690,18 +2690,23 @@ label {
 
 .stat-cards-info__num {
   font-weight: 600;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1.22;
-  color: #171717;
+  /* color: #171717; */
   margin-bottom: 4px;
+  background-color: #5f2eea;
+  padding: 2px 6px;
+  border-radius: 8px;
+  color: #fff;
 }
 
 .stat-cards-info__title {
-  font-weight: 500;
-  font-size: 14px;
+  font-weight: 600;
+  font-size: 16px;
   line-height: 1.22;
-  color: #b9b9b9;
-  margin-bottom: 6px;
+  color: #171717;
+  /* color: #b9b9b9; */
+  margin-bottom: 8px;
 }
 
 .stat-cards-info__progress {

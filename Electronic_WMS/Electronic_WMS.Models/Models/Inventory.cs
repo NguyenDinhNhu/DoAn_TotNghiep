@@ -65,4 +65,11 @@ namespace Electronic_WMS.Models.Models
         public int Status { get; set; }
         public List<InventoryLineVM> ListInventoryLine { get; set; }
     }
+
+    public class DashboardVM
+    {
+        public int CountReciptReady { get; set; }
+        public int CountDeliveryReady { get; set; }
+        public int CountProductOutOfStock { get; set; }
+    }
 }

@@ -88,4 +88,31 @@ export class StockComponent {
       }, 10)
     })
   }
+
+  exportExcelStock(): void {
+    this.productService.exportStockToExcel().subscribe(
+      (data: Blob) => {
+
+        const now = new Date();
+        const dateTimeStr = now.toISOString().slice(0, 19).replace(/[-T:/]/g, ""); // Format: YYYYMMDDHHmmss
+        const fileName = `stock_${dateTimeStr}.xlsx`; // Tạo tên file với ngày giờ
+  
+        // Tạo một URL tạm thời từ dữ liệu Blob nhận được
+        const url = window.URL.createObjectURL(data);
+        // Tạo một đối tượng a để tạo một liên kết trực tiếp đến file PDF
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName; // Tên file PDF khi được tải xuống
+        // Thêm liên kết vào DOM và kích hoạt sự kiện click để tải xuống file PDF
+        document.body.appendChild(link);
+        link.click();
+        // Xóa liên kết và URL tạm thời sau khi đã tải xuống xong
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+        this.toastr.error("Exported fail!", "Error");
+      }
+    );
+  }
 }

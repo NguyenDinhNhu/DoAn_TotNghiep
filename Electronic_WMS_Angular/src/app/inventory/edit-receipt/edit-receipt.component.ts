@@ -192,7 +192,7 @@ export class EditReceiptComponent {
     }
     // Nếu bất kỳ dòng nào không hợp lệ, không thực hiện gửi form và hiển thị thông báo lỗi
     if (this.ListInventoryLine.some(row => row.submited)) {
-      this.toastr.error('Please fill out all fields in each row of the list product table & list serial number and quantity must be > 0', 'Error');
+      this.toastr.error('Please fill out all fields and quantity must be > 0 and quantity cannot be decreased', 'Error');
       return;
     }
 

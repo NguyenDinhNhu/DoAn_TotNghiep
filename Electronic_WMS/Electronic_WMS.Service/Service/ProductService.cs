@@ -1,4 +1,5 @@
-﻿using Electronic_WMS.Models.Entities;
+﻿using ClosedXML.Excel;
+using Electronic_WMS.Models.Entities;
 using Electronic_WMS.Models.Models;
 using Electronic_WMS.Repository.IRepository;
 using Electronic_WMS.Repository.Repository;
@@ -24,7 +25,7 @@ namespace Electronic_WMS.Service.Service
         private readonly IFeatureRepository _iFeatureRepository;
         private readonly IInventoryLineRepository _iInventoryLineRepository;
         private readonly IInventoryRepository _iInventoryRepository;
-        public ProductService(IProductRepository iProductRepository, ICategoryRepository iCategoryRepository, 
+        public ProductService(IProductRepository iProductRepository, ICategoryRepository iCategoryRepository,
             IBrandRepository iBrandRepository, IProductFeatureRepository iProductFeatureRepository, IFeatureRepository iFeatureRepository,
             IInventoryLineRepository iInventoryLineRepository, IInventoryRepository iInventoryRepository)
         {
@@ -87,12 +88,12 @@ namespace Electronic_WMS.Service.Service
                 CateName = _iCategoryRepository.GetById(prod.CateId).CateName,
                 ListProductFeature = (from pf in _iProductFeatureRepository.GetListByProductId(prod.ProductId)
                                       select new ProductFeatureVM {
-                                        ProductFeatureId = pf.ProductFeatureId,
-                                        ProductId = pf.ProductId,
-                                        FeatureId = pf.FeatureId,
-                                        ProductName = prod.ProductName,
-                                        FeatureName = _iFeatureRepository.GetById(pf.FeatureId).FeatureName,
-                                        Value = pf.Value,
+                                          ProductFeatureId = pf.ProductFeatureId,
+                                          ProductId = pf.ProductId,
+                                          FeatureId = pf.FeatureId,
+                                          ProductName = prod.ProductName,
+                                          FeatureName = _iFeatureRepository.GetById(pf.FeatureId).FeatureName,
+                                          Value = pf.Value,
                                       }).ToList(),
             };
             return prodDetail;
@@ -120,8 +121,8 @@ namespace Electronic_WMS.Service.Service
             }
             var total = list.Count();
             list = list.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
-            return new GetListProduct { ListProduct = list, Total = total};
-        } 
+            return new GetListProduct { ListProduct = list, Total = total };
+        }
         public GetListProductStock GetListProductStock(SearchVM search)
         {
             var list = from prod in _iProductRepository.GetList()
@@ -140,17 +141,17 @@ namespace Electronic_WMS.Service.Service
                                                && invLine.ProductId == prod.ProductId
                                                select inv.InventoryId).ToList().Count(),
                            Incoming = (from inv in _iInventoryRepository.GetList()
-                                               join invLine in _iInventoryLineRepository.GetList()
-                                               on inv.InventoryId equals invLine.InventoryId
-                                               where inv.Type == 1 && inv.Status == (int)InventoryStatus.IsReady
-                                               && invLine.ProductId == prod.ProductId
-                                               select inv.InventoryId).ToList().Count(),
+                                       join invLine in _iInventoryLineRepository.GetList()
+                                       on inv.InventoryId equals invLine.InventoryId
+                                       where inv.Type == 1 && inv.Status == (int)InventoryStatus.IsReady
+                                       && invLine.ProductId == prod.ProductId
+                                       select inv.InventoryId).ToList().Count(),
                            Outgoing = (from inv in _iInventoryRepository.GetList()
-                                               join invLine in _iInventoryLineRepository.GetList()
-                                               on inv.InventoryId equals invLine.InventoryId
-                                               where inv.Type == 2 && inv.Status == (int)InventoryStatus.IsReady
-                                               && invLine.ProductId == prod.ProductId
-                                               select inv.InventoryId).ToList().Count(),
+                                       join invLine in _iInventoryLineRepository.GetList()
+                                       on inv.InventoryId equals invLine.InventoryId
+                                       where inv.Type == 2 && inv.Status == (int)InventoryStatus.IsReady
+                                       && invLine.ProductId == prod.ProductId
+                                       select inv.InventoryId).ToList().Count(),
                        };
             if (!string.IsNullOrEmpty(search.TextSearch))
             {
@@ -334,6 +335,77 @@ namespace Electronic_WMS.Service.Service
                 StatusCode = 200,
                 StatusMessage = "Edit Successfully!"
             };
+        }
+        public byte[] ExportStockToExcel()
+        {
+            var list = from prod in _iProductRepository.GetList()
+                    join c in _iCategoryRepository.GetList() on prod.CateId equals c.CateId
+                    join b in _iBrandRepository.GetList() on prod.BrandId equals b.BrandId
+                    where c.Status == (int)CommonStatus.IsActive && b.Status == (int)CommonStatus.IsActive
+                    select new ProductStock
+                    {
+                        ProductId = prod.ProductId,
+                        ProductName = prod.ProductName,
+                        QuantityStock = prod.Quantity,
+                        QuantityExported = (from inv in _iInventoryRepository.GetList()
+                                            join invLine in _iInventoryLineRepository.GetList()
+                                            on inv.InventoryId equals invLine.InventoryId
+                                            where inv.Type == 2 && inv.Status == (int)InventoryStatus.IsComplete
+                                            && invLine.ProductId == prod.ProductId
+                                            select inv.InventoryId).ToList().Count(),
+                        Incoming = (from inv in _iInventoryRepository.GetList()
+                                    join invLine in _iInventoryLineRepository.GetList()
+                                    on inv.InventoryId equals invLine.InventoryId
+                                    where inv.Type == 1 && inv.Status == (int)InventoryStatus.IsReady
+                                    && invLine.ProductId == prod.ProductId
+                                    select inv.InventoryId).ToList().Count(),
+                        Outgoing = (from inv in _iInventoryRepository.GetList()
+                                    join invLine in _iInventoryLineRepository.GetList()
+                                    on inv.InventoryId equals invLine.InventoryId
+                                    where inv.Type == 2 && inv.Status == (int)InventoryStatus.IsReady
+                                    && invLine.ProductId == prod.ProductId
+                                    select inv.InventoryId).ToList().Count(),
+                    };
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Stock");
+
+                // Đặt header
+                worksheet.Cell(1, 1).Value = "ID";
+                worksheet.Cell(1, 2).Value = "Product Name";
+                worksheet.Cell(1, 3).Value = "Quantity Stock";
+                worksheet.Cell(1, 4).Value = "Quantity Released";
+                worksheet.Cell(1, 5).Value = "Incoming";
+                worksheet.Cell(1, 6).Value = "Outgoing";
+
+                // Đổ dữ liệu từ danh sách object vào file Excel
+                int row = 2;
+                foreach (var item in list)
+                {
+                    worksheet.Cell(row, 1).Value = item.ProductId;
+                    worksheet.Cell(row, 2).Value = item.ProductName;
+                    worksheet.Cell(row, 3).Value = item.QuantityStock;
+                    worksheet.Cell(row, 4).Value = item.QuantityExported;
+                    worksheet.Cell(row, 5).Value = item.Incoming;
+                    worksheet.Cell(row, 6).Value = item.Outgoing;
+                    row++;
+                }
+
+                // Chỉnh kích thước của các cột
+                worksheet.Column(1).Width = 20;
+                worksheet.Column(2).Width = 80;
+                worksheet.Column(3).Width = 20;
+                worksheet.Column(4).Width = 20;
+                worksheet.Column(5).Width = 20;
+                worksheet.Column(6).Width = 20;
+
+                // Lưu workbook vào MemoryStream
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    return stream.ToArray();
+                }
+            }
         }
     }
 }

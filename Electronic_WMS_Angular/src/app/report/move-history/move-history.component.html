@@ -7,7 +7,16 @@
                     <i data-feather="search" aria-hidden="true"></i>
                     <input type="text" (keyup.enter)="search()" [(ngModel)]="textSearch"
                         placeholder="Enter Customer Name ..." required>
+                    <select (change)="filterByType($event)" class="filter-selection">
+                        <option value="0">All</option>
+                        <option value="1">Receipt</option>
+                        <option value="2">Delivery</option>
+                    </select>
                 </div>
+                <button class="btn btn-success" style="padding: 10px 8px;" (click)="exportExcelMoveHistory()">
+                    <i data-feather="file-text" aria-hidden="true" style="width: 16px; height: 16px;"></i>
+                    Export Excel
+                </button>
             </div>
             <table class="table table-bordered mt-4">
                 <thead>

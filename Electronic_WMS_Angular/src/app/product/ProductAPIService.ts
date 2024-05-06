@@ -38,4 +38,8 @@ export class ProductAPIService {
     const params = new HttpParams().set('id', id.toString());
     return this.http.patch<any>('http://localhost:5091/api/Product/Delete', {}, {params});
   }
+
+  exportStockToExcel(): Observable<Blob> {
+    return this.http.get<Blob>('http://localhost:5091/api/Product/ExportExcelStock', { responseType: 'blob' as 'json' });
+  }
 }

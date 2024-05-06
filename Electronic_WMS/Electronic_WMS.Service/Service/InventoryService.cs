@@ -18,6 +18,10 @@ using iText.Layout.Element;
 using iText.Layout.Properties;
 using Microsoft.EntityFrameworkCore;
 using iText.Layout;
+using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Irony.Parsing;
+using Table = iText.Layout.Element.Table;
 
 namespace Electronic_WMS.Service.Service
 {
@@ -487,8 +491,9 @@ namespace Electronic_WMS.Service.Service
                 {
                     foreach (var item in inv.ListInventoryLine)
                     {
-                        var quantityStock = _iSerialNumberRepository.GetListByProductId(item.ProductId)
-                            .Where(x => x.WareHouseId == inv.WareHouseId).Count();
+                        var quantityStock = _iSerialNumberRepository.GetList()
+                            .Where(x => x.WareHouseId == inv.WareHouseId && x.ProductId == item.ProductId
+                                && (x.Status == (int)SeriStatus.IsStock || x.Status == (int)SeriStatus.IsProcessing)).Count();
                         if (item.Quantity > quantityStock)
                         {
                             var productError = new CheckQuantity
@@ -762,22 +767,22 @@ namespace Electronic_WMS.Service.Service
                 table.SetWidth(UnitValue.CreatePercentValue(100));
 
                 // Add header row
-                table.AddHeaderCell(new Cell().Add(new Paragraph("Product")));
-                table.AddHeaderCell(new Cell().Add(new Paragraph("Quantity")));
-                table.AddHeaderCell(new Cell().Add(new Paragraph("Serial Numbers")));
+                table.AddHeaderCell(new iText.Layout.Element.Cell().Add(new Paragraph("Product")));
+                table.AddHeaderCell(new iText.Layout.Element.Cell().Add(new Paragraph("Quantity")));
+                table.AddHeaderCell(new iText.Layout.Element.Cell().Add(new Paragraph("Serial Numbers")));
 
                 // Add invoice details
                 foreach (var invLine in invDetail.ListInventoryLine)
                 {
                     // Add product name in the first column
-                    table.AddCell(new Cell().Add(new Paragraph(invLine.ProductName)));
+                    table.AddCell(new iText.Layout.Element.Cell().Add(new Paragraph(invLine.ProductName)));
 
                     // Add quantity in the second column
-                    table.AddCell(new Cell().Add(new Paragraph(invLine.Quantity.ToString())));
+                    table.AddCell(new iText.Layout.Element.Cell().Add(new Paragraph(invLine.Quantity.ToString())));
 
                     // Add serial numbers in the third column
                     var serialNumbers = string.Join(", ", invLine.ListSerialNumber.Select(s => s.SerialNumber));
-                    table.AddCell(new Cell().Add(new Paragraph(serialNumbers)));
+                    table.AddCell(new iText.Layout.Element.Cell().Add(new Paragraph(serialNumbers)));
                 }
 
                 // Add the table to the document
@@ -788,6 +793,93 @@ namespace Electronic_WMS.Service.Service
 
                 return stream.ToArray();
             }
+        }
+
+        public byte[] ExportMoveHistoryToExcel(int type)
+        {
+            var inventory = from inv in _iInventoryRepository.GetList()
+                            where inv.Status == (int)InventoryStatus.IsComplete
+                            select new InventoryVM
+                            {
+                                InventoryId = inv.InventoryId,
+                                SourceLocation = inv.SourceLocation,
+                                CustomerName = _iUserRepository.GetById(inv.SourceLocation).FullName,
+                                WareHouseName = _iWareHouseRepository.GetById(inv.WareHouseId).Name,
+                                CreatedDate = inv.CreatedDate,
+                                UpdatedDate = inv.UpdatedDate,
+                                Quantity = _iInventoryLineRepository.GetList().Where(x => x.InventoryId == inv.InventoryId).Sum(x => x.Quantity),
+                                Type = inv.Type,
+                                Status = inv.Status
+                            };
+            if (type != 0)
+            {
+                inventory = inventory.Where(x => x.Type == type);
+            }
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("MoveHistory");
+
+                // Đặt header
+                worksheet.Cell(1, 1).Value = "ID";
+                worksheet.Cell(1, 2).Value = "Customer Name";
+                worksheet.Cell(1, 3).Value = "WareHouse Name";
+                worksheet.Cell(1, 4).Value = "Created Date";
+                worksheet.Cell(1, 5).Value = "Reception Date";
+                worksheet.Cell(1, 6).Value = "Quantity";
+                worksheet.Cell(1, 7).Value = "Type";
+
+                // Đổ dữ liệu từ danh sách object vào file Excel
+                int row = 2;
+                foreach (var item in inventory)
+                {
+                    worksheet.Cell(row, 1).Value = item.InventoryId;
+                    worksheet.Cell(row, 2).Value = item.CustomerName;
+                    worksheet.Cell(row, 3).Value = item.WareHouseName;
+                    worksheet.Cell(row, 4).Value = item.CreatedDate.ToString("dd-MM-yyyy");
+                    worksheet.Cell(row, 5).Value = item.UpdatedDate?.ToString("dd-MM-yyyy");
+                    worksheet.Cell(row, 6).Value = item.Quantity;
+                    if (item.Type == 1)
+                    {
+                        worksheet.Cell(row, 7).Value = "Receipt";
+                    }
+                    else if (item.Type == 2)
+                    {
+                        worksheet.Cell(row, 7).Value = "Delivery";
+                    }
+                    row++;
+                }
+
+                // Chỉnh kích thước của các cột
+                worksheet.Column(1).Width = 10; 
+                worksheet.Column(2).Width = 45; 
+                worksheet.Column(3).Width = 45; 
+                worksheet.Column(4).Width = 25; 
+                worksheet.Column(5).Width = 25; 
+                worksheet.Column(6).Width = 15; 
+                worksheet.Column(7).Width = 15; 
+
+                // Lưu workbook vào MemoryStream
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    return stream.ToArray();
+                }
+            }
+        }
+
+        public DashboardVM GetVMDashBoard()
+        {
+            var countReceiptReady = _iInventoryRepository.GetList().Where(x => x.Type == 1 && x.Status == (int)InventoryStatus.IsReady).Count();
+            var countDeliveryReady = _iInventoryRepository.GetList().Where(x => x.Type == 2 && x.Status == (int)InventoryStatus.IsReady).Count();
+            var countProductOutOfStock = _iProductRepository.GetList().Where(x => x.Quantity == 0).Count();
+
+            return new DashboardVM
+            {
+                CountReciptReady = countReceiptReady,
+                CountDeliveryReady = countDeliveryReady,
+                CountProductOutOfStock = countProductOutOfStock
+            };
         }
     }
 }

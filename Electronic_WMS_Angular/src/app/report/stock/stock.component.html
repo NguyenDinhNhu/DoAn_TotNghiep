@@ -8,6 +8,11 @@
                     <input type="text" (keyup.enter)="search()" [(ngModel)]="textSearch"
                         placeholder="Enter Product Name ..." required>
                 </div>
+                
+                <button class="btn btn-success" style="padding: 10px 8px;" (click)="exportExcelStock()">
+                    <i data-feather="file-text" aria-hidden="true" style="width: 16px; height: 16px;"></i>
+                    Export Excel
+                </button>
             </div>
             <table class="table table-bordered mt-4">
                 <thead>

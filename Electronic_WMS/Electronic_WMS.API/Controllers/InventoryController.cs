@@ -70,5 +70,22 @@ namespace Electronic_WMS.API.Controllers
 
             return File(result, "application/pdf", $"invoice_{dateTimeStr}.pdf");
         }
+
+        [HttpGet(nameof(ExportExcelMoveHistory))]
+        public IActionResult ExportExcelMoveHistory([FromQuery] int type)
+        {
+            DateTime now = DateTime.Now;
+            string dateTimeStr = now.ToString("yyyyMMddHHmmss");
+            var result = _iInventoryService.ExportMoveHistoryToExcel(type);
+
+            return File(result, "application/force-download", $"move_history_{dateTimeStr}.xlsx");
+        }
+
+        [HttpGet(nameof(GetDashBoardVM))]
+        public IActionResult GetDashBoardVM()
+        {
+            var result = _iInventoryService.GetVMDashBoard();
+            return Ok(result);
+        }
     }
 }

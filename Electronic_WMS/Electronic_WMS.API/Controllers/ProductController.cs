@@ -64,5 +64,15 @@ namespace Electronic_WMS.API.Controllers
             var result = _iProductService.Update(product);
             return Ok(result);
         }
+
+        [HttpGet(nameof(ExportExcelStock))]
+        public IActionResult ExportExcelStock()
+        {
+            DateTime now = DateTime.Now;
+            string dateTimeStr = now.ToString("yyyyMMddHHmmss");
+            var result = _iProductService.ExportStockToExcel();
+
+            return File(result, "application/force-download", $"stock_{dateTimeStr}.xlsx");
+        }
     }
 }

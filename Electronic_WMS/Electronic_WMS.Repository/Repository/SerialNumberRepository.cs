@@ -23,7 +23,11 @@ namespace Electronic_WMS.Repository.Repository
             return _db.SaveChanges();
         }
 
-        public IEnumerable<SerialNumberEntity> GetListByProductId(int productId)
+        public IEnumerable<SerialNumberEntity> GetList()
+        {
+            return _db.SerialNumberEntities.ToList();
+        }
+          public IEnumerable<SerialNumberEntity> GetListByProductId(int productId)
         {
             return _db.SerialNumberEntities.Where(x => x.Status == (int)SeriStatus.IsStock && x.ProductId == productId).ToList();
         }

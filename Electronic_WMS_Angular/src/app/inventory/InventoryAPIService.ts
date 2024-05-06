@@ -10,6 +10,10 @@ export class InventoryAPIService {
 
   constructor(private http: HttpClient) { }
 
+  getDashBoardVM(): Observable<any> {
+    return this.http.get<any>('http://localhost:5091/api/Inventory/GetDashBoardVM');
+  }
+
   getListInventoryByType(search: any): Observable<any> {
     return this.http.post<any>('http://localhost:5091/api/Inventory/GetListByType', search);
   }
@@ -37,5 +41,9 @@ export class InventoryAPIService {
 
   exportInventoryToPDF(id: number): Observable<Blob> {
     return this.http.get<Blob>(`http://localhost:5091/api/Inventory/ExportedPDFInventory?id=${id}`, { responseType: 'blob' as 'json' });
+  }
+
+  exportMoveHistoryToExcel(type: number): Observable<Blob> {
+    return this.http.get<Blob>(`http://localhost:5091/api/Inventory/ExportExcelMoveHistory?type=${type}`, { responseType: 'blob' as 'json' });
   }
 }
