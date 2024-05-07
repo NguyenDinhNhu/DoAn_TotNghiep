@@ -8,7 +8,6 @@ namespace Electronic_WMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "AdminOrStocker")]
     public class InventoryController : ControllerBase
     {
         private readonly IInventoryService _iInventoryService;
@@ -19,6 +18,7 @@ namespace Electronic_WMS.API.Controllers
             _iAuthenticationService = iAuthenticationService;
         }
 
+        [Authorize]
         [HttpPost(nameof(GetListByType))]
         public IActionResult GetListByType([FromBody] InventorySearch search)
         {
@@ -26,6 +26,7 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Policy = "AdminOrStocker")]
         [HttpPatch(nameof(Delete))]
         public IActionResult Delete([FromQuery] int id)
         {
@@ -33,6 +34,7 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Policy = "AdminOrStocker")]
         [HttpPost(nameof(Insert))]
         public IActionResult Insert([FromBody] InsertOrUpdateInventory inv)
         {
@@ -44,8 +46,9 @@ namespace Electronic_WMS.API.Controllers
             }
             var result = _iInventoryService.Insert(inv, userToken);
             return Ok(result);
-        } 
-        
+        }
+
+        [Authorize(Policy = "AdminOrStocker")]
         [HttpPost(nameof(Update))]
         public IActionResult Update([FromBody] InsertOrUpdateInventory inv)
         {
@@ -59,6 +62,7 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpGet(nameof(GetById))]
         public IActionResult GetById([FromQuery] int id)
         {
@@ -66,6 +70,7 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Policy = "AdminOrStocker")]
         [HttpPost(nameof(ChangeStatus))]
         public IActionResult ChangeStatus([FromBody] ChangeStatusInventory change)
         {
@@ -79,6 +84,7 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Policy = "AdminOrStocker")]
         [HttpGet(nameof(ExportedPDFInventory))]
         public IActionResult ExportedPDFInventory([FromQuery] int id)
         {
@@ -93,6 +99,7 @@ namespace Electronic_WMS.API.Controllers
             return File(result, "application/pdf", $"invoice_{dateTimeStr}.pdf");
         }
 
+        [Authorize(Policy = "AdminOrStocker")]
         [HttpGet(nameof(ExportExcelMoveHistory))]
         public IActionResult ExportExcelMoveHistory([FromQuery] int type)
         {
@@ -103,6 +110,7 @@ namespace Electronic_WMS.API.Controllers
             return File(result, "application/force-download", $"move_history_{dateTimeStr}.xlsx");
         }
 
+        [Authorize(Policy = "AdminOrStocker")]
         [HttpGet(nameof(GetDashBoardVM))]
         public IActionResult GetDashBoardVM()
         {
