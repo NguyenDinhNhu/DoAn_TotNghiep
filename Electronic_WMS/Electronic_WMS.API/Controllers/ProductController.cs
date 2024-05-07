@@ -1,6 +1,7 @@
 ﻿using Electronic_WMS.Models.Models;
 using Electronic_WMS.Service.IService;
 using Electronic_WMS.Service.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,11 +12,14 @@ namespace Electronic_WMS.API.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _iProductService;
-        public ProductController(IProductService iProductService)
+        private readonly IAuthenticationService _iAuthenticationService;
+        public ProductController(IProductService iProductService, IAuthenticationService iAuthenticationService)
         {
             _iProductService = iProductService;
+            _iAuthenticationService = iAuthenticationService;
         }
 
+        [Authorize(Policy = "AdminOrStocker")]
         [HttpPost(nameof(GetList))]
         public IActionResult GetList([FromBody] SearchVM search)
         {
@@ -23,6 +27,7 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Policy = "AdminOrStocker")]
         [HttpPost(nameof(GetListProductStock))]
         public IActionResult GetListProductStock([FromBody] SearchVM search)
         {
@@ -30,6 +35,7 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Policy = "AdminOrStocker")]
         [HttpGet(nameof(GetProduct))]
         public IActionResult GetProduct([FromQuery] int id)
         {
@@ -37,6 +43,7 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Policy = "AdminOrStocker")]
         [HttpGet(nameof(GetListCombobox))]
         public IActionResult GetListCombobox()
         {
@@ -44,13 +51,21 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Policy = "Administrator")]
         [HttpPost(nameof(Insert))]
         public IActionResult Insert([FromForm] InsertOrUpdateProduct product)
         {
-            var result = _iProductService.Insert(product);
+            var userToken = _iAuthenticationService.GetUserToken();
+
+            if (userToken == null)
+            {
+                return Unauthorized("Token not found");
+            }
+            var result = _iProductService.Insert(product, userToken);
             return Ok(result);
         }
 
+        [Authorize(Policy = "Administrator")]
         [HttpPatch(nameof(Delete))]
         public IActionResult Delete([FromQuery] int id)
         {
@@ -58,13 +73,21 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Policy = "AdminOrStocker")]
         [HttpPost(nameof(Update))]
         public IActionResult Update([FromForm] InsertOrUpdateProduct product)
         {
-            var result = _iProductService.Update(product);
+            var userToken = _iAuthenticationService.GetUserToken();
+
+            if (userToken == null)
+            {
+                return Unauthorized("Token not found");
+            }
+            var result = _iProductService.Update(product, userToken);
             return Ok(result);
         }
 
+        [Authorize(Policy = "AdminOrStocker")]
         [HttpGet(nameof(ExportExcelStock))]
         public IActionResult ExportExcelStock()
         {

@@ -173,7 +173,7 @@ namespace Electronic_WMS.Service.Service
             return list;
         }
 
-        public ResponseModel Insert(InsertOrUpdateProduct prod)
+        public ResponseModel Insert(InsertOrUpdateProduct prod, UserToken userToken)
         {
             // Check ProductName in database
             //var checkProdName = _iProductRepository.GetByUserName(prod.ProductName);
@@ -192,7 +192,7 @@ namespace Electronic_WMS.Service.Service
                 ProductId = prod.ProductId,
                 ProductName = prod.ProductName,
                 CreatedDate = DateTime.Now,
-                CreatedBy = 1,
+                CreatedBy = userToken.UserId,
                 Description = prod.Description,
                 Price = prod.Price,
                 Unit = prod.Unit,
@@ -255,7 +255,7 @@ namespace Electronic_WMS.Service.Service
             };
         }
 
-        public ResponseModel Update(InsertOrUpdateProduct prod)
+        public ResponseModel Update(InsertOrUpdateProduct prod, UserToken userToken)
         {
             var prodDetail = _iProductRepository.GetById(prod.ProductId);
             if (prodDetail == null)
@@ -281,7 +281,7 @@ namespace Electronic_WMS.Service.Service
             // Update Product 
             prodDetail.ProductName = prod.ProductName;
             prodDetail.UpdatedDate = DateTime.Now;
-            prodDetail.UpdatedBy = 1;
+            prodDetail.UpdatedBy = userToken.UserId;
             prodDetail.Description = prod.Description;
             prodDetail.Price = prod.Price;
             prodDetail.Unit = prod.Unit;

@@ -100,7 +100,7 @@ namespace Electronic_WMS.Service.Service
             return list;
         }
 
-        public ResponseModel Insert(InsertUpdateWareHouse wh)
+        public ResponseModel Insert(InsertUpdateWareHouse wh, UserToken userToken)
         {
             // Check WareHouseName in database
             var checkWHName = _iWareHouseRepository.GetByName(wh.Name);
@@ -120,7 +120,7 @@ namespace Electronic_WMS.Service.Service
                 Name = wh.Name,
                 Address = wh.Address,
                 CreatedDate = DateTime.Now,
-                CreatedBy = 1,
+                CreatedBy = userToken.UserId,
                 Status = (int)CommonStatus.IsActive
             };
 
@@ -140,7 +140,7 @@ namespace Electronic_WMS.Service.Service
             };
         }
 
-        public ResponseModel Update(InsertUpdateWareHouse wh)
+        public ResponseModel Update(InsertUpdateWareHouse wh, UserToken userToken)
         {
             var whDetail = _iWareHouseRepository.GetById(wh.WareHouseId);
             if (whDetail == null)
@@ -166,7 +166,7 @@ namespace Electronic_WMS.Service.Service
             whDetail.Name = wh.Name;
             whDetail.Address = wh.Address;
             whDetail.UpdatedDate = DateTime.Now;
-            whDetail.UpdatedBy = 1;
+            whDetail.UpdatedBy = userToken.UserId;
 
             var status = _iWareHouseRepository.Update(whDetail);
             if (status == 0)

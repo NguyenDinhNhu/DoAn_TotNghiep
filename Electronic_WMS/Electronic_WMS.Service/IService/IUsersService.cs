@@ -12,8 +12,8 @@ namespace Electronic_WMS.Service.IService
         public GetListUser GetList(SearchVM search);
         public IEnumerable<SupplierOrShopCombobox> GetListSupplierOrShop(int rolesId);
         public UsersVM GetById(int id);
-        public ResponseModel Insert(InsertUpdateUsers user);
-        public ResponseModel Update(InsertUpdateUsers user);
+        public ResponseModel Insert(InsertUpdateUsers user, UserToken userToken);
+        public ResponseModel Update(InsertUpdateUsers user, UserToken userToken);
         public ResponseModel Delete(int id);
     }
 }

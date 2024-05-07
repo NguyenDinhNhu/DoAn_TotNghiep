@@ -11,10 +11,10 @@ namespace Electronic_WMS.Service.IService
     {
         public GetListInventory GetListByType(InventorySearch search);
         public InventoryDetail GetById(int id);
-        public ResponseModel Insert(InsertOrUpdateInventory inv);
-        public ResponseModel Update(InsertOrUpdateInventory inv);
+        public ResponseModel Insert(InsertOrUpdateInventory inv, UserToken userToken);
+        public ResponseModel Update(InsertOrUpdateInventory inv, UserToken userToken);
         public ResponseModel Delete(int id);
-        public ResponseModel ChangeStatus(ChangeStatusInventory change);
+        public ResponseModel ChangeStatus(ChangeStatusInventory change, UserToken userToken);
         public byte[] GenerateInventoryPDF(int inventoryId);
         public byte[] ExportMoveHistoryToExcel(int type);
         public DashboardVM GetVMDashBoard();

@@ -1,5 +1,6 @@
 ﻿using Electronic_WMS.Models.Models;
 using Electronic_WMS.Service.IService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,13 +16,15 @@ namespace Electronic_WMS.API.Controllers
             _iBrandService = iBrandService;
         }
 
+        [Authorize(Policy = "AdminOrStocker")]
         [HttpPost(nameof(GetList))]
         public IActionResult GetList([FromBody] SearchVM search)
         {
             var result = _iBrandService.GetList(search);
             return Ok(result);
-        } 
-        
+        }
+
+        [Authorize(Policy = "AdminOrStocker")]
         [HttpGet(nameof(GetListCombobox))]
         public IActionResult GetListCombobox()
         {
@@ -29,6 +32,7 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Policy = "AdminOrStocker")]
         [HttpGet(nameof(GetParentBrandCombobox))]
         public IActionResult GetParentBrandCombobox()
         {
@@ -36,6 +40,7 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Policy = "AdminOrStocker")]
         [HttpGet(nameof(GetBrand))]
         public IActionResult GetBrand([FromQuery] int id)
         {
@@ -43,6 +48,7 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Policy = "Administrator")]
         [HttpPost(nameof(Insert))]
         public IActionResult Insert([FromBody] Brand brand)
         {
@@ -50,6 +56,7 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Policy = "Administrator")]
         [HttpPatch(nameof(Delete))]
         public IActionResult Delete([FromQuery] int id)
         {
@@ -57,6 +64,7 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Policy = "Administrator")]
         [HttpPost(nameof(Update))]
         public IActionResult Update([FromBody] Brand brand)
         {

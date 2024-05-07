@@ -116,7 +116,7 @@ namespace Electronic_WMS.Service.Service
             return list;
         }
 
-        public ResponseModel Insert(InsertUpdateUsers user)
+        public ResponseModel Insert(InsertUpdateUsers user, UserToken userToken)
         {
             // Check UserName in database
             var checkUserName = _iUsersRepository.GetByUserNameOrEmail(user.UserName);
@@ -152,7 +152,7 @@ namespace Electronic_WMS.Service.Service
                 Phone = user.Phone,
                 Status = (int)CommonStatus.IsActive,
                 CreatedDate = DateTime.Now,
-                CreatedBy = 1,
+                CreatedBy = userToken.UserId,
                 RoleId = user.RoleId,
             };
             String avatar = XString.ToAscii(user.FullName);
@@ -186,7 +186,7 @@ namespace Electronic_WMS.Service.Service
             };
         }
 
-        public ResponseModel Update(InsertUpdateUsers user)
+        public ResponseModel Update(InsertUpdateUsers user, UserToken userToken)
         {
             var uDetail = _iUsersRepository.GetById(user.UserId);
             if (uDetail == null)
@@ -228,7 +228,7 @@ namespace Electronic_WMS.Service.Service
             uDetail.Address = user.Address;
             uDetail.Phone = user.Phone;
             uDetail.UpdatedDate = DateTime.Now;
-            uDetail.UpdatedBy = 1;
+            uDetail.UpdatedBy = userToken.UserId;
             uDetail.RoleId = user.RoleId;
             String avatar = XString.ToAscii(user.FullName);
             if (user.FileImage != null)

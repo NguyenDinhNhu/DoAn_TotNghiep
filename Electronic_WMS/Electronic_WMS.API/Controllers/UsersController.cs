@@ -1,6 +1,7 @@
 ﻿using Electronic_WMS.Models.Models;
 using Electronic_WMS.Service.IService;
 using Electronic_WMS.Service.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,12 +9,15 @@ namespace Electronic_WMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "Administrator")]
     public class UsersController : ControllerBase
     {
         private readonly IUsersService _iUsersService;
-        public UsersController(IUsersService iUsersService)
+        private readonly IAuthenticationService _iAuthenticationService;
+        public UsersController(IUsersService iUsersService, IAuthenticationService iAuthenticationService)
         {
             _iUsersService = iUsersService;
+            _iAuthenticationService = iAuthenticationService;
         }
 
         [HttpPost(nameof(GetList))]
@@ -40,7 +44,13 @@ namespace Electronic_WMS.API.Controllers
         [HttpPost(nameof(Insert))]
         public IActionResult Insert([FromForm] InsertUpdateUsers user)
         {
-            var result = _iUsersService.Insert(user);
+            var userToken = _iAuthenticationService.GetUserToken();
+
+            if (userToken == null)
+            {
+                return Unauthorized("Token not found");
+            }
+            var result = _iUsersService.Insert(user, userToken);
             return Ok(result);
         }
 
@@ -54,7 +64,13 @@ namespace Electronic_WMS.API.Controllers
         [HttpPost(nameof(Update))]
         public IActionResult Update([FromForm] InsertUpdateUsers user)
         {
-            var result = _iUsersService.Update(user);
+            var userToken = _iAuthenticationService.GetUserToken();
+
+            if (userToken == null)
+            {
+                return Unauthorized("Token not found");
+            }
+            var result = _iUsersService.Update(user, userToken);
             return Ok(result);
         }
     }

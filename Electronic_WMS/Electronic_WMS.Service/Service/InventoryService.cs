@@ -46,7 +46,7 @@ namespace Electronic_WMS.Service.Service
             _iWareHouseRepository = iWareHouseRepository;
         }
 
-        public ResponseModel ChangeStatus(ChangeStatusInventory change)
+        public ResponseModel ChangeStatus(ChangeStatusInventory change, UserToken userToken)
         {
             var inv = _iInventoryRepository.GetById(change.InventoryId);
             if (inv == null)
@@ -172,7 +172,7 @@ namespace Electronic_WMS.Service.Service
                 }
             }
             inv.UpdatedDate = DateTime.Now;
-            inv.UpdatedBy = 1;
+            inv.UpdatedBy = userToken.UserId;
             var res = _iInventoryRepository.Update(inv);
             if (res == 0)
             {
@@ -295,13 +295,13 @@ namespace Electronic_WMS.Service.Service
             return new GetListInventory { ListInventory = list, Total = total};
         }
 
-        public ResponseModel Insert(InsertOrUpdateInventory inv)
+        public ResponseModel Insert(InsertOrUpdateInventory inv, UserToken userToken)
         {
             // Insert Inventory 
             var inventory = new InventoryEntity
             {
                 InventoryId = inv.InventoryId,
-                UserId = 1,
+                UserId = userToken.UserId,
                 WareHouseId = inv.WareHouseId,
                 SourceLocation = inv.SourceLocation,
                 CreatedDate = DateTime.Now,
@@ -465,7 +465,7 @@ namespace Electronic_WMS.Service.Service
             };
         }
 
-        public ResponseModel Update(InsertOrUpdateInventory inv)
+        public ResponseModel Update(InsertOrUpdateInventory inv, UserToken userToken)
         {
             var invDetail = _iInventoryRepository.GetById(inv.InventoryId);
             if (invDetail == null)
@@ -481,7 +481,7 @@ namespace Electronic_WMS.Service.Service
             invDetail.SourceLocation = inv.SourceLocation;
             invDetail.WareHouseId = inv.WareHouseId;
             invDetail.UpdatedDate = DateTime.Now;
-            invDetail.UpdatedBy = 1;
+            invDetail.UpdatedBy = userToken.UserId;
             invDetail.Type = inv.Type;
 
             if (inv.Type == 2)

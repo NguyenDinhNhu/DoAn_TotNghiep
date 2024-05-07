@@ -1,5 +1,6 @@
 ﻿using Electronic_WMS.Models.Models;
 using Electronic_WMS.Service.IService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,12 +8,15 @@ namespace Electronic_WMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "AdminOrStocker")]
     public class InventoryController : ControllerBase
     {
         private readonly IInventoryService _iInventoryService;
-        public InventoryController(IInventoryService iInventoryService)
+        private readonly IAuthenticationService _iAuthenticationService;
+        public InventoryController(IInventoryService iInventoryService, IAuthenticationService iAuthenticationService)
         {
             _iInventoryService = iInventoryService;
+            _iAuthenticationService = iAuthenticationService;
         }
 
         [HttpPost(nameof(GetListByType))]
@@ -32,14 +36,26 @@ namespace Electronic_WMS.API.Controllers
         [HttpPost(nameof(Insert))]
         public IActionResult Insert([FromBody] InsertOrUpdateInventory inv)
         {
-            var result = _iInventoryService.Insert(inv);
+            var userToken = _iAuthenticationService.GetUserToken();
+
+            if (userToken == null)
+            {
+                return Unauthorized("Token not found");
+            }
+            var result = _iInventoryService.Insert(inv, userToken);
             return Ok(result);
         } 
         
         [HttpPost(nameof(Update))]
         public IActionResult Update([FromBody] InsertOrUpdateInventory inv)
         {
-            var result = _iInventoryService.Update(inv);
+            var userToken = _iAuthenticationService.GetUserToken();
+
+            if (userToken == null)
+            {
+                return Unauthorized("Token not found");
+            }
+            var result = _iInventoryService.Update(inv, userToken);
             return Ok(result);
         }
 
@@ -53,7 +69,13 @@ namespace Electronic_WMS.API.Controllers
         [HttpPost(nameof(ChangeStatus))]
         public IActionResult ChangeStatus([FromBody] ChangeStatusInventory change)
         {
-            var result = _iInventoryService.ChangeStatus(change);
+            var userToken = _iAuthenticationService.GetUserToken();
+
+            if (userToken == null)
+            {
+                return Unauthorized("Token not found");
+            }
+            var result = _iInventoryService.ChangeStatus(change, userToken);
             return Ok(result);
         }
 

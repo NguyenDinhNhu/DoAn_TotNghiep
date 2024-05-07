@@ -49,4 +49,20 @@ namespace Electronic_WMS.Models.Models
         public int RoleId { get; set; }
         public IFormFile FileImage { get; set; }
     }
+
+    public class LoginModel
+    {
+        public string UserName { get; set; }
+        public string PassWord { get; set; }
+    }
+
+    public class UserToken
+    {
+        public int UserId { get; set; }
+        public string UserName { get; set; }
+        public string FullName { get; set; }
+        public string Email { get; set; }
+        public string Address { get; set; }
+        public string RoleName { get; set; }
+    }
 }
