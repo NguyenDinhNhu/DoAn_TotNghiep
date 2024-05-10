@@ -1,0 +1,61 @@
+<div class="container"  *ngIf="productDetail">
+    <div class="d-flex justify-content-between w-100">
+        <h2 class="main-title">Detail</h2>
+        <div>
+            <button class="btn btn-danger" style="padding: 10px 8px;" [routerLink]="['/product/index']">
+                <i data-feather="corner-down-left" aria-hidden="true" style="width: 16px; height: 16px;"></i>
+                Back to list
+            </button>
+        </div>
+    </div>
+    <div class="start-cards">
+        <article class="stat-cards-item">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td>ID</td>
+                        <td>{{productDetail.productId}}</td>
+                    </tr>
+                    <tr>
+                        <td>Product Name</td>
+                        <td>{{productDetail.productName}}</td>
+                    </tr>
+                    <tr>
+                        <td>Description</td>
+                        <td>{{productDetail.description}}</td>
+                    </tr>
+                    <tr>
+                        <td>Created Date</td>
+                        <td>{{productDetail.createdDate | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+                    </tr>
+                    <tr>
+                        <td>Updated Date</td>
+                        <td>{{productDetail.updatedDate | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+                    </tr>
+                    <tr>
+                        <td>Price</td>
+                        <td>{{formatVND(productDetail.price)}}</td>
+                    </tr>
+                    <tr>
+                        <td>Quantity</td>
+                        <td>{{productDetail.quantity}}</td>
+                    </tr>
+                    <tr>
+                        <td>Brand</td>
+                        <td>{{productDetail.brandName}}</td>
+                    </tr>
+                    <tr>
+                        <td>Category</td>
+                        <td>{{productDetail.cateName}}</td>
+                    </tr>
+                    <tr>
+                        <td>Product Feature</td>
+                        <td>
+                            <div *ngFor="let item of productDetail.listProductFeature">{{item.featureName}}: {{item.value}}</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </article>
+    </div>
+</div>

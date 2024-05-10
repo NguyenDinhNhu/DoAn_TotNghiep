@@ -30,7 +30,7 @@
                         <td>{{prod.productId}}</td>
                         <td><img src="../../../assets/img/product/{{prod.image}}" alt=""
                                 style="width: 50px; height: 50px;"></td>
-                        <td>{{prod.productName}}</td>
+                        <td><a [routerLink]="['/product/detail', prod.productId]">{{prod.productName}}</a></td>
                         <!-- <td>{{prod.price | currency:'VND':'symbol':'1.0-0'}}</td> -->
                         <td>{{formatVND(prod.price)}}</td>
                         <td>{{ prod.quantity }}</td>

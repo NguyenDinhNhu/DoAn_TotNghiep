@@ -1,6 +1,7 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { AuthAPIService } from '../login/AuthAPIService';
 
 @Injectable({
   providedIn: 'root'
@@ -8,38 +9,57 @@ import { Observable } from 'rxjs';
 
 export class ProductAPIService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,  private authService: AuthAPIService) { }
 
+  private getHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    if (token) {
+      return new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      });
+    } else {
+      return new HttpHeaders();
+    }
+  }
+  
   getListProduct(search: any): Observable<any> {
-    return this.http.post<any>('http://localhost:5091/api/Product/GetList', search);
+    const headers = this.getHeaders();
+    return this.http.post<any>('http://localhost:5091/api/Product/GetList', search, { headers });
   }
 
   getListProductStock(search: any): Observable<any> {
-    return this.http.post<any>('http://localhost:5091/api/Product/GetListProductStock', search);
+    const headers = this.getHeaders();
+    return this.http.post<any>('http://localhost:5091/api/Product/GetListProductStock', search, { headers });
   }
 
   getListProductCombobox(): Observable<any> {
-    return this.http.get<any>('http://localhost:5091/api/Product/GetListCombobox');
+    const headers = this.getHeaders();
+    return this.http.get<any>('http://localhost:5091/api/Product/GetListCombobox', { headers });
   }
 
   getProduct(id: number): Observable<any> {
-    return this.http.get<any>('http://localhost:5091/api/Product/GetProduct?id=' + id);
+    const headers = this.getHeaders();
+    return this.http.get<any>('http://localhost:5091/api/Product/GetProduct?id=' + id, { headers });
   }
 
   insertProduct(product: any): Observable<any> {
-    return this.http.post<any>('http://localhost:5091/api/Product/Insert', product);
+    const headers = this.getHeaders();
+    return this.http.post<any>('http://localhost:5091/api/Product/Insert', product, { headers });
   }
 
   updateProduct(product: any): Observable<any> {
-    return this.http.post<any>('http://localhost:5091/api/Product/Update', product);
+    const headers = this.getHeaders();
+    return this.http.post<any>('http://localhost:5091/api/Product/Update', product, { headers });
   }
 
   deleteProduct(id: number): Observable<any> {
+    const headers = this.getHeaders();
     const params = new HttpParams().set('id', id.toString());
-    return this.http.patch<any>('http://localhost:5091/api/Product/Delete', {}, {params});
+    return this.http.patch<any>('http://localhost:5091/api/Product/Delete', {}, {headers, params});
   }
 
   exportStockToExcel(): Observable<Blob> {
-    return this.http.get<Blob>('http://localhost:5091/api/Product/ExportExcelStock', { responseType: 'blob' as 'json' });
+    const headers = this.getHeaders();
+    return this.http.get<Blob>('http://localhost:5091/api/Product/ExportExcelStock', {headers, responseType: 'blob' as 'json' });
   }
 }

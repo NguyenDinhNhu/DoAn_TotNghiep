@@ -34,6 +34,9 @@ import { MoveHistoryComponent } from './report/move-history/move-history.compone
 import { EditDeliveryComponent } from './inventory/edit-delivery/edit-delivery.component';
 import { StockComponent } from './report/stock/stock.component';
 import { InventoryDetailComponent } from './inventory/inventory-detail/inventory-detail.component';
+import { LoginComponent } from './login/login.component';
+import { UserDetailComponent } from './users/user-detail/user-detail.component';
+import { ProductDetailComponent } from './product/product-detail/product-detail.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +65,9 @@ import { InventoryDetailComponent } from './inventory/inventory-detail/inventory
     EditDeliveryComponent,
     StockComponent,
     InventoryDetailComponent,
+    LoginComponent,
+    UserDetailComponent,
+    ProductDetailComponent,
   ],
   imports: [
     BrowserModule,

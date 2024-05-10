@@ -1,6 +1,7 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { AuthAPIService } from '../login/AuthAPIService';
 
 @Injectable({
   providedIn: 'root'
@@ -8,34 +9,52 @@ import { Observable } from 'rxjs';
 
 export class BrandAPIService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,  private authService: AuthAPIService) { }
+
+  private getHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    if (token) {
+      return new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      });
+    } else {
+      return new HttpHeaders();
+    }
+  }
 
   getListBrand(search: any): Observable<any> {
-    return this.http.post<any>('http://localhost:5091/api/Brand/GetList', search);
+    const headers = this.getHeaders();
+    return this.http.post<any>('http://localhost:5091/api/Brand/GetList', search, { headers });
   }
 
   getBrandCombobox(): Observable<any> {
-    return this.http.get<any>('http://localhost:5091/api/Brand/GetListCombobox');
+    const headers = this.getHeaders();
+    return this.http.get<any>('http://localhost:5091/api/Brand/GetListCombobox', { headers });
   }
 
   getParentBrandCombobox(): Observable<any> {
-    return this.http.get<any>('http://localhost:5091/api/Brand/GetParentBrandCombobox');
+    const headers = this.getHeaders();
+    return this.http.get<any>('http://localhost:5091/api/Brand/GetParentBrandCombobox', { headers });
   }
 
   getBrand(id: number): Observable<any> {
-    return this.http.get<any>('http://localhost:5091/api/Brand/GetBrand?id=' + id);
+    const headers = this.getHeaders();
+    return this.http.get<any>('http://localhost:5091/api/Brand/GetBrand?id=' + id, { headers });
   }
 
   insertBrand(brand: any): Observable<any> {
-    return this.http.post<any>('http://localhost:5091/api/Brand/Insert', brand);
+    const headers = this.getHeaders();
+    return this.http.post<any>('http://localhost:5091/api/Brand/Insert', brand, { headers });
   }
 
   updateBrand(brand: any): Observable<any> {
-    return this.http.post<any>('http://localhost:5091/api/Brand/Update', brand);
+    const headers = this.getHeaders();
+    return this.http.post<any>('http://localhost:5091/api/Brand/Update', brand, { headers });
   }
 
   deleteBrand(id: number): Observable<any> {
+    const headers = this.getHeaders();
     const params = new HttpParams().set('id', id.toString());
-    return this.http.patch<any>('http://localhost:5091/api/Brand/Delete', {}, {params});
+    return this.http.patch<any>('http://localhost:5091/api/Brand/Delete', {}, {headers, params});
   }
 }

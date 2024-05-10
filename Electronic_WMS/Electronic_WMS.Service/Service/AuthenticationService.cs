@@ -55,6 +55,7 @@ namespace Electronic_WMS.Service.Service
                 new Claim(ClaimTypes.NameIdentifier, userToken.UserId.ToString()),
                 new Claim("FullName", userToken.FullName),
                 new Claim("Email", userToken.Email),
+                new Claim("Image", userToken.Image),
                 new Claim("Address", userToken.Address),
                 new Claim(ClaimTypes.Role, userToken.RoleName)
             };
@@ -81,6 +82,7 @@ namespace Electronic_WMS.Service.Service
                             FullName = user.FullName,
                             UserName = user.UserName,
                             Address = user.Address,
+                            Image = user.Image,
                             Email = user.Email,
                             RoleName = _iRolesRepository.GetById(user.RoleId).RoleName,
                         }).SingleOrDefault();
@@ -106,6 +108,7 @@ namespace Electronic_WMS.Service.Service
                 FullName = tokenS.Claims.FirstOrDefault(x => x.Type == "FullName")?.Value,
                 Email = tokenS.Claims.FirstOrDefault(x => x.Type == "Email")?.Value,
                 Address = tokenS.Claims.FirstOrDefault(x => x.Type == "Address")?.Value,
+                Image = tokenS.Claims.FirstOrDefault(x => x.Type == "Image")?.Value,
                 RoleName = tokenS.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value
             };
         }

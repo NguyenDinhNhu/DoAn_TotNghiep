@@ -29,11 +29,16 @@
                     <tr *ngFor="let user of listUser;">
                         <td>{{user.userId}}</td>
                         <td><img src="../../../assets/img/user/{{user.image}}" alt="" style="width: 50px; height: 50px;"></td>
-                        <td>{{user.fullName}}</td>
+                        <td><a [routerLink]="['/user/detail', user.userId]">{{user.fullName}}</a></td>
                         <td>{{user.address}}</td>
                         <td>{{ user.createdDate | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
                         <td>{{ user.roleName }}</td>
                         <td>
+                            <!-- <button class="btn btn-primary" style="padding: 8px 8px; margin-right: 4px;"
+                                [routerLink]="['/user/detail', user.userId]">
+                                <i data-feather="info" aria-hidden="true"
+                                    style="width: 16px; height: 16px; color: #fff;"></i>
+                            </button> -->
                             <button class="btn btn-warning" style="padding: 8px 8px; margin-right: 4px;" [routerLink]="['/user/edit', user.userId]">
                                 <i data-feather="edit" aria-hidden="true"
                                     style="width: 16px; height: 16px; color: #fff;"></i>

@@ -23,31 +23,39 @@ import { MoveHistoryComponent } from './report/move-history/move-history.compone
 import { EditDeliveryComponent } from './inventory/edit-delivery/edit-delivery.component';
 import { StockComponent } from './report/stock/stock.component';
 import { InventoryDetailComponent } from './inventory/inventory-detail/inventory-detail.component';
+import { LoginComponent } from './login/login.component';
+import { AuthGuard } from './login/AuthGuard';
+import { UserDetailComponent } from './users/user-detail/user-detail.component';
+import { ProductDetailComponent } from './product/product-detail/product-detail.component';
 
 const routes: Routes = [
-  { path: '', component: DashboardComponent},
-  { path: 'brand/index', component: ListBrandComponent},
-  { path: 'category/index', component: CategoryComponent},
-  { path: 'feature/index', component: FeatureComponent},
-  { path: 'roles/index', component: RolesComponent},
-  { path: 'warehouse/index', component: WarehouseComponent},
-  { path: 'user/index', component: ListUserComponent},
-  { path: 'user/add', component: AddUserComponent},
-  { path: 'user/edit/:userId', component: EditUserComponent},
-  { path: 'product/index', component: ListProductComponent},
-  { path: 'product/add', component: AddProductComponent},
-  { path: 'product/edit/:productId', component: EditProductComponent},
-  { path: 'product-feature/index/:productId', component: ProductFeatureComponent},
-  { path: 'receipts/index', component: ListReceiptsComponent},
-  { path: 'deliveries/index', component: ListDeliveriesComponent},
-  { path: 'receipts/add', component: AddReceiptComponent},
-  { path: 'deliveries/add', component: AddDeliveryComponent},
-  { path: 'receipts/edit/:receiptId', component: EditReceiptComponent},
-  { path: 'deliveries/edit/:deliveryId', component: EditDeliveryComponent},
-  { path: 'inventory/detail/:inventoryId', component: InventoryDetailComponent},
-  { path: 'serial-number/index/:productId', component: SerialNumberComponent},
-  { path: 'report/move-history', component: MoveHistoryComponent},
-  { path: 'report/stock', component: StockComponent},
+  { path: '', component: DashboardComponent, canActivate: [AuthGuard]  },
+  { path: 'brand/index', component: ListBrandComponent, canActivate: [AuthGuard] },
+  { path: 'category/index', component: CategoryComponent, canActivate: [AuthGuard] },
+  { path: 'feature/index', component: FeatureComponent, canActivate: [AuthGuard] },
+  { path: 'roles/index', component: RolesComponent, canActivate: [AuthGuard] },
+  { path: 'warehouse/index', component: WarehouseComponent, canActivate: [AuthGuard] },
+  { path: 'user/index', component: ListUserComponent, canActivate: [AuthGuard] },
+  { path: 'user/add', component: AddUserComponent, canActivate: [AuthGuard] },
+  { path: 'user/edit/:userId', component: EditUserComponent, canActivate: [AuthGuard] },
+  { path: 'user/detail/:userId', component: UserDetailComponent, canActivate: [AuthGuard] },
+  { path: 'product/index', component: ListProductComponent, canActivate: [AuthGuard] },
+  { path: 'product/add', component: AddProductComponent, canActivate: [AuthGuard] },
+  { path: 'product/edit/:productId', component: EditProductComponent, canActivate: [AuthGuard] },
+  { path: 'product/detail/:productId', component: ProductDetailComponent, canActivate: [AuthGuard] },
+  { path: 'product-feature/index/:productId', component: ProductFeatureComponent, canActivate: [AuthGuard] },
+  { path: 'receipts/index', component: ListReceiptsComponent, canActivate: [AuthGuard] },
+  { path: 'deliveries/index', component: ListDeliveriesComponent, canActivate: [AuthGuard] },
+  { path: 'receipts/add', component: AddReceiptComponent, canActivate: [AuthGuard] },
+  { path: 'deliveries/add', component: AddDeliveryComponent, canActivate: [AuthGuard] },
+  { path: 'receipts/edit/:receiptId', component: EditReceiptComponent, canActivate: [AuthGuard] },
+  { path: 'deliveries/edit/:deliveryId', component: EditDeliveryComponent, canActivate: [AuthGuard] },
+  { path: 'inventory/detail/:inventoryId', component: InventoryDetailComponent, canActivate: [AuthGuard] },
+  { path: 'serial-number/index/:productId', component: SerialNumberComponent, canActivate: [AuthGuard] },
+  { path: 'report/move-history', component: MoveHistoryComponent, canActivate: [AuthGuard] },
+  { path: 'report/stock', component: StockComponent, canActivate: [AuthGuard] },
+
+  { path: 'login', component: LoginComponent},
 ];
 
 @NgModule({

@@ -1,4 +1,4 @@
-<div id="theme">
+<div id="theme" *ngIf="isLoggedIn()">
   <div class="layer"></div>
   <!-- ! Body -->
   <!-- <a class="skip-link sr-only" href="#skip-target">Skip to content</a> -->
@@ -136,7 +136,7 @@
               <i class="sun-icon" data-feather="sun" aria-hidden="true"></i>
               <i class="moon-icon" data-feather="moon" aria-hidden="true"></i>
             </button>
-            <div class="notification-wrapper">
+            <!-- <div class="notification-wrapper">
               <button class="gray-circle-btn dropdown-btn" title="To messages" type="button">
                 <span class="sr-only">To messages</span>
                 <span class="icon notification active" aria-hidden="true"></span>
@@ -181,27 +181,27 @@
                   <a class="link-to-page" href="##">Go to Notifications page</a>
                 </li>
               </ul>
-            </div>
+            </div> -->
             <div class="nav-user-wrapper">
               <button href="##" class="nav-user-btn dropdown-btn" title="My profile" type="button">
                 <span class="sr-only">My profile</span>
                 <div class="user-info d-flex">
                   <span class="nav-user-img">
-                    <img src="../assets//img/avatar/avatar-illustrated-02.png" alt="User name">
+                    <img src="../assets/img/user/{{ getUserToken().Image }}" alt="User name">
                   </span>
-                  <p style="margin: 12px 8px 0;">admin<i data-feather="chevron-down" aria-hidden="true"></i></p>
+                  <p style="margin: 12px 8px 0;">{{ getUserToken().FullName }}<i data-feather="chevron-down" aria-hidden="true"></i></p>
                 </div>
               </button>
               <ul class="users-item-dropdown nav-user-dropdown dropdown">
-                <li><a href="##">
+                <li><a [routerLink]="['/user/detail', nameIdentifier]">
                     <i data-feather="user" aria-hidden="true"></i>
                     <span>Profile</span>
                   </a></li>
-                <li><a href="##">
+                <!-- <li><a href="##">
                     <i data-feather="settings" aria-hidden="true"></i>
                     <span>Account settings</span>
-                  </a></li>
-                <li><a class="danger" href="##">
+                  </a></li> -->
+                <li><a class="danger" (click)="logOut()">
                     <i data-feather="log-out" aria-hidden="true"></i>
                     <span>Log out</span>
                   </a></li>
@@ -217,3 +217,6 @@
     </div>
   </div>
 </div>
+
+<router-outlet *ngIf="!isLoggedIn()"></router-outlet>
+<!-- <app-login  [hidden]="isLoggedIn"></app-login> -->

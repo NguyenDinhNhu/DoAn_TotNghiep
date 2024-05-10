@@ -1,6 +1,7 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { AuthAPIService } from '../login/AuthAPIService';
 
 @Injectable({
   providedIn: 'root'
@@ -8,42 +9,61 @@ import { Observable } from 'rxjs';
 
 export class InventoryAPIService {
 
-  constructor(private http: HttpClient) { }
-
+  constructor(private http: HttpClient,  private authService: AuthAPIService) { }
+  
+  private getHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    if (token) {
+      return new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      });
+    } else {
+      return new HttpHeaders();
+    }
+  }
   getDashBoardVM(): Observable<any> {
-    return this.http.get<any>('http://localhost:5091/api/Inventory/GetDashBoardVM');
+    const headers = this.getHeaders();
+    return this.http.get<any>('http://localhost:5091/api/Inventory/GetDashBoardVM', { headers });
   }
 
   getListInventoryByType(search: any): Observable<any> {
-    return this.http.post<any>('http://localhost:5091/api/Inventory/GetListByType', search);
+    const headers = this.getHeaders();
+    return this.http.post<any>('http://localhost:5091/api/Inventory/GetListByType', search, { headers });
   }
 
   getInventory(id: number): Observable<any> {
-    return this.http.get<any>('http://localhost:5091/api/Inventory/GetById?id=' + id);
+    const headers = this.getHeaders();
+    return this.http.get<any>('http://localhost:5091/api/Inventory/GetById?id=' + id, { headers });
   }
 
   insertInventory(inv: any): Observable<any> {
-    return this.http.post<any>('http://localhost:5091/api/Inventory/Insert', inv);
+    const headers = this.getHeaders();
+    return this.http.post<any>('http://localhost:5091/api/Inventory/Insert', inv, { headers });
   }
 
   updateInventory(inv: any): Observable<any> {
-    return this.http.post<any>('http://localhost:5091/api/Inventory/Update', inv);
+    const headers = this.getHeaders();
+    return this.http.post<any>('http://localhost:5091/api/Inventory/Update', inv, { headers });
   }
 
   changeStatusInventory(inv: any): Observable<any> {
-    return this.http.post<any>('http://localhost:5091/api/Inventory/ChangeStatus', inv);
+    const headers = this.getHeaders();
+    return this.http.post<any>('http://localhost:5091/api/Inventory/ChangeStatus', inv, { headers });
   }
 
   deleteInventory(id: number): Observable<any> {
+    const headers = this.getHeaders();
     const params = new HttpParams().set('id', id.toString());
-    return this.http.patch<any>('http://localhost:5091/api/Inventory/Delete', {}, {params});
+    return this.http.patch<any>('http://localhost:5091/api/Inventory/Delete', {}, {headers, params});
   }
 
   exportInventoryToPDF(id: number): Observable<Blob> {
-    return this.http.get<Blob>(`http://localhost:5091/api/Inventory/ExportedPDFInventory?id=${id}`, { responseType: 'blob' as 'json' });
+    const headers = this.getHeaders();
+    return this.http.get<Blob>(`http://localhost:5091/api/Inventory/ExportedPDFInventory?id=${id}`, {headers, responseType: 'blob' as 'json' });
   }
 
   exportMoveHistoryToExcel(type: number): Observable<Blob> {
-    return this.http.get<Blob>(`http://localhost:5091/api/Inventory/ExportExcelMoveHistory?type=${type}`, { responseType: 'blob' as 'json' });
+    const headers = this.getHeaders();
+    return this.http.get<Blob>(`http://localhost:5091/api/Inventory/ExportExcelMoveHistory?type=${type}`, {headers, responseType: 'blob' as 'json' });
   }
 }
