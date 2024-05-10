@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import * as feather from 'feather-icons';
 import Swal from 'sweetalert2';
+import { AuthAPIService } from '../login/AuthAPIService';
 
 @Component({
   selector: 'app-warehouse',
@@ -43,6 +44,7 @@ export class WarehouseComponent {
     private toastr: ToastrService,
     private fb: FormBuilder, 
     private whService: WareHouseAPIService,
+    private authAPIService: AuthAPIService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) { }
@@ -53,6 +55,23 @@ export class WarehouseComponent {
   ngOnInit(): void {
     feather.replace();
     this.getAllWareHouse();
+  }
+
+  
+  isAdmin(): boolean {
+    const token = this.authAPIService.getToken();
+    if (token) {
+      const parsedToken = this.parseJwt(token);
+      const role = parsedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      return role === 'Administrator';
+    }
+    return false;
+  }
+
+  parseJwt(token: string): any {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    return JSON.parse(window.atob(base64));
   }
 
   // Add 

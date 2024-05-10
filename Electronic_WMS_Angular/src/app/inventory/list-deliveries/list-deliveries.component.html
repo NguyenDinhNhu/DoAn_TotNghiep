@@ -14,7 +14,8 @@
                         <option value="3">Cancel</option>
                     </select>
                 </div>
-                <button class="btn btn-primary" style="padding: 10px 8px;" [routerLink]="['/deliveries/add']">
+                <button class="btn btn-primary" style="padding: 10px 8px;" [routerLink]="['/deliveries/add']"
+                    [ngClass]="{'disabled-link': !checkPermissions()}">
                     <i data-feather="plus-circle" aria-hidden="true" style="width: 16px; height: 16px;"></i>
                     Add New Delivery
                 </button>
@@ -42,33 +43,38 @@
                             <span *ngIf="item.status == 3" style="color: red;">Cancel</span>
                         </td>
                         <td>
-                            <button class="btn btn-success" style="padding: 8px 8px; margin-right: 4px;"
-                                *ngIf="item.status == 1" (click)="completeDelivery(item.inventoryId)">
-                                <i data-feather="check-circle" aria-hidden="true"
-                                    style="width: 16px; height: 16px; color: #fff;"></i>
-                            </button>
-                            <button class="btn btn-primary" style="padding: 8px 8px; margin-right: 4px;"
-                                *ngIf="item.status == 1" (click)="cancelDelivery(item.inventoryId)">
-                                <i data-feather="x-circle" aria-hidden="true"
-                                    style="width: 16px; height: 16px; color: #fff;"></i>
-                            </button>
-                            <button class="btn btn-warning" style="padding: 8px 8px; margin-right: 4px;"
-                                *ngIf="item.status == 1" [routerLink]="['/deliveries/edit', item.inventoryId]">
-                                <i data-feather="edit" aria-hidden="true"
-                                    style="width: 16px; height: 16px; color: #fff;"></i>
-                            </button>
                             <button class="btn btn-primary" style="padding: 8px 8px; margin-right: 4px;"
                                 [routerLink]="['/inventory/detail', item.inventoryId]">
                                 <i data-feather="info" aria-hidden="true"
                                     style="width: 16px; height: 16px; color: #fff;"></i>
                             </button>
+                            <button class="btn btn-success" style="padding: 8px 8px; margin-right: 4px;"
+                                *ngIf="item.status == 1" (click)="completeDelivery(item.inventoryId)"
+                                [ngClass]="{'disabled-link': !checkPermissions()}">
+                                <i data-feather="check-circle" aria-hidden="true"
+                                    style="width: 16px; height: 16px; color: #fff;"></i>
+                            </button>
+                            <button class="btn btn-danger" style="padding: 8px 8px; margin-right: 4px;"
+                                *ngIf="item.status == 1" (click)="cancelDelivery(item.inventoryId)"
+                                [ngClass]="{'disabled-link': !checkPermissions()}">
+                                <i data-feather="x-circle" aria-hidden="true"
+                                    style="width: 16px; height: 16px; color: #fff;"></i>
+                            </button>
+                            <button class="btn btn-warning" style="padding: 8px 8px; margin-right: 4px;"
+                                *ngIf="item.status == 1" [routerLink]="['/deliveries/edit', item.inventoryId]"
+                                [ngClass]="{'disabled-link': !checkPermissions()}">
+                                <i data-feather="edit" aria-hidden="true"
+                                    style="width: 16px; height: 16px; color: #fff;"></i>
+                            </button>
                             <button class="btn btn-danger" style="padding: 8px 8px;" *ngIf="item.status != 2"
-                                (click)="deleteDelivery(item.inventoryId)">
+                                (click)="deleteDelivery(item.inventoryId)"
+                                [ngClass]="{'disabled-link': !checkPermissions()}">
                                 <i data-feather="trash-2" aria-hidden="true"
                                     style="width: 16px; height: 16px; color: #fff"></i>
                             </button>
                             <button class="btn btn-warning" style="padding: 8px 8px;" *ngIf="item.status == 2"
-                                (click)="exportPDFInventory(item.inventoryId)">
+                                (click)="exportPDFInventory(item.inventoryId)"
+                                [ngClass]="{'disabled-link': !checkPermissions()}">
                                 <i data-feather="file" aria-hidden="true"
                                     style="width: 16px; height: 16px; color: #fff"></i>
                             </button>

@@ -110,7 +110,7 @@ namespace Electronic_WMS.API.Controllers
             return File(result, "application/force-download", $"move_history_{dateTimeStr}.xlsx");
         }
 
-        [Authorize(Policy = "AdminOrStocker")]
+        [Authorize]
         [HttpGet(nameof(GetDashBoardVM))]
         public IActionResult GetDashBoardVM()
         {

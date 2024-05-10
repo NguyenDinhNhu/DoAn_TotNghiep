@@ -8,7 +8,8 @@
                     <input type="text" (keyup.enter)="search()" [(ngModel)]="textSearch"
                         placeholder="Enter keywords ..." required>
                 </div>
-                <button class="btn btn-primary" style="padding: 10px 8px;" (click)="OpenModal()">
+                <button class="btn btn-primary" style="padding: 10px 8px;" (click)="OpenModal()"
+                    [ngClass]="{'disabled-link': !isAdmin()}">
                     <i data-feather="plus-circle" aria-hidden="true" style="width: 16px; height: 16px;"></i>
                     Add New Warehouse
                 </button>
@@ -30,12 +31,13 @@
                         <td>{{wh.address}}</td>
                         <td>{{ wh.createdDate | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
                         <td>
-                            <button class="btn btn-warning" style="padding: 8px 8px; margin-right: 4px;" (click)="OpenModalEdit(wh.wareHouseId)">
+                            <button class="btn btn-warning" style="padding: 8px 8px; margin-right: 4px;"
+                                (click)="OpenModalEdit(wh.wareHouseId)" [ngClass]="{'disabled-link': !isAdmin()}">
                                 <i data-feather="edit" aria-hidden="true"
                                     style="width: 16px; height: 16px; color: #fff;"></i>
                             </button>
                             <button class="btn btn-danger" style="padding: 8px 8px;"
-                                (click)="deleteWareHouse(wh.wareHouseId)">
+                                (click)="deleteWareHouse(wh.wareHouseId)" [ngClass]="{'disabled-link': !isAdmin()}">
                                 <i data-feather="trash-2" aria-hidden="true"
                                     style="width: 16px; height: 16px; color: #fff"></i>
                             </button>
@@ -74,7 +76,8 @@
                                 <label for="" class="mb-2 font-weight-bold">WareHouse Name</label>
                                 <input name="" class="form-control" type="text" formControlName="WareHouseName" />
                                 <div *ngIf="submitedAdd && f.WareHouseName.errors">
-                                    <small *ngIf="f.WareHouseName.errors['required']" style="color: red;">WareHouse Name cannot be
+                                    <small *ngIf="f.WareHouseName.errors['required']" style="color: red;">WareHouse Name
+                                        cannot be
                                         empty</small>
                                 </div>
                             </div>
@@ -116,7 +119,8 @@
                                 <label for="" class="mb-2 font-weight-bold">WareHouse Name</label>
                                 <input name="" class="form-control" type="text" formControlName="WareHouseName" />
                                 <div *ngIf="submitedEdit && v.WareHouseName.errors">
-                                    <small *ngIf="v.WareHouseName.errors['required']" style="color: red;">WareHouse Name cannot be
+                                    <small *ngIf="v.WareHouseName.errors['required']" style="color: red;">WareHouse Name
+                                        cannot be
                                         empty</small>
                                 </div>
                             </div>

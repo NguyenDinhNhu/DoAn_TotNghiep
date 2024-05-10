@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as feather from 'feather-icons';
 import Swal from 'sweetalert2';
 import { ProductAPIService } from '../ProductAPIService';
+import { AuthAPIService } from 'src/app/login/AuthAPIService';
 
 @Component({
   selector: 'app-list-product',
@@ -28,6 +29,7 @@ export class ListProductComponent {
     private toastr: ToastrService,
     private fb: FormBuilder, 
     private productService: ProductAPIService,
+    private authAPIService: AuthAPIService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) { }
@@ -36,6 +38,22 @@ export class ListProductComponent {
   ngOnInit(): void {
     feather.replace();
     this.getAllProduct();
+  }
+
+  isAdmin(): boolean {
+    const token = this.authAPIService.getToken();
+    if (token) {
+      const parsedToken = this.parseJwt(token);
+      const role = parsedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      return role === 'Administrator';
+    }
+    return false;
+  }
+
+  parseJwt(token: string): any {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    return JSON.parse(window.atob(base64));
   }
 
   // delete

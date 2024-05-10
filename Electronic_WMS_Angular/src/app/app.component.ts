@@ -14,9 +14,9 @@ export class AppComponent {
   public nameIdentifier!: number;
 
   ngOnInit(): void {
-    CustomFunc();
     feather.replace();
-    this.nameIdentifier = this.getUserToken()['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']
+    this.nameIdentifier = this.getUserToken()['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+    CustomFunc();
   }
 
   constructor(
@@ -27,6 +27,46 @@ export class AppComponent {
   // Kiểm tra xem người dùng đã đăng nhập hay chưa
   isLoggedIn(): boolean {
     return this.authAPIService.isLoggedIn();
+  }
+
+  checkPermissions(): boolean {
+    const token = this.authAPIService.getToken();
+    if (token) {
+      const parsedToken = this.parseJwt(token);
+      const role = parsedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      return role === 'Administrator' || role === 'Stocker';
+    }
+    return false;
+  }
+
+  isAdmin(): boolean {
+    const token = this.authAPIService.getToken();
+    if (token) {
+      const parsedToken = this.parseJwt(token);
+      const role = parsedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      return role === 'Administrator';
+    }
+    return false;
+  }
+
+  isAdminOrStockerOrSupplier(): boolean {
+    const token = this.authAPIService.getToken();
+    if (token) {
+      const parsedToken = this.parseJwt(token);
+      const role = parsedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      return role === 'Administrator' || role === 'Stocker' || role === 'Supplier';
+    }
+    return false;
+  }
+
+  isAdminOrStockerOrShop(): boolean {
+    const token = this.authAPIService.getToken();
+    if (token) {
+      const parsedToken = this.parseJwt(token);
+      const role = parsedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      return role === 'Administrator' || role === 'Stocker' ||  role === 'Shop';
+    }
+    return false;
   }
 
   // Logout

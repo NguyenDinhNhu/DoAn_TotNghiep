@@ -1,1 +1,6 @@
 @import url(../../../assets/css/style.css);
+.disabled-link {
+    pointer-events: none; /* Ngăn các sự kiện chuột và bàn phím kích hoạt */
+    opacity: 0.5; /* Điều chỉnh độ mờ để chỉ ra rằng nó đang bị tắt */
+    cursor: not-allowed; /* Thay đổi con trỏ chuột */
+}

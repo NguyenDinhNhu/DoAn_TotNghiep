@@ -5,14 +5,16 @@
             <div class="d-flex justify-content-between w-100">
                 <div class="search-wrapper">
                     <i data-feather="search" aria-hidden="true"></i>
-                    <input type="text" (keyup.enter)="search()" [(ngModel)]="textSearch" placeholder="Enter keywords ..." required>
+                    <input type="text" (keyup.enter)="search()" [(ngModel)]="textSearch"
+                        placeholder="Enter keywords ..." required>
                 </div>
-                <button class="btn btn-primary" style="padding: 10px 8px;" (click)="OpenModal()">
+                <button class="btn btn-primary" style="padding: 10px 8px;" (click)="OpenModal()"
+                    [ngClass]="{'disabled-link': !isAdmin()}">
                     <i data-feather="plus-circle" aria-hidden="true" style="width: 16px; height: 16px;"></i>
                     Add New Category
                 </button>
             </div>
-            <table class="table table-bordered mt-4" >
+            <table class="table table-bordered mt-4">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -27,11 +29,13 @@
                         <td>{{cate.cateName}}</td>
                         <td>{{cate.parentName}}</td>
                         <td>
-                            <button class="btn btn-warning" style="padding: 8px 8px; margin-right: 4px;" (click)="OpenModalEdit(cate.cateId)"> 
+                            <button class="btn btn-warning" style="padding: 8px 8px; margin-right: 4px;"
+                                (click)="OpenModalEdit(cate.cateId)" [ngClass]="{'disabled-link': !isAdmin()}">
                                 <i data-feather="edit" aria-hidden="true"
                                     style="width: 16px; height: 16px; color: #fff;"></i>
                             </button>
-                            <button class="btn btn-danger" style="padding: 8px 8px;" (click)="deleteCategory(cate.cateId)">
+                            <button class="btn btn-danger" style="padding: 8px 8px;"
+                                (click)="deleteCategory(cate.cateId)" [ngClass]="{'disabled-link': !isAdmin()}">
                                 <i data-feather="trash-2" aria-hidden="true"
                                     style="width: 16px; height: 16px; color: #fff"></i>
                             </button>
@@ -49,12 +53,8 @@
                     </select>
                     <p style="margin-left: 2px;">entries of {{totalItem}} total item</p>
                 </div>
-                <app-pagination
-                    [currentPage]="currentPage"
-                    [pageSize]="pageSize"
-                    [totalItem]="totalItem"
-                    (changePage)="changePage($event)"
-                ></app-pagination>
+                <app-pagination [currentPage]="currentPage" [pageSize]="pageSize" [totalItem]="totalItem"
+                    (changePage)="changePage($event)"></app-pagination>
             </div>
         </article>
     </div>
@@ -75,16 +75,19 @@
                             <label for="" class="mb-2 font-weight-bold">Category Name</label>
                             <input name="" class="form-control" type="text" formControlName="CateName" />
                             <div *ngIf="submitedAdd && f.CateName.errors">
-                                <small *ngIf="f.CateName.errors['required']" style="color: red;">Category Name cannot be empty</small>
+                                <small *ngIf="f.CateName.errors['required']" style="color: red;">Category Name cannot be
+                                    empty</small>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="" class="mb-2 font-weight-bold">Parent Level</label>
                             <div class="combo-section">
-                                <igx-simple-combo [data]="cateParentCombobox" [displayKey]="'cateName'" [valueKey]="'cateId'" formControlName="ParentLevel"></igx-simple-combo>
+                                <igx-simple-combo [data]="cateParentCombobox" [displayKey]="'cateName'"
+                                    [valueKey]="'cateId'" formControlName="ParentLevel"></igx-simple-combo>
                             </div>
                             <div *ngIf="submitedAdd && f.ParentLevel.errors">
-                                <small *ngIf="f.ParentLevel.errors['required']" style="color: red;">Parent Level cannot be empty</small>
+                                <small *ngIf="f.ParentLevel.errors['required']" style="color: red;">Parent Level cannot
+                                    be empty</small>
                             </div>
                         </div>
                     </form>
@@ -93,7 +96,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" (click)="CloseModal()"
                         style="padding: 8px 8px; margin-right: 4px;">Close</button>
-                    <button type="submit" class="btn btn-primary" style="padding: 8px 8px;" (click)="addCategory()">Submit</button>
+                    <button type="submit" class="btn btn-primary" style="padding: 8px 8px;"
+                        (click)="addCategory()">Submit</button>
                 </div>
             </div>
         </div>
@@ -111,20 +115,23 @@
                 <div class="modal-body">
                     <form action="" [formGroup]="editCateForm">
                         <div class="mb-3">
-                            <input name="" class="form-control" type="text" formControlName="CateId" hidden="true"/>
+                            <input name="" class="form-control" type="text" formControlName="CateId" hidden="true" />
                             <label for="" class="mb-2 font-weight-bold">Category Name</label>
                             <input name="" class="form-control" type="text" formControlName="CateName" />
                             <div *ngIf="submitedEdit && v.CateName.errors">
-                                <small *ngIf="v.CateName.errors['required']" style="color: red;">Category Name cannot be empty</small>
+                                <small *ngIf="v.CateName.errors['required']" style="color: red;">Category Name cannot be
+                                    empty</small>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="" class="mb-2 font-weight-bold">Parent Level</label>
                             <div class="combo-section">
-                                <igx-simple-combo [data]="cateParentCombobox" [displayKey]="'cateName'" [valueKey]="'cateId'" formControlName="ParentLevel"></igx-simple-combo>
+                                <igx-simple-combo [data]="cateParentCombobox" [displayKey]="'cateName'"
+                                    [valueKey]="'cateId'" formControlName="ParentLevel"></igx-simple-combo>
                             </div>
                             <div *ngIf="submitedEdit && v.ParentLevel.errors">
-                                <small *ngIf="v.ParentLevel.errors['required']" style="color: red;">Parent Level cannot be empty</small>
+                                <small *ngIf="v.ParentLevel.errors['required']" style="color: red;">Parent Level cannot
+                                    be empty</small>
                             </div>
                         </div>
                     </form>
@@ -133,7 +140,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" (click)="CloseModalEdit()"
                         style="padding: 8px 8px; margin-right: 4px;">Close</button>
-                    <button type="submit" class="btn btn-primary" style="padding: 8px 8px;" (click)="editCategory()">Submit</button>
+                    <button type="submit" class="btn btn-primary" style="padding: 8px 8px;"
+                        (click)="editCategory()">Submit</button>
                 </div>
             </div>
         </div>

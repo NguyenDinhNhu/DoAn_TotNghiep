@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { InventoryAPIService } from '../InventoryAPIService';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SerialNumberAPIService } from 'src/app/serial-number/SerialNumberAPIService';
+import { AuthAPIService } from 'src/app/login/AuthAPIService';
 
 @Component({
   selector: 'app-list-receipts',
@@ -28,10 +29,26 @@ export class ListReceiptsComponent {
     private fb: FormBuilder, 
     private inventoryService: InventoryAPIService,
     private serialService: SerialNumberAPIService,
+    private authAPIService: AuthAPIService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) { }
 
+  checkPermissions(): boolean {
+    const token = this.authAPIService.getToken();
+    if (token) {
+      const parsedToken = this.parseJwt(token);
+      const role = parsedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      return role === 'Administrator' || role === 'Stocker';
+    }
+    return false;
+  }
+
+  parseJwt(token: string): any {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    return JSON.parse(window.atob(base64));
+  }
 
   ngOnInit(): void {
     feather.replace();

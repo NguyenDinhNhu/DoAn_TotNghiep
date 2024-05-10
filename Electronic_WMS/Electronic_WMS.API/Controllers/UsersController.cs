@@ -9,7 +9,6 @@ namespace Electronic_WMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "Administrator")]
     public class UsersController : ControllerBase
     {
         private readonly IUsersService _iUsersService;
@@ -20,6 +19,7 @@ namespace Electronic_WMS.API.Controllers
             _iAuthenticationService = iAuthenticationService;
         }
 
+        [Authorize(Policy = "AdminOrStocker")]
         [HttpPost(nameof(GetList))]
         public IActionResult GetList([FromBody] SearchVM search)
         {
@@ -27,6 +27,7 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Policy = "AdminOrStocker")]
         [HttpGet(nameof(GetUser))]
         public IActionResult GetUser([FromQuery] int id)
         {
@@ -34,6 +35,7 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Policy = "AdminOrStocker")]
         [HttpPost(nameof(GetListSupplierOrShop))]
         public IActionResult GetListSupplierOrShop([FromBody]int rolesId)
         {
@@ -41,6 +43,7 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Policy = "Administrator")]
         [HttpPost(nameof(Insert))]
         public IActionResult Insert([FromForm] InsertUpdateUsers user)
         {
@@ -54,6 +57,7 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Policy = "Administrator")]
         [HttpPatch(nameof(Delete))]
         public IActionResult Delete([FromQuery] int id)
         {
@@ -61,6 +65,7 @@ namespace Electronic_WMS.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Policy = "Administrator")]
         [HttpPost(nameof(Update))]
         public IActionResult Update([FromForm] InsertUpdateUsers user)
         {

@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import { InventoryAPIService } from '../InventoryAPIService';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthAPIService } from 'src/app/login/AuthAPIService';
 
 @Component({
   selector: 'app-list-deliveries',
@@ -23,6 +24,7 @@ export class ListDeliveriesComponent {
     private toastr: ToastrService,
     private fb: FormBuilder, 
     private inventoryService: InventoryAPIService,
+    private authAPIService: AuthAPIService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) { }
@@ -31,6 +33,23 @@ export class ListDeliveriesComponent {
   ngOnInit(): void {
     feather.replace();
     this.getAllDeliveries();
+  }
+
+  
+  checkPermissions(): boolean {
+    const token = this.authAPIService.getToken();
+    if (token) {
+      const parsedToken = this.parseJwt(token);
+      const role = parsedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      return role === 'Administrator' || role === 'Stocker';
+    }
+    return false;
+  }
+
+  parseJwt(token: string): any {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    return JSON.parse(window.atob(base64));
   }
 
   // delete

@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CategoryAPIService } from './CategoryAPIService';
 import * as feather from 'feather-icons';
 import Swal from 'sweetalert2';
+import { AuthAPIService } from '../login/AuthAPIService';
 
 @Component({
   selector: 'app-category',
@@ -46,6 +47,7 @@ export class CategoryComponent {
     private toastr: ToastrService,
     private fb: FormBuilder, 
     private categoryService: CategoryAPIService,
+    private authAPISerivce: AuthAPIService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) { }
@@ -58,6 +60,23 @@ export class CategoryComponent {
     this.getAllCategory();
     this.getParentCategoryCombobox();
   }
+
+  isAdmin(): boolean {
+    const token = this.authAPISerivce.getToken();
+    if (token) {
+      const parsedToken = this.parseJwt(token);
+      const role = parsedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      return role === 'Administrator';
+    }
+    return false;
+  }
+
+  parseJwt(token: string): any {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    return JSON.parse(window.atob(base64));
+  }
+
 
   // Add 
   addCategory(): void {

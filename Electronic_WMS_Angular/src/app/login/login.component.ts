@@ -55,9 +55,11 @@ export class LoginComponent {
           this.submited = false;
           this.toastr.success("Login Successfully!", "Success");
           sessionStorage.setItem('auth_token', res.token);
-          this.router.navigate(['/']); // Điều hướng đến trang Dashboard
+          this.router.navigate(['/']).then(() => {
+            window.location.reload();
+          }); // Điều hướng đến trang Dashboard
       }, error => {
-        this.toastr.success(error.error, "Error");
+        this.toastr.error(error.error, "Error");
       });
     }
   }

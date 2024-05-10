@@ -23,29 +23,34 @@
         <div class="sidebar-body" id="sidebar-body">
           <ul class="sidebar-body-menu">
             <li>
-              <a class="check-menu-active active" [routerLink]="['/']"><span class="icon home" aria-hidden="true"></span>Dashboard</a>
+              <a class="check-menu-active active"
+                [routerLink]="['/']"><span class="icon home" aria-hidden="true"></span>Dashboard</a>
             </li>
             <span class="system-menu__title">Management</span>
             <li>
-              <a class="check-menu-active" [routerLink]="['/brand/index']">
+              <a class="check-menu-active" [routerLink]="['/brand/index']"
+                [ngClass]="{'disabled-link': !checkPermissions()}">
                 <span class="icon document" aria-hidden="true"></span>
                 Brand
               </a>
             </li>
             <li>
-              <a class="check-menu-active" [routerLink]="['/category/index']">
+              <a class="check-menu-active" [routerLink]="['/category/index']"
+                [ngClass]="{'disabled-link': !checkPermissions()}">
                 <span class="icon folder" aria-hidden="true"></span>
                 Category
               </a>
             </li>
             <li>
-              <a class="check-menu-active" [routerLink]="['/feature/index']">
+              <a class="check-menu-active" [routerLink]="['/feature/index']"
+                [ngClass]="{'disabled-link': !checkPermissions()}">
                 <span class="icon codepen" aria-hidden="true"></span>
                 Feature
               </a>
             </li>
             <li>
-              <a class="check-menu-active" [routerLink]="['/warehouse/index']">
+              <a class="check-menu-active" [routerLink]="['/warehouse/index']"
+                [ngClass]="{'disabled-link': !checkPermissions()}">
                 <span class="icon category" aria-hidden="true"></span>
                 Warehouse
               </a>
@@ -60,22 +65,28 @@
               </a>
               <ul class="cat-sub-menu">
                 <li>
-                  <a class="check-menu-active" [routerLink]="['/product/index']">All Products</a>
+                  <a class="check-menu-active" [routerLink]="['/product/index']"
+                    [ngClass]="{'disabled-link': !checkPermissions()}">All
+                    Products</a>
                 </li>
                 <li>
-                  <a class="check-menu-active" [routerLink]="['/product/add']">Add New Product</a>
+                  <a class="check-menu-active" [routerLink]="['/product/add']"
+                    [ngClass]="{'disabled-link': !isAdmin()}">Add New
+                    Product</a>
                 </li>
               </ul>
             </li>
             <span class="system-menu__title">Operations</span>
             <li>
-              <a class="check-menu-active" [routerLink]="['/receipts/index']">
+              <a class="check-menu-active" [routerLink]="['/receipts/index']"
+                [ngClass]="{'disabled-link': !isAdminOrStockerOrSupplier()}">
                 <span class="icon clipboard" aria-hidden="true"></span>
                 Receipts
               </a>
             </li>
             <li>
-              <a class="check-menu-active" [routerLink]="['/deliveries/index']">
+              <a class="check-menu-active" [routerLink]="['/deliveries/index']"
+                [ngClass]="{'disabled-link': !isAdminOrStockerOrShop()}">
                 <span class="icon message" aria-hidden="true"></span>
                 Deliveries
               </a>
@@ -84,16 +95,21 @@
           <span class="system-menu__title">Reporting</span>
           <ul class="sidebar-body-menu">
             <li>
-              <a class="check-menu-active" [routerLink]="['/report/stock']"><span class="icon archive" aria-hidden="true"></span>Stock</a>
+              <a class="check-menu-active" [routerLink]="['/report/stock']"
+                [ngClass]="{'disabled-link': !checkPermissions()}"><span class="icon archive"
+                  aria-hidden="true"></span>Stock</a>
             </li>
             <li>
-              <a class="check-menu-active" [routerLink]="['/report/move-history']"><span class="icon truck" aria-hidden="true"></span>Moves History</a>
+              <a class="check-menu-active" [routerLink]="['/report/move-history']"
+                [ngClass]="{'disabled-link': !checkPermissions()}">
+                <span class="icon truck" aria-hidden="true"></span>Moves History</a>
             </li>
           </ul>
           <span class="system-menu__title">System</span>
           <ul class="sidebar-body-menu">
             <li>
-              <a class="check-menu-active" [routerLink]="['/roles/index']">
+              <a class="check-menu-active" [routerLink]="['/roles/index']"
+                [ngClass]="{'disabled-link': !isAdmin()}">
                 <span class="icon role" aria-hidden="true"></span>
                 Roles
               </a>
@@ -108,10 +124,14 @@
               </a>
               <ul class="cat-sub-menu">
                 <li>
-                  <a class="check-menu-active" [routerLink]="['/user/index']">All Users</a>
+                  <a class="check-menu-active" [routerLink]="['/user/index']"
+                    [ngClass]="{'disabled-link': !checkPermissions()}">All
+                    Users</a>
                 </li>
                 <li>
-                  <a class="check-menu-active" [routerLink]="['/user/add']">Add new user</a>
+                  <a class="check-menu-active" [routerLink]="['/user/add']"
+                    [ngClass]="{'disabled-link': !isAdmin()}">Add new
+                    user</a>
                 </li>
               </ul>
             </li>
@@ -189,7 +209,8 @@
                   <span class="nav-user-img">
                     <img src="../assets/img/user/{{ getUserToken().Image }}" alt="User name">
                   </span>
-                  <p style="margin: 12px 8px 0;">{{ getUserToken().FullName }}<i data-feather="chevron-down" aria-hidden="true"></i></p>
+                  <p style="margin: 12px 8px 0;">{{ getUserToken().FullName }}<i data-feather="chevron-down"
+                      aria-hidden="true"></i></p>
                 </div>
               </button>
               <ul class="users-item-dropdown nav-user-dropdown dropdown">
@@ -201,7 +222,7 @@
                     <i data-feather="settings" aria-hidden="true"></i>
                     <span>Account settings</span>
                   </a></li> -->
-                <li><a class="danger" (click)="logOut()">
+                <li><a class="danger" (click)="logOut()" style="cursor: pointer;">
                     <i data-feather="log-out" aria-hidden="true"></i>
                     <span>Log out</span>
                   </a></li>
