@@ -820,17 +820,41 @@ namespace Electronic_WMS.Service.Service
             {
                 var worksheet = workbook.Worksheets.Add("MoveHistory");
 
+                // Gộp các ô từ cột 1 đến cột 7 trong dòng đầu tiên
+                var titleHeader = worksheet.Range(1, 1, 1, 7);
+                titleHeader.Merge();
+                titleHeader.Value = "Move History";
+                titleHeader.Style.Font.Bold = true;
+                titleHeader.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                titleHeader.Style.Font.FontSize = 18;
+
+                var exportedDate = worksheet.Range(2, 1, 2, 7);
+                exportedDate.Merge();
+                exportedDate.Value = "Exported Date: " + DateTime.Now.ToString("dd-MM-yyyy");
+                exportedDate.Style.Font.Bold = true;
+                exportedDate.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                exportedDate.Style.Font.FontSize = 16;
+
                 // Đặt header
-                worksheet.Cell(1, 1).Value = "ID";
-                worksheet.Cell(1, 2).Value = "Customer Name";
-                worksheet.Cell(1, 3).Value = "WareHouse Name";
-                worksheet.Cell(1, 4).Value = "Created Date";
-                worksheet.Cell(1, 5).Value = "Reception Date";
-                worksheet.Cell(1, 6).Value = "Quantity";
-                worksheet.Cell(1, 7).Value = "Type";
+                worksheet.Cell(3, 1).Value = "ID";
+                worksheet.Cell(3, 2).Value = "Customer Name";
+                worksheet.Cell(3, 3).Value = "WareHouse Name";
+                worksheet.Cell(3, 4).Value = "Created Date";
+                worksheet.Cell(3, 5).Value = "Reception Date";
+                worksheet.Cell(3, 6).Value = "Quantity";
+                worksheet.Cell(3, 7).Value = "Type";
+
+                // Thêm border cho header
+                for (int col = 1; col <= 7; col++)
+                {
+                    var cell = worksheet.Cell(3, col);
+                    cell.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    cell.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                    cell.Style.Font.Bold = true;
+                }
 
                 // Đổ dữ liệu từ danh sách object vào file Excel
-                int row = 2;
+                int row = 4;
                 foreach (var item in inventory)
                 {
                     worksheet.Cell(row, 1).Value = item.InventoryId;
@@ -847,6 +871,15 @@ namespace Electronic_WMS.Service.Service
                     {
                         worksheet.Cell(row, 7).Value = "Delivery";
                     }
+
+                    // Thêm border cho các ô dữ liệu
+                    for (int col = 1; col <= 7; col++)
+                    {
+                        var cell = worksheet.Cell(row, col);
+                        cell.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                        cell.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                    }
+
                     row++;
                 }
 
