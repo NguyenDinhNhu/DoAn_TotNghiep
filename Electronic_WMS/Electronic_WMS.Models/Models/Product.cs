@@ -27,6 +27,8 @@ namespace Electronic_WMS.Models.Models
         public int Quantity { get; set; }
         public decimal Price { get; set; }
         public DateTime CreatedDate { get; set; }
+        public int CateId { get; set; }
+        public int BrandId { get; set; }
         public int Status {  get; set; }
 
     }
@@ -86,5 +88,11 @@ namespace Electronic_WMS.Models.Models
         public int QuantityExported { get; set; }
         public int Incoming { get; set; }
         public int Outgoing { get; set; }
+    }
+
+    public class ProductSearch : SearchVM
+    { 
+        public int CateId { get; set; }
+        public int BrandId { get; set; }
     }
 }

@@ -21,7 +21,7 @@ namespace Electronic_WMS.API.Controllers
 
         [Authorize(Policy = "AdminOrStocker")]
         [HttpPost(nameof(GetList))]
-        public IActionResult GetList([FromBody] SearchVM search)
+        public IActionResult GetList([FromBody] ProductSearch search)
         {
             var result = _iProductService.GetList(search);
             return Ok(result);

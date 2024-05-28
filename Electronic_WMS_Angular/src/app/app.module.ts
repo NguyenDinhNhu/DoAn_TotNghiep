@@ -37,6 +37,8 @@ import { InventoryDetailComponent } from './inventory/inventory-detail/inventory
 import { LoginComponent } from './login/login.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { ProductDetailComponent } from './product/product-detail/product-detail.component';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -75,7 +77,9 @@ import { ProductDetailComponent } from './product/product-detail/product-detail.
     AppRoutingModule, FormsModule, ReactiveFormsModule, ComboBoxModule, BrowserAnimationsModule,
     HttpClientModule,
     CommonModule,IgxComboModule, IgxSimpleComboModule,
-    ToastrModule.forRoot({timeOut: 3000, positionClass: 'toast-top-right',})
+    ToastrModule.forRoot({timeOut: 3000, positionClass: 'toast-top-right',}),
+    MatMenuModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

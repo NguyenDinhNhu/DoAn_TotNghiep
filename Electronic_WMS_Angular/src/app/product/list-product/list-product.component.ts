@@ -6,6 +6,8 @@ import * as feather from 'feather-icons';
 import Swal from 'sweetalert2';
 import { ProductAPIService } from '../ProductAPIService';
 import { AuthAPIService } from 'src/app/login/AuthAPIService';
+import { BrandAPIService } from 'src/app/brand/BrandAPIService';
+import { CategoryAPIService } from 'src/app/category/CategoryAPIService';
 
 @Component({
   selector: 'app-list-product',
@@ -21,6 +23,14 @@ export class ListProductComponent {
   public totalItem: number = 0;
   public productPrice: number = 0;
 
+  public BrandId: number = 0;
+  public CateId: number = 0;
+  // combobox
+  public brandCombobox: any[] = [ 
+    { brandName: 'All', brandId: 0}];
+  public categoryCombobox: any[] = [ 
+    { cateName: 'All', cateId: 0}];
+  
   formatVND(productPrice: number): string {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(productPrice);
   }
@@ -29,6 +39,8 @@ export class ListProductComponent {
     private toastr: ToastrService,
     private fb: FormBuilder, 
     private productService: ProductAPIService,
+    private brandService: BrandAPIService,
+    private categoryService: CategoryAPIService,
     private authAPIService: AuthAPIService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -38,6 +50,8 @@ export class ListProductComponent {
   ngOnInit(): void {
     feather.replace();
     this.getAllProduct();
+    this.getBrandCombobox();
+    this.getCategoryCombobox();
   }
 
   isAdmin(): boolean {
@@ -54,6 +68,20 @@ export class ListProductComponent {
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     return JSON.parse(window.atob(base64));
+  }
+
+  getBrandCombobox(): any {
+    this.brandService.getBrandCombobox().subscribe(res => {
+      res.unshift(this.brandCombobox[0]) // unshift: thêm vào đầu danh sách
+      this.brandCombobox = res;
+    })
+  }
+
+  getCategoryCombobox(): any {
+    this.categoryService.getCategoryCombobox().subscribe(res => {
+      res.unshift(this.categoryCombobox[0]) // unshift: thêm vào đầu danh sách
+      this.categoryCombobox = res;
+    })
   }
 
   // delete
@@ -121,7 +149,13 @@ export class ListProductComponent {
   }
 
   search(): void {
-    this.productService.getListProduct({PageSize: this.pageSize, CurrentPage: this.currentPage, TextSearch: this.textSearch.trim()}).subscribe(res => {
+    this.productService.getListProduct({
+      PageSize: this.pageSize, 
+      CurrentPage: this.currentPage, 
+      TextSearch: this.textSearch ? this.textSearch.trim() : '',
+      BrandId: this.BrandId,
+      CateId: this.CateId
+    }).subscribe(res => {
       this.listProduct = res.listProduct;
       this.totalItem = res.total;
       setTimeout(() => {

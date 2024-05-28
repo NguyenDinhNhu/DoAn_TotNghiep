@@ -99,7 +99,7 @@ namespace Electronic_WMS.Service.Service
             return prodDetail;
         }
 
-        public GetListProduct GetList(SearchVM search)
+        public GetListProduct GetList(ProductSearch search)
         {
             var list = from prod in _iProductRepository.GetList()
                        join c in _iCategoryRepository.GetList() on prod.CateId equals c.CateId
@@ -113,11 +113,49 @@ namespace Electronic_WMS.Service.Service
                            CreatedDate = prod.CreatedDate,
                            Price = prod.Price,
                            Quantity = prod.Quantity,
+                           BrandId = prod.BrandId,
+                           CateId = prod.CateId,
                            Status = prod.Status,
                        };
             if (!string.IsNullOrEmpty(search.TextSearch))
             {
                 list = list.Where(x => x.ProductName.ToLower().Contains(search.TextSearch.ToLower()));
+            }
+            if (search.CateId > 0)
+            {
+                list = from prod in list
+                       join c in _iCategoryRepository.GetList() on prod.CateId equals c.CateId
+                       where c.CateId == search.CateId || c.ParentId == search.CateId
+                       select new ProductVM
+                       {
+                           ProductId = prod.ProductId,
+                           ProductName = prod.ProductName,
+                           Image = prod.Image,
+                           CreatedDate = prod.CreatedDate,
+                           Price = prod.Price,
+                           Quantity = prod.Quantity,
+                           BrandId = prod.BrandId,
+                           CateId = prod.CateId,
+                           Status = prod.Status,
+                       };
+            }
+            if (search.BrandId > 0)
+            {
+                list = from prod in list
+                       join b in _iBrandRepository.GetList() on prod.BrandId equals b.BrandId
+                       where b.BrandId == search.BrandId || b.ParentId == search.BrandId
+                       select new ProductVM
+                       {
+                           ProductId = prod.ProductId,
+                           ProductName = prod.ProductName,
+                           Image = prod.Image,
+                           CreatedDate = prod.CreatedDate,
+                           Price = prod.Price,
+                           Quantity = prod.Quantity,
+                           BrandId = prod.BrandId,
+                           CateId = prod.CateId,
+                           Status = prod.Status,
+                       };
             }
             var total = list.Count();
             list = list.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);

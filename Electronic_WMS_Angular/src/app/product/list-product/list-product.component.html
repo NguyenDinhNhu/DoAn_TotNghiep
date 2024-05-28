@@ -3,11 +3,37 @@
     <div class="start-cards">
         <article class="stat-cards-item">
             <div class="d-flex justify-content-between w-100">
-                <div class="search-wrapper">
-                    <i data-feather="search" aria-hidden="true"></i>
-                    <input type="text" (keyup.enter)="search()" [(ngModel)]="textSearch"
-                        placeholder="Enter keywords ..." required>
+                <div class="search-box d-flex">
+                    <div class="search-wrapper">
+                        <i data-feather="search" aria-hidden="true"></i>
+                        <input type="text" (keyup.enter)="search()" [(ngModel)]="textSearch"
+                            placeholder="Enter keywords ..." required>
+                    </div>
+
+                    <button mat-button [matMenuTriggerFor]="menu"
+                        style="background-color: #0D6EFD; color: #fff; margin-left: 12px; padding: 8px 8px; margin-right: 4px;">
+                        <i data-feather="filter" aria-hidden="true" style="width: 16px; height: 16px;"></i>
+                        Filter
+                    </button>
+                    <mat-menu #menu="matMenu" class="d-flex">
+                        <div class="combo-section" style="padding: 8px !important;">
+                            <p>Brand: </p>
+                            <igx-simple-combo [data]="brandCombobox" [displayKey]="'brandName'"
+                                [valueKey]="'brandId'" [(ngModel)]="BrandId"></igx-simple-combo>
+                        </div>
+                        <div class="combo-section" style="padding: 8px !important;">
+                            <p>Category: </p>
+                            <igx-simple-combo [data]="categoryCombobox" [displayKey]="'cateName'"
+                                [valueKey]="'cateId'" [(ngModel)]="CateId"></igx-simple-combo>
+                        </div>
+                        <div class="combo-section" style="padding: 8px !important;">
+                            <button class="btn btn-primary" style="padding: 8px 8px;" (click)="search()">
+                                Search
+                            </button>
+                        </div>
+                    </mat-menu>
                 </div>
+
                 <button class="btn btn-primary" style="padding: 10px 8px;" [routerLink]="['/product/add']"
                     [ngClass]="{'disabled-link': !isAdmin()}">
                     <i data-feather="plus-circle" aria-hidden="true" style="width: 16px; height: 16px;"></i>
