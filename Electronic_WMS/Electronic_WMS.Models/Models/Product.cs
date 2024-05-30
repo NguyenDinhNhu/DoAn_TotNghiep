@@ -94,5 +94,6 @@ namespace Electronic_WMS.Models.Models
     { 
         public int CateId { get; set; }
         public int BrandId { get; set; }
+        public int CheckStock { get; set; }
     }
 }

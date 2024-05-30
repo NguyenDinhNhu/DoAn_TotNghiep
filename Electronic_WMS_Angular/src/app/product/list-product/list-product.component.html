@@ -15,7 +15,7 @@
                         <i data-feather="filter" aria-hidden="true" style="width: 16px; height: 16px;"></i>
                         Filter
                     </button>
-                    <mat-menu #menu="matMenu" class="d-flex">
+                    <mat-menu #menu="matMenu">
                         <div class="combo-section" style="padding: 8px !important;">
                             <p>Brand: </p>
                             <igx-simple-combo [data]="brandCombobox" [displayKey]="'brandName'"
@@ -25,6 +25,11 @@
                             <p>Category: </p>
                             <igx-simple-combo [data]="categoryCombobox" [displayKey]="'cateName'"
                                 [valueKey]="'cateId'" [(ngModel)]="CateId"></igx-simple-combo>
+                        </div>
+                        <div class="combo-section" style="padding: 8px !important;">
+                            <p>Status: </p>
+                            <igx-simple-combo [data]="statusProductCombobox" [displayKey]="'statusName'"
+                                [valueKey]="'checkStock'" [(ngModel)]="CheckStock"></igx-simple-combo>
                         </div>
                         <div class="combo-section" style="padding: 8px !important;">
                             <button class="btn btn-primary" style="padding: 8px 8px;" (click)="search()">

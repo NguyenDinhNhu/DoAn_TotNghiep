@@ -157,6 +157,17 @@ namespace Electronic_WMS.Service.Service
                            Status = prod.Status,
                        };
             }
+            if (search.CheckStock > 0)
+            {
+                if (search.CheckStock == 1) 
+                {
+                    list = list.Where(x => x.Quantity == 0);
+                }
+                else if (search.CheckStock == 2)
+                {
+                    list = list.Where(x => x.Quantity > 0);
+                }
+            }
             var total = list.Count();
             list = list.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
             return new GetListProduct { ListProduct = list, Total = total };

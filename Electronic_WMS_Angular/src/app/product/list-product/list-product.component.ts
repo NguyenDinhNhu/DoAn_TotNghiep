@@ -25,11 +25,18 @@ export class ListProductComponent {
 
   public BrandId: number = 0;
   public CateId: number = 0;
+  public CheckStock: number = 0;
   // combobox
   public brandCombobox: any[] = [ 
     { brandName: 'All', brandId: 0}];
   public categoryCombobox: any[] = [ 
     { cateName: 'All', cateId: 0}];
+  
+  public statusProductCombobox: any[] = [ 
+    { statusName: 'All', checkStock: 0},
+    { statusName: 'Out of stock', checkStock: 1},
+    { statusName: 'Stocking', checkStock: 2},
+  ];
   
   formatVND(productPrice: number): string {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(productPrice);
@@ -154,7 +161,8 @@ export class ListProductComponent {
       CurrentPage: this.currentPage, 
       TextSearch: this.textSearch ? this.textSearch.trim() : '',
       BrandId: this.BrandId,
-      CateId: this.CateId
+      CateId: this.CateId,
+      CheckStock: this.CheckStock
     }).subscribe(res => {
       this.listProduct = res.listProduct;
       this.totalItem = res.total;
