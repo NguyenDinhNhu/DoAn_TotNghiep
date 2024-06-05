@@ -23,6 +23,7 @@ export class EditProductComponent {
   public Unit!: string;
   public BrandId!: Number;
   public CateId!: number;
+  public Image!: string;
   public FileImage!: File;
   public ListProductFeature!: string;
 
@@ -84,6 +85,7 @@ export class EditProductComponent {
               }
             this.rows.push(row)
           });
+          this.Image = res.image;
           this.editProduct = this.fb.group({
             ProductId: [res.productId, Validators.required],
             ProductName: [res.productName, Validators.required],
@@ -160,6 +162,7 @@ export class EditProductComponent {
       this.ProductName= this.editProduct.value.ProductName!.trim();
       this.Description = this.editProduct.value.Description!.trim();
       this.Price = parseInt(this.editProduct.value.Price!);
+      this.Quantity = parseInt(this.editProduct.value.Quantity!);
       this.Unit = this.editProduct.value.Unit!.trim();
       this.BrandId = parseInt(this.editProduct.value.BrandId!);
       this.CateId = parseInt(this.editProduct.value.CateId!);
@@ -170,6 +173,7 @@ export class EditProductComponent {
       formEdit.append("ProductName", this.ProductName);
       formEdit.append("Description", this.Description);
       formEdit.append("Price", this.Price.toString());
+      formEdit.append("Quantity", this.Quantity.toString());
       formEdit.append("Unit", this.Unit);
       formEdit.append("BrandId", this.BrandId.toString());
       formEdit.append("CateId", this.CateId.toString());

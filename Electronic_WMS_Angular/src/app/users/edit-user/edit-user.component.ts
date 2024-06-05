@@ -20,6 +20,7 @@ export class EditUserComponent {
   public Email!: string;
   public Phone!: string;
   public RoleId!: number;
+  public Image!: string;
   public FileImage!: File;
   public UserId!: number;
   // Combobox
@@ -60,6 +61,7 @@ export class EditUserComponent {
       if (id != null) {
         let userId = parseInt(id);
         this.userService.getUser(userId).subscribe(res => {
+          this.Image = res.image;
           this.editUser = this.fb.group({
               UserId: [res.userId, Validators.required],
               FullName: [res.fullName, Validators.required],

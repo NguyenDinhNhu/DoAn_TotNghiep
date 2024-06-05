@@ -28,7 +28,7 @@ namespace Electronic_WMS.Repository.Repository
             return _db.ProductEntities.Find(id);
         }
 
-        public ProductEntity GetByUserName(string name)
+        public ProductEntity GetByProductName(string name)
         {
             return _db.ProductEntities.Where(x => x.Status == (int)CommonStatus.IsActive && (x.ProductName.ToLower() == name.ToLower())).FirstOrDefault();
         }

@@ -190,10 +190,15 @@ export class AddDeliveryComponent {
         this.submited = false;
       })
       this.ListSerial = row.ListSerialNumber;
-      for (let i = this.ListSerial.length; i < row.Quantity; i++) {
-        let row = {SerialId: '', submited: false};
-        this.ListSerial.push(row);
+      if (this.ListSerial.length < row.Quantity) {
+        for (let i = this.ListSerial.length; i < row.Quantity; i++) {
+          let row = {SerialId: '', submited: false};
+          this.ListSerial.push(row);
+        }
+      } else if (this.ListSerial.length > row.Quantity) {
+        this.ListSerial = this.ListSerial.slice(0, row.Quantity);
       }
+      
       console.log(this.ListSerial)
     }
     else {

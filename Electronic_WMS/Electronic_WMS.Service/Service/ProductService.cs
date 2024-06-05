@@ -159,7 +159,7 @@ namespace Electronic_WMS.Service.Service
             }
             if (search.CheckStock > 0)
             {
-                if (search.CheckStock == 1) 
+                if (search.CheckStock == 1)
                 {
                     list = list.Where(x => x.Quantity == 0);
                 }
@@ -202,6 +202,7 @@ namespace Electronic_WMS.Service.Service
                                        && invLine.ProductId == prod.ProductId
                                        select inv.InventoryId).ToList().Count(),
                        };
+            list = list.Where(x => x.QuantityStock > 0 || x.QuantityExported > 0 || x.Incoming > 0 || x.Outgoing > 0);
             if (!string.IsNullOrEmpty(search.TextSearch))
             {
                 list = list.Where(x => x.ProductName.ToLower().Contains(search.TextSearch.ToLower()));
@@ -225,16 +226,16 @@ namespace Electronic_WMS.Service.Service
         public ResponseModel Insert(InsertOrUpdateProduct prod, UserToken userToken)
         {
             // Check ProductName in database
-            //var checkProdName = _iProductRepository.GetByUserName(prod.ProductName);
-            //if (checkProdName != null)
-            //{
-            //    return new ResponseModel
-            //    {
-            //        StatusCode = 400,
-            //        StatusMessage = "ProductName already exists!"
-            //    };
-            //}
-            
+            var checkProdName = _iProductRepository.GetByProductName(prod.ProductName);
+            if (checkProdName != null)
+            {
+                return new ResponseModel
+                {
+                    StatusCode = 400,
+                    StatusMessage = "ProductName already exists!"
+                };
+            }
+
             // Insert Product 
             var prodEntity = new ProductEntity
             {
@@ -317,15 +318,15 @@ namespace Electronic_WMS.Service.Service
             }
 
             // Check ProductName in database
-            //var checkProdName = _iProductRepository.GetByUserName(prod.ProductName);
-            //if (checkProdName != null && (checkProdName.ProductId != prod.ProductId && checkProdName.ProductName == prod.ProductName))
-            //{
-            //    return new ResponseModel
-            //    {
-            //        StatusCode = 400,
-            //        StatusMessage = "ProductName already exists!"
-            //    };
-            //}
+            var checkProdName = _iProductRepository.GetByProductName(prod.ProductName);
+            if (checkProdName != null && checkProdName.ProductId != prod.ProductId )
+            {
+                return new ResponseModel
+                {
+                    StatusCode = 400,
+                    StatusMessage = "ProductName already exists!"
+                };
+            }
 
             // Update Product 
             prodDetail.ProductName = prod.ProductName;
@@ -415,6 +416,7 @@ namespace Electronic_WMS.Service.Service
                                     && invLine.ProductId == prod.ProductId
                                     select inv.InventoryId).ToList().Count(),
                     };
+            list = list.Where(x => x.QuantityStock > 0 || x.QuantityExported > 0 || x.Incoming > 0 || x.Outgoing > 0);
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add("Stock");

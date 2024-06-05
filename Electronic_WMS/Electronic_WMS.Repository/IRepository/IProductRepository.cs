@@ -14,6 +14,6 @@ namespace Electronic_WMS.Repository.IRepository
         public int Update(ProductEntity prod);
         public int Delete(ProductEntity prod);
         public ProductEntity GetById(int id);
-        public ProductEntity GetByUserName(string name);
+        public ProductEntity GetByProductName(string name);
     }
 }
