@@ -227,6 +227,7 @@ export class ListBrandComponent {
       modelDiv.style.backgroundColor = "rgba(136,136,136,0.8)";
     }
     this.addBrandForm.reset();
+    this.getParentBrandCombobox();
   }
 
   CloseModal() {
