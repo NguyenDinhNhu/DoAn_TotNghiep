@@ -64,19 +64,12 @@ export class CategoryComponent {
   isAdmin(): boolean {
     const token = this.authAPISerivce.getToken();
     if (token) {
-      const parsedToken = this.parseJwt(token);
+      const parsedToken = this.authAPISerivce.parseJwt(token);
       const role = parsedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
       return role === 'Administrator';
     }
     return false;
   }
-
-  parseJwt(token: string): any {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    return JSON.parse(window.atob(base64));
-  }
-
 
   // Add 
   addCategory(): void {

@@ -97,6 +97,7 @@ export class AddReceiptComponent {
 
   onSubmit(): void {
     this.submited = true;
+    let hasDuplicateSerial = false;
 
     this.ListInventoryLine.forEach(row => {
       if (!row.ProductId || !row.Quantity || row.ListSerialNumber.length != row.Quantity) {
@@ -105,11 +106,18 @@ export class AddReceiptComponent {
         row.submited = false; // Reset submited for valid rows
       }
 
+      let serialNumber = new Set(); // Set để lưu trữ các serial number đã xuất hiện trong dòng
       row.ListSerialNumber.forEach(e => {
         if (!e.SerialNumber) {
           row.submited = true;
         } else {
           e.submited = false; // Reset submited for valid rows
+        }
+
+        if (serialNumber.has(e.SerialNumber)) {
+          hasDuplicateSerial = true;
+        } else {
+          serialNumber.add(e.SerialNumber); // Thêm serial number vào set
         }
       });
     });
@@ -121,6 +129,12 @@ export class AddReceiptComponent {
       return;
     }
 
+    // Nếu có serial number trùng nhau, hiển thị thông báo và không thực hiện hành động tiếp theo
+    if (hasDuplicateSerial) {
+      this.toastr.error('Duplicate serial numbers are not allowed in the same row.', 'Error');
+      return;
+    }
+    
     // Nếu bất kỳ dòng nào không hợp lệ, không thực hiện gửi form và hiển thị thông báo lỗi
     if (this.ListInventoryLine.some(row => row.submited)) {
       this.toastr.error('Please fill out all fields in each row of the list product table & list serial number and quantity must be > 0', 'Error');

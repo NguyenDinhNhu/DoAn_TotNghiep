@@ -4,7 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ComboBoxModule } from '@syncfusion/ej2-angular-dropdowns';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { IgxComboModule, IgxSimpleComboModule } from "igniteui-angular";
@@ -39,6 +39,8 @@ import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { ProductDetailComponent } from './product/product-detail/product-detail.component';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
+import { AuthAPIService } from './login/AuthAPIService';
+import { AuthInterceptor } from './login/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -81,7 +83,14 @@ import {MatButtonModule} from '@angular/material/button';
     MatMenuModule,
     MatButtonModule
   ],
-  providers: [],
+  providers: [
+    AuthAPIService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
