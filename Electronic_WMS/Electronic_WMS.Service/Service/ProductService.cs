@@ -123,39 +123,47 @@ namespace Electronic_WMS.Service.Service
             }
             if (search.CateId > 0)
             {
-                list = from prod in list
-                       join c in _iCategoryRepository.GetList() on prod.CateId equals c.CateId
-                       where c.CateId == search.CateId || c.ParentId == search.CateId
-                       select new ProductVM
-                       {
-                           ProductId = prod.ProductId,
-                           ProductName = prod.ProductName,
-                           Image = prod.Image,
-                           CreatedDate = prod.CreatedDate,
-                           Price = prod.Price,
-                           Quantity = prod.Quantity,
-                           BrandId = prod.BrandId,
-                           CateId = prod.CateId,
-                           Status = prod.Status,
-                       };
+                var childCategories = GetAllChildCategories(search.CateId);
+                var cateIds = childCategories.Select(b => b.CateId).ToList();
+                cateIds.Add(search.CateId); // Include the parent category
+                //list = from prod in list
+                //       join c in _iCategoryRepository.GetList() on prod.CateId equals c.CateId
+                //       where c.CateId == search.CateId || c.ParentId == search.CateId
+                //       select new ProductVM
+                //       {
+                //           ProductId = prod.ProductId,
+                //           ProductName = prod.ProductName,
+                //           Image = prod.Image,
+                //           CreatedDate = prod.CreatedDate,
+                //           Price = prod.Price,
+                //           Quantity = prod.Quantity,
+                //           BrandId = prod.BrandId,
+                //           CateId = prod.CateId,
+                //           Status = prod.Status,
+                //       };
+                list = list.Where(p => cateIds.Contains(p.CateId)).ToList();
             }
             if (search.BrandId > 0)
             {
-                list = from prod in list
-                       join b in _iBrandRepository.GetList() on prod.BrandId equals b.BrandId
-                       where b.BrandId == search.BrandId || b.ParentId == search.BrandId
-                       select new ProductVM
-                       {
-                           ProductId = prod.ProductId,
-                           ProductName = prod.ProductName,
-                           Image = prod.Image,
-                           CreatedDate = prod.CreatedDate,
-                           Price = prod.Price,
-                           Quantity = prod.Quantity,
-                           BrandId = prod.BrandId,
-                           CateId = prod.CateId,
-                           Status = prod.Status,
-                       };
+                var childBrands = GetAllChildBrands(search.BrandId);
+                var brandIds = childBrands.Select(b => b.BrandId).ToList();
+                brandIds.Add(search.BrandId); // Include the parent brand
+                //list = from prod in list
+                //       join b in _iBrandRepository.GetList() on prod.BrandId equals b.BrandId
+                //       where b.BrandId == search.BrandId || b.ParentId == search.BrandId
+                //       select new ProductVM
+                //       {
+                //           ProductId = prod.ProductId,
+                //           ProductName = prod.ProductName,
+                //           Image = prod.Image,
+                //           CreatedDate = prod.CreatedDate,
+                //           Price = prod.Price,
+                //           Quantity = prod.Quantity,
+                //           BrandId = prod.BrandId,
+                //           CateId = prod.CateId,
+                //           Status = prod.Status,
+                //       };
+                list = list.Where(p => brandIds.Contains(p.BrandId)).ToList();
             }
             if (search.CheckStock > 0)
             {
@@ -172,6 +180,49 @@ namespace Electronic_WMS.Service.Service
             list = list.Skip((search.CurrentPage - 1) * search.PageSize).Take(search.PageSize);
             return new GetListProduct { ListProduct = list, Total = total };
         }
+
+        public List<BrandEntity> GetAllChildBrands(int parentId)
+        {
+            List<BrandEntity> allBrands = _iBrandRepository.GetList().ToList();
+            List<BrandEntity> childBrands = new List<BrandEntity>();
+            Queue<int> brandsToProcess = new Queue<int>();
+            brandsToProcess.Enqueue(parentId);
+
+            while (brandsToProcess.Count > 0)
+            {
+                int currentBrandId = brandsToProcess.Dequeue();
+                var children = allBrands.Where(b => b.ParentId == currentBrandId).ToList();
+                foreach (var child in children)
+                {
+                    childBrands.Add(child);
+                    brandsToProcess.Enqueue(child.BrandId);
+                }
+            }
+
+            return childBrands;
+        }
+
+        public List<CategoryEntity> GetAllChildCategories(int parentId)
+        {
+            List<CategoryEntity> allCategories = _iCategoryRepository.GetList().ToList();
+            List<CategoryEntity> childCategories = new List<CategoryEntity>();
+            Queue<int> categoriesToProcess = new Queue<int>();
+            categoriesToProcess.Enqueue(parentId);
+
+            while (categoriesToProcess.Count > 0)
+            {
+                int currentCateId = categoriesToProcess.Dequeue();
+                var children = allCategories.Where(b => b.ParentId == currentCateId).ToList();
+                foreach (var child in children)
+                {
+                    childCategories.Add(child);
+                    categoriesToProcess.Enqueue(child.CateId);
+                }
+            }
+
+            return childCategories;
+        }
+
         public GetListProductStock GetListProductStock(SearchVM search)
         {
             var list = from prod in _iProductRepository.GetList()

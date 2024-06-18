@@ -238,6 +238,8 @@ export class ListBrandComponent {
       modelDiv.style.backgroundColor = "rgba(136,136,136,0.8)";
     }
 
+    this.getParentBrandCombobox();
+    
     this.brandService.getBrand(id).subscribe(res => {
       this.editBrandForm = this.fb.group({
         BrandId: [res.brandId, Validators.required],

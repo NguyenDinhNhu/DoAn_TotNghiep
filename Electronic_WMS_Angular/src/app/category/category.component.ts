@@ -237,6 +237,8 @@ export class CategoryComponent {
       modelDiv.style.display = "block";
       modelDiv.style.backgroundColor = "rgba(136,136,136,0.8)";
     }
+    
+    this.getParentCategoryCombobox();
 
     this.categoryService.getCategory(id).subscribe(res => {
       this.editCateForm = this.fb.group({
