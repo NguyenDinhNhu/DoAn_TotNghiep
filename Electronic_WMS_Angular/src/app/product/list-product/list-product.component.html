@@ -40,7 +40,7 @@
                 </div>
 
                 <button class="btn btn-primary" style="padding: 10px 8px;" [routerLink]="['/product/add']"
-                    [ngClass]="{'disabled-link': !isAdmin()}">
+                    [ngClass]="{'disabled-link': !isAdmin()}" *ngIf="isAdmin()">
                     <i data-feather="plus-circle" aria-hidden="true" style="width: 16px; height: 16px;"></i>
                     Add New Product
                 </button>
@@ -84,7 +84,7 @@
                                     style="width: 16px; height: 16px; color: #fff;"></i>
                             </button>
                             <button class="btn btn-danger" style="padding: 8px 8px;"
-                                (click)="deleteProduct(prod.productId)" [ngClass]="{'disabled-link': !isAdmin()}">
+                                (click)="deleteProduct(prod.productId)" [ngClass]="{'disabled-link': !isAdmin()}" *ngIf="isAdmin()">
                                 <i data-feather="trash-2" aria-hidden="true"
                                     style="width: 16px; height: 16px; color: #fff"></i>
                             </button>

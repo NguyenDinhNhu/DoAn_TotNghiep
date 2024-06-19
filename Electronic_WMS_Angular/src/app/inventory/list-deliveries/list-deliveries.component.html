@@ -15,7 +15,7 @@
                     </select>
                 </div>
                 <button class="btn btn-primary" style="padding: 10px 8px;" [routerLink]="['/deliveries/add']"
-                    [ngClass]="{'disabled-link': !checkPermissions()}">
+                    [ngClass]="{'disabled-link': !checkPermissions()}" *ngIf="checkPermissions()">
                     <i data-feather="plus-circle" aria-hidden="true" style="width: 16px; height: 16px;"></i>
                     Add New Delivery
                 </button>
@@ -28,7 +28,7 @@
                         <th>To</th>
                         <th>Created Date</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th *ngIf="checkPermissions()">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,7 +42,7 @@
                             <span *ngIf="item.status == 2" style="color: rgb(4, 227, 4);">Complete</span>
                             <span *ngIf="item.status == 3" style="color: red;">Cancel</span>
                         </td>
-                        <td>
+                        <td *ngIf="checkPermissions()">
                             <button class="btn btn-primary" style="padding: 8px 8px; margin-right: 4px;"
                                 [routerLink]="['/inventory/detail', item.inventoryId]">
                                 <i data-feather="info" aria-hidden="true"

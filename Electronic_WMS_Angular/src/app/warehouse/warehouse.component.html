@@ -9,7 +9,7 @@
                         placeholder="Enter keywords ..." required>
                 </div>
                 <button class="btn btn-primary" style="padding: 10px 8px;" (click)="OpenModal()"
-                    [ngClass]="{'disabled-link': !isAdmin()}">
+                    [ngClass]="{'disabled-link': !isAdmin()}" *ngIf="isAdmin()">
                     <i data-feather="plus-circle" aria-hidden="true" style="width: 16px; height: 16px;"></i>
                     Add New Warehouse
                 </button>
@@ -21,7 +21,7 @@
                         <th>Warehouse Name</th>
                         <th>Address</th>
                         <th>Created Date</th>
-                        <th>Action</th>
+                        <th *ngIf="isAdmin()">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,7 +30,7 @@
                         <td>{{wh.name}}</td>
                         <td>{{wh.address}}</td>
                         <td>{{ wh.createdDate | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
-                        <td>
+                        <td *ngIf="isAdmin()">
                             <button class="btn btn-warning" style="padding: 8px 8px; margin-right: 4px;"
                                 (click)="OpenModalEdit(wh.wareHouseId)" [ngClass]="{'disabled-link': !isAdmin()}">
                                 <i data-feather="edit" aria-hidden="true"

@@ -26,37 +26,37 @@
               <a class="check-menu-active active"
                 [routerLink]="['/']"><span class="icon home" aria-hidden="true"></span>Dashboard</a>
             </li>
-            <span class="system-menu__title">Management</span>
+            <span class="system-menu__title" *ngIf="checkPermissions()">Management</span>
             <li>
               <a class="check-menu-active" [routerLink]="['/brand/index']"
-                [ngClass]="{'disabled-link': !checkPermissions()}">
+                [ngClass]="{'disabled-link': !checkPermissions()}" *ngIf="checkPermissions()">
                 <span class="icon document" aria-hidden="true"></span>
                 Brand
               </a>
             </li>
             <li>
               <a class="check-menu-active" [routerLink]="['/category/index']"
-                [ngClass]="{'disabled-link': !checkPermissions()}">
+                [ngClass]="{'disabled-link': !checkPermissions()}" *ngIf="checkPermissions()">
                 <span class="icon folder" aria-hidden="true"></span>
                 Category
               </a>
             </li>
             <li>
               <a class="check-menu-active" [routerLink]="['/feature/index']"
-                [ngClass]="{'disabled-link': !checkPermissions()}">
+                [ngClass]="{'disabled-link': !checkPermissions()}" *ngIf="checkPermissions()">
                 <span class="icon codepen" aria-hidden="true"></span>
                 Feature
               </a>
             </li>
             <li>
               <a class="check-menu-active" [routerLink]="['/warehouse/index']"
-                [ngClass]="{'disabled-link': !checkPermissions()}">
+                [ngClass]="{'disabled-link': !checkPermissions()}" *ngIf="checkPermissions()">
                 <span class="icon category" aria-hidden="true"></span>
                 Warehouse
               </a>
             </li>
             <li>
-              <a class="show-cat-btn" href="##">
+              <a class="show-cat-btn" href="##" *ngIf="checkPermissions()">
                 <span class="icon codesanbox" aria-hidden="true"></span>Product
                 <span class="category__btn transparent-btn" title="Open list">
                   <span class="sr-only">Open list</span>
@@ -71,7 +71,7 @@
                 </li>
                 <li>
                   <a class="check-menu-active" [routerLink]="['/product/add']"
-                    [ngClass]="{'disabled-link': !isAdmin()}">Add New
+                    [ngClass]="{'disabled-link': !isAdmin()}" *ngIf="isAdmin()">Add New
                     Product</a>
                 </li>
               </ul>
@@ -79,43 +79,43 @@
             <span class="system-menu__title">Operations</span>
             <li>
               <a class="check-menu-active" [routerLink]="['/receipts/index']"
-                [ngClass]="{'disabled-link': !isAdminOrStockerOrSupplier()}">
+                [ngClass]="{'disabled-link': !isAdminOrStockerOrSupplier()}" *ngIf="isAdminOrStockerOrSupplier()">
                 <span class="icon clipboard" aria-hidden="true"></span>
                 Receipts
               </a>
             </li>
             <li>
               <a class="check-menu-active" [routerLink]="['/deliveries/index']"
-                [ngClass]="{'disabled-link': !isAdminOrStockerOrShop()}">
+                [ngClass]="{'disabled-link': !isAdminOrStockerOrShop()}" *ngIf="isAdminOrStockerOrShop()">
                 <span class="icon message" aria-hidden="true"></span>
                 Deliveries
               </a>
             </li>
           </ul>
-          <span class="system-menu__title">Reporting</span>
+          <span class="system-menu__title" *ngIf="checkPermissions()">Reporting</span>
           <ul class="sidebar-body-menu">
             <li>
               <a class="check-menu-active" [routerLink]="['/report/stock']"
-                [ngClass]="{'disabled-link': !checkPermissions()}"><span class="icon archive"
+                [ngClass]="{'disabled-link': !checkPermissions()}" *ngIf="checkPermissions()"><span class="icon archive"
                   aria-hidden="true"></span>Stock</a>
             </li>
             <li>
               <a class="check-menu-active" [routerLink]="['/report/move-history']"
-                [ngClass]="{'disabled-link': !checkPermissions()}">
+                [ngClass]="{'disabled-link': !checkPermissions()}" *ngIf="checkPermissions()">
                 <span class="icon truck" aria-hidden="true"></span>Moves History</a>
             </li>
           </ul>
-          <span class="system-menu__title">System</span>
+          <span class="system-menu__title" *ngIf="checkPermissions()">System</span>
           <ul class="sidebar-body-menu">
             <li>
               <a class="check-menu-active" [routerLink]="['/roles/index']"
-                [ngClass]="{'disabled-link': !isAdmin()}">
+                [ngClass]="{'disabled-link': !isAdmin()}" *ngIf="isAdmin()">
                 <span class="icon role" aria-hidden="true"></span>
                 Roles
               </a>
             </li>
             <li>
-              <a class="show-cat-btn" href="##">
+              <a class="show-cat-btn" href="##" *ngIf="checkPermissions()">
                 <span class="icon user-3" aria-hidden="true"></span>Users
                 <span class="category__btn transparent-btn" title="Open list">
                   <span class="sr-only">Open list</span>
@@ -130,7 +130,7 @@
                 </li>
                 <li>
                   <a class="check-menu-active" [routerLink]="['/user/add']"
-                    [ngClass]="{'disabled-link': !isAdmin()}">Add new
+                    [ngClass]="{'disabled-link': !isAdmin()}" *ngIf="isAdmin()">Add new
                     user</a>
                 </li>
               </ul>

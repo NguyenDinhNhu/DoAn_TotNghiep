@@ -9,7 +9,7 @@
                         placeholder="Enter keywords ..." required>
                 </div>
                 <button class="btn btn-primary" style="padding: 10px 8px;" (click)="OpenModal()"
-                    [ngClass]="{'disabled-link': !isAdmin()}">
+                    [ngClass]="{'disabled-link': !isAdmin()}" *ngIf="isAdmin()">
                     <i data-feather="plus-circle" aria-hidden="true" style="width: 16px; height: 16px;"></i>
                     Add New Feature
                 </button>
@@ -19,14 +19,14 @@
                     <tr>
                         <th>ID</th>
                         <th>Feature Name</th>
-                        <th>Action</th>
+                        <th *ngIf="isAdmin()">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let fea of listFeature;">
                         <td>{{fea.featureId}}</td>
                         <td>{{fea.featureName}}</td>
-                        <td>
+                        <td *ngIf="isAdmin()">
                             <button class="btn btn-warning" style="padding: 8px 8px; margin-right: 4px;"
                                 (click)="OpenModalEdit(fea.featureId)" [ngClass]="{'disabled-link': !isAdmin()}">
                                 <i data-feather="edit" aria-hidden="true"

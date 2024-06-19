@@ -9,7 +9,7 @@
                         placeholder="Enter keywords ..." required>
                 </div>
                 <button class="btn btn-primary" style="padding: 10px 8px;" (click)="OpenModal()"
-                    [ngClass]="{'disabled-link': !isAdmin()}">
+                    [ngClass]="{'disabled-link': !isAdmin()}" *ngIf="isAdmin()">
                     <i data-feather="plus-circle" aria-hidden="true" style="width: 16px; height: 16px;"></i>
                     Add New Category
                 </button>
@@ -20,7 +20,7 @@
                         <th>ID</th>
                         <th>Category Name</th>
                         <th>Parent Name</th>
-                        <th>Action</th>
+                        <th *ngIf="isAdmin()">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -28,7 +28,7 @@
                         <td>{{cate.cateId}}</td>
                         <td>{{cate.cateName}}</td>
                         <td>{{cate.parentName}}</td>
-                        <td>
+                        <td *ngIf="isAdmin()">
                             <button class="btn btn-warning" style="padding: 8px 8px; margin-right: 4px;"
                                 (click)="OpenModalEdit(cate.cateId)" [ngClass]="{'disabled-link': !isAdmin()}">
                                 <i data-feather="edit" aria-hidden="true"
