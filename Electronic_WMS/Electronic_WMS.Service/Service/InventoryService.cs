@@ -398,9 +398,16 @@ namespace Electronic_WMS.Service.Service
                     {
                         ProductId = invLine.ProductId,
                         Quantity = invLine.Quantity,
-                        Price = _iProductRepository.GetById(invLine.ProductId).Price,
+                        //Price = _iProductRepository.GetById(invLine.ProductId).Price,
                         InventoryId = inventory.InventoryId
                     };
+                    if (inv.Type == 1)
+                    {
+                        inventoryLine.Price = invLine.Price;
+                    } else if (inv.Type == 2)
+                    {
+                        inventoryLine.Price = _iProductRepository.GetById(invLine.ProductId).Price;
+                    }
                     //Insert InventoryLine
                     var res = _iInventoryLineRepository.Insert(inventoryLine);
                     if (res == 0)
@@ -575,7 +582,14 @@ namespace Electronic_WMS.Service.Service
                         var invLineDetail = _iInventoryLineRepository.GetById(invLine.InventoryLineId);
                         invLineDetail.ProductId = invLine.ProductId;
                         invLineDetail.Quantity = invLine.Quantity;
-                        invLineDetail.Price = _iProductRepository.GetById(invLine.ProductId).Price;
+                        if (inv.Type == 1)
+                        {
+                            invLineDetail.Price = invLine.Price;
+                        }
+                        else if (inv.Type == 2)
+                        {
+                            invLineDetail.Price = _iProductRepository.GetById(invLine.ProductId).Price;
+                        }
                         invLineDetail.InventoryId = invDetail.InventoryId;
 
                         var res = _iInventoryLineRepository.Update(invLineDetail);
@@ -662,9 +676,17 @@ namespace Electronic_WMS.Service.Service
                         {
                             ProductId = invLine.ProductId,
                             Quantity = invLine.Quantity,
-                            Price = _iProductRepository.GetById(invLine.ProductId).Price,
+                            //Price = _iProductRepository.GetById(invLine.ProductId).Price,
                             InventoryId = invDetail.InventoryId
                         };
+                        if (inv.Type == 1)
+                        {
+                            inventoryLine.Price = invLine.Price;
+                        }
+                        else if (inv.Type == 2)
+                        {
+                            inventoryLine.Price = _iProductRepository.GetById(invLine.ProductId).Price;
+                        }
                         //Insert InventoryLine
                         var res = _iInventoryLineRepository.Insert(inventoryLine);
                         if (res == 0)
@@ -762,29 +784,45 @@ namespace Electronic_WMS.Service.Service
                     document.Add(new Paragraph($"Shop Name: {invDetail.CustomerName}"));
                 }
 
-                // Create a table with 3 columns
-                var table = new Table(3);
+                // Create a table with 4 columns
+                var table = new Table(5);
                 table.SetWidth(UnitValue.CreatePercentValue(100));
 
                 // Add header row
                 table.AddHeaderCell(new iText.Layout.Element.Cell().Add(new Paragraph("Product")));
                 table.AddHeaderCell(new iText.Layout.Element.Cell().Add(new Paragraph("Quantity")));
+                table.AddHeaderCell(new iText.Layout.Element.Cell().Add(new Paragraph("Price")));
+                table.AddHeaderCell(new iText.Layout.Element.Cell().Add(new Paragraph("Total")));
                 table.AddHeaderCell(new iText.Layout.Element.Cell().Add(new Paragraph("Serial Numbers")));
+
+                decimal totalAmount = 0;
 
                 // Add invoice details
                 foreach (var invLine in invDetail.ListInventoryLine)
                 {
+                    // Calculate total for this line and add to totalAmount
+                    decimal lineTotal = invLine.Quantity * invLine.Price;
+                    totalAmount += lineTotal;
+
                     // Add product name in the first column
                     table.AddCell(new iText.Layout.Element.Cell().Add(new Paragraph(invLine.ProductName)));
 
                     // Add quantity in the second column
                     table.AddCell(new iText.Layout.Element.Cell().Add(new Paragraph(invLine.Quantity.ToString())));
+                    // Add price in the third column
+                    table.AddCell(new iText.Layout.Element.Cell().Add(new Paragraph(string.Format("{0:N0}", invLine.Price))));
+                    // Add serial numbers in the fourth column
+                    table.AddCell(new iText.Layout.Element.Cell().Add(new Paragraph(string.Format("{0:N0}", lineTotal))));
 
-                    // Add serial numbers in the third column
+                    // Add serial numbers in the fifth column
                     var serialNumbers = string.Join(", ", invLine.ListSerialNumber.Select(s => s.SerialNumber));
                     table.AddCell(new iText.Layout.Element.Cell().Add(new Paragraph(serialNumbers)));
                 }
-
+                // Add total amount row at the end
+                table.AddCell(new iText.Layout.Element.Cell(1, 2).Add(new Paragraph("Total Amount")));
+                table.AddCell(new iText.Layout.Element.Cell(1, 2).Add(new Paragraph(string.Format("{0:N0}", totalAmount))));
+                table.AddCell(new iText.Layout.Element.Cell().Add(new Paragraph("")));
+                
                 // Add the table to the document
                 document.Add(table);
 

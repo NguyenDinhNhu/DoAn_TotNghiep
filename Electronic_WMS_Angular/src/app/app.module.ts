@@ -41,6 +41,10 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import { AuthAPIService } from './login/AuthAPIService';
 import { AuthInterceptor } from './login/auth.interceptor';
+import { NgxScannerQrcodeModule, LOAD_WASM } from 'ngx-scanner-qrcode';
+
+LOAD_WASM().subscribe();
+
 
 @NgModule({
   declarations: [
@@ -81,7 +85,8 @@ import { AuthInterceptor } from './login/auth.interceptor';
     CommonModule,IgxComboModule, IgxSimpleComboModule,
     ToastrModule.forRoot({timeOut: 3000, positionClass: 'toast-top-right',}),
     MatMenuModule,
-    MatButtonModule
+    MatButtonModule,
+    NgxScannerQrcodeModule
   ],
   providers: [
     AuthAPIService,

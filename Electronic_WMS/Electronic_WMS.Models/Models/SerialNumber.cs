@@ -56,4 +56,12 @@ namespace Electronic_WMS.Models.Models
         public int ProductId { get; set;}
         public int WareHouseId { get; set;}
     }
+
+    public class ListSerialComboboxByWH
+    {
+        public int SerialId { get; set; }
+        public string SerialNumber { get; set; }
+        public int ProductId { get; set; }
+        public decimal Price { get; set; }
+    }
 }

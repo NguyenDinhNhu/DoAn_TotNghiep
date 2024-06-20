@@ -11,6 +11,8 @@ namespace Electronic_WMS.Service.IService
     {
         public GetListSerialByProductId GetListByProductId(SearchSeriVM search);
         public IEnumerable<ListSerialCombobox> GetListSerialCombobox(SearchListSerialCombobox search);
+        public IEnumerable<ListSerialComboboxByWH> GetListSerialComboboxByWH(int warehouseId);
+        public ListSerialComboboxByWH GetSerialNumberBySeri(string seri);
         public ResponseModel UpdateLocation(List<UpdateLocation> listSeri);
         public SerialNumberVM GetById(int id);
     }

@@ -47,6 +47,7 @@
                     <tr>
                         <th>Product</th>
                         <th>Quantity</th>
+                        <th>Price</th>
                         <th>Serial Number</th>
                         <th>Action</th>
                     </tr>
@@ -63,6 +64,12 @@
                         </td>
                         <td>
                             <input class="form-control" type="number" [(ngModel)]="row.Quantity" min="0"/>
+                            <!-- <div *ngIf="submited && f.Quantity.errors">
+                                <small *ngIf="f.Quantity.errors['required']" style="color: red;">Quantity cannot be empty</small>
+                            </div> -->
+                        </td>
+                        <td>
+                            <input class="form-control" type="number" [(ngModel)]="row.Price" min="0"/>
                             <!-- <div *ngIf="submited && f.Quantity.errors">
                                 <small *ngIf="f.Quantity.errors['required']" style="color: red;">Quantity cannot be empty</small>
                             </div> -->

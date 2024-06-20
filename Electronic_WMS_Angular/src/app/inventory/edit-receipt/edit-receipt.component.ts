@@ -23,6 +23,7 @@ export class EditReceiptComponent {
   public ListInventoryLine: any[] = []; 
   public Quantity!: number;
   public ProductId!: number;
+  public Price!: number;
 
   public ListSerial: any[] = []; 
   public SerialNumber!: string;
@@ -79,6 +80,7 @@ export class EditReceiptComponent {
                 InventoryLineId: e.inventoryLineId,
                 ProductId: e.productId,
                 Quantity: e.quantity,
+                Price: e.price,
                 ListSerialNumber: ListSeri,
                 submited: false,
                 shouldDisableCombo: true,
@@ -120,7 +122,7 @@ export class EditReceiptComponent {
   get f() {return this.editReceipt.controls;}
   
   addRow() {
-    let row = {InventoryLineId: 0, ProductId: 0, Quantity: 0, ListSerialNumber: [], submited: false, shouldDisableCombo: false};
+    let row = {InventoryLineId: 0, ProductId: 0, Quantity: 0, Price: 0, ListSerialNumber: [], submited: false, shouldDisableCombo: false};
     this.ListInventoryLine.push(row);
   }
 
@@ -145,7 +147,7 @@ export class EditReceiptComponent {
     const previousQuantities = this.ListInventoryLine.map(row => row.Quantity);
 
     this.ListInventoryLine.forEach((row, index) => {
-      if (!row.ProductId || !row.Quantity || row.ListSerialNumber.length != row.Quantity) {
+      if (!row.ProductId || !row.Price || !row.Quantity || row.ListSerialNumber.length != row.Quantity) {
         row.submited = true;
       } else {
         row.submited = false; // Reset submited for valid rows

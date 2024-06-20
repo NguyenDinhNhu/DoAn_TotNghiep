@@ -23,6 +23,7 @@ export class InventoryDetailComponent {
   public ListInventoryLine: any[] = []; 
   public Quantity!: number;
   public ProductId!: number;
+  public Price!: number;
 
   public ListSerial: any[] = []; 
   public SerialNumber!: string;
@@ -43,7 +44,10 @@ export class InventoryDetailComponent {
     feather.replace();
     this.getDetail();
   }
-
+  
+  formatVND(productPrice: number): string {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(productPrice);
+  }
   getDetail(): void {
     this.activatedRoute.paramMap.subscribe(query => {
       console.log(query.get("inventoryId"));   // lay id
@@ -65,6 +69,7 @@ export class InventoryDetailComponent {
                 ProductId: e.productId,
                 ProductName: e.productName,
                 Quantity: e.quantity,
+                Price: e.price,
                 ListSerialNumber: ListSeri
               }
             this.ListInventoryLine.push(row)

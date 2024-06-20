@@ -41,47 +41,76 @@
                     </div>
                 </div>
             </form>
-            <h2 class="main-title" style="margin-top: 12px;">List Product: </h2>
+            <div class="w-100 d-flex justify-content-between">
+                <h2 class="main-title" style="margin-top: 12px;">List Product: </h2>
+                <div>
+                    <h1>Barcode Scanner</h1>
+                    <p>Scanned Barcode: {{ scannedBarcode }}</p>
+                    <button class="btn btn-primary" style="padding: 10px 8px;" (click)="openScannerModal()" (click)="action.start()">Start Scan</button>
+                </div>
+            </div>
+            <!-- <div class="w-100">
+                <ngx-scanner-qrcode #action="scanner" (detect)="onCodeResult($event)"></ngx-scanner-qrcode>
+
+                <div>
+                    <span>{{ action.data.value | json }}</span>
+                </div>
+                <span>{{ action.data | async | json }}</span>
+                <div>
+                    <p>Scanned Barcode: {{ scannedBarcode }}</p>
+                </div>
+                <p *ngIf="action.isLoading">⌛ Loading...</p>
+
+                <button (click)="action.isStart ? action.stop() : action.start()">{{action.isStart ? 'Stop' : 'Start'}}</button>
+            </div> -->
             <table class="table table-bordered">
                 <thead class="text text-primary">
                     <tr>
-                        <th>Product</th>
+                        <!-- <th>Product</th>
                         <th>Quantity</th>
                         <th>Serial Number</th>
+                        <th>Action</th> -->
+                        <th>Serial Number</th>
+                        <th>Product</th>
+                        <th>Price</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let row of ListInventoryLine; let i = index;">
+                    <!-- <tr *ngFor="let row of ListInventoryLine; let i = index;">
                         <td>
                             <igx-simple-combo [data]="ListProductCombobox" [displayKey]="'productName'"
                                 [valueKey]="'productId'" [(ngModel)]="row.ProductId"></igx-simple-combo>
-                            <!-- <div *ngIf="submited && f.ProductId.errors">
-                                <small *ngIf="f.ProductId.errors['required']" style="color: red;">Please select
-                                    Feature</small>
-                            </div> -->
                         </td>
                         <td>
                             <input class="form-control" type="number" [(ngModel)]="row.Quantity" min="0"/>
-                            <!-- <div *ngIf="submited && f.Quantity.errors">
-                                <small *ngIf="f.Quantity.errors['required']" style="color: red;">Quantity cannot be empty</small>
-                            </div> -->
                         </td>
                         <td>
                             <button class="btn btn-primary" style="padding: 10px 8px;" (click)="OpenModal(row)">
                                 Show
                             </button>
-                            <!-- <div *ngIf="submited && f.Value.errors">
-                                <small *ngIf="f.Value.errors['required']" style="color: red;">Value cannot be empty</small>
-                            </div> -->
                         </td>
                         <td>
                             <button class="btn btn-danger" style="padding: 8px 8px;"
                                 (click)="deleteRow(i)">Remove</button>
                         </td>
-                        <!-- <td *ngIf="row.submited && (!row.FeatureId || !row.Value)">
-                            <div style="color: red;">Please fill in all fields in this row</div>
-                        </td> -->
+                    </tr> -->
+                    <tr *ngFor="let row of ListRow; let i = index;">
+                        <td>
+                            <igx-simple-combo [data]="ListSerialComboboxByWH" [displayKey]="'serialNumber'"
+                            [valueKey]="'serialId'" [(ngModel)]="row.SerialId" (ngModelChange)="onSerialNumberChange(row)"></igx-simple-combo>
+                        </td>
+                        <td>
+                            <igx-simple-combo [data]="ListProductCombobox" [displayKey]="'productName'"
+                            [valueKey]="'productId'" [(ngModel)]="row.productId" [ngClass]="{'disabled-link': true}"></igx-simple-combo>
+                        </td>
+                        <td>
+                            <input type="text" [(ngModel)]="row.price" [ngClass]="{'disabled-link': true}">
+                        </td>
+                        <td>
+                            <button class="btn btn-danger" style="padding: 8px 8px;"
+                                (click)="deleteRow(i)">Remove</button>
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="4">
@@ -135,6 +164,24 @@
                             style="padding: 8px 8px; margin-right: 4px;">Close</button>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="scannerModal" tabindex="-1" aria-labelledby="scannerModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="scannerModalLabel">Scan Barcode</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeScannerModal()" (click)="action.stop()"></button>
+                </div>
+                <div class="modal-body">
+                  <ngx-scanner-qrcode #action="scanner" (detect)="onBarcodeScanned($event)"></ngx-scanner-qrcode>
+                  <p *ngIf="action.isLoading">⌛ Loading...</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" style="padding: 10px 8px;" data-bs-dismiss="modal" (click)="closeScannerModal()" (click)="action.stop()">Close</button>
+                </div>
+              </div>
             </div>
         </div>
     </div>

@@ -24,6 +24,7 @@ export class EditDeliveryComponent {
   public ListInventoryLine: any[] = []; 
   public Quantity!: number;
   public ProductId!: number;
+  public Price!: number;
 
   public ListSerial: any[] = []; 
   public SerialId!: string;
@@ -82,6 +83,7 @@ export class EditDeliveryComponent {
               InventoryLineId: e.inventoryLineId,
               ProductId: e.productId,
               Quantity: e.quantity,
+              Price: e.price,
               ListSerialNumber: ListSeri,
               submited: false,
               shouldDisableCombo: true,
@@ -123,12 +125,22 @@ export class EditDeliveryComponent {
   get f() {return this.editDelivery.controls;}
   
   addRow() {
-    let row = {InventoryLineId: 0, ProductId: 0, Quantity: 0, ListSerialNumber: [], submited: false, shouldDisableCombo: false};
+    let row = {InventoryLineId: 0, ProductId: 0, Quantity: 0, Price: 0, ListSerialNumber: [], submited: false, shouldDisableCombo: false};
     this.ListInventoryLine.push(row);
   }
 
   deleteRow(index:any) {
     this.ListInventoryLine.splice(index, 1);
+  }
+
+  onProductChange(row: any) {
+    if (row.ProductId) {
+      this.productService.getProduct(row.ProductId).subscribe(
+        (product: any) => {
+          row.Price = product.price;
+        }
+      );
+    }
   }
 
   hasDuplicateProductIds(): boolean {
@@ -148,7 +160,7 @@ export class EditDeliveryComponent {
     const previousQuantities = this.ListInventoryLine.map(row => row.Quantity);
 
     this.ListInventoryLine.forEach((row, index) => {
-      if (!row.ProductId || !row.Quantity || row.ListSerialNumber.length != row.Quantity) {
+      if (!row.ProductId || !row.Price || !row.Quantity || row.ListSerialNumber.length != row.Quantity) {
         row.submited = true;
       } else {
         row.submited = false; // Reset submited for valid rows

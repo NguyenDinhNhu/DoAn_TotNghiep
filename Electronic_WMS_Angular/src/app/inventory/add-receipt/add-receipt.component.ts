@@ -22,7 +22,7 @@ export class AddReceiptComponent {
   public ListInventoryLine: any[] = []; 
   public Quantity!: number;
   public ProductId!: number;
-
+  public Price!: number;
   public ListSerial: any[] = []; 
   public SerialNumber!: string;
 
@@ -76,7 +76,7 @@ export class AddReceiptComponent {
   get f() {return this.addReceipt.controls;}
   
   addRow() {
-    let row = {ProductId: 0, Quantity: 0, ListSerialNumber: [], submited: false};
+    let row = {ProductId: 0, Quantity: 0, Price: 0, ListSerialNumber: [], submited: false};
     this.ListInventoryLine.push(row);
   }
 
@@ -100,7 +100,7 @@ export class AddReceiptComponent {
     let hasDuplicateSerial = false;
 
     this.ListInventoryLine.forEach(row => {
-      if (!row.ProductId || !row.Quantity || row.ListSerialNumber.length != row.Quantity) {
+      if (!row.ProductId || !row.Price || !row.Quantity || row.ListSerialNumber.length != row.Quantity) {
         row.submited = true;
       } else {
         row.submited = false; // Reset submited for valid rows

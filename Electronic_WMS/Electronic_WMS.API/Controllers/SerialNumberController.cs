@@ -23,6 +23,12 @@ namespace Electronic_WMS.API.Controllers
         {
             var result = _iSerialNumberService.GetById(id);
             return Ok(result);
+        } 
+        [HttpGet(nameof(GetSerialNumberBySeri))]
+        public IActionResult GetSerialNumberBySeri([FromQuery] string seri)
+        {
+            var result = _iSerialNumberService.GetSerialNumberBySeri(seri);
+            return Ok(result);
         }  
         
         [HttpPost(nameof(GetListByProductId))]
@@ -36,6 +42,13 @@ namespace Electronic_WMS.API.Controllers
         public IActionResult GetListSerialCombobox([FromBody] SearchListSerialCombobox search)
         {
             var result = _iSerialNumberService.GetListSerialCombobox(search);
+            return Ok(result);
+        }
+        
+        [HttpGet(nameof(GetListSerialComboboxByWH))]
+        public IActionResult GetListSerialComboboxByWH([FromQuery] int warehouseId)
+        {
+            var result = _iSerialNumberService.GetListSerialComboboxByWH(warehouseId);
             return Ok(result);
         }
 

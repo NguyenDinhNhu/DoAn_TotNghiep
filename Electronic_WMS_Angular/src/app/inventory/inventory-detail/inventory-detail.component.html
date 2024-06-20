@@ -41,6 +41,7 @@
                         <th>Product Id</th>
                         <th>Product Name</th>
                         <th>Quantity</th>
+                        <th>Price</th>
                         <th>Serial Number</th>
                     </tr>
                 </thead>
@@ -49,6 +50,7 @@
                         <td>{{row.ProductId}}</td>
                         <td>{{row.ProductName}}</td>
                         <td>{{row.Quantity}}</td>
+                        <td>{{formatVND(row.Price)}}</td>
                         <td>
                             <button class="btn btn-primary" style="padding: 10px 8px;" (click)="OpenModal(row)">
                                 Show

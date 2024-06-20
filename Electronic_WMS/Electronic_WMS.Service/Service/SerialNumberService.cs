@@ -15,10 +15,12 @@ namespace Electronic_WMS.Service.Service
     {
         private readonly ISerialNumberRepository _iSerialNumberRepository;
         private readonly IWareHouseRepository _iWareHouseRepository;
-        public SerialNumberService(ISerialNumberRepository iSerialNumberRepository, IWareHouseRepository iWareHouseRepository)
+        private readonly IProductRepository _iProductRepository;
+        public SerialNumberService(ISerialNumberRepository iSerialNumberRepository, IWareHouseRepository iWareHouseRepository, IProductRepository iProductRepository)
         {
             _iSerialNumberRepository = iSerialNumberRepository;
             _iWareHouseRepository = iWareHouseRepository;
+            _iProductRepository = iProductRepository;
         }
 
         public SerialNumberVM GetById(int id)
@@ -68,6 +70,34 @@ namespace Electronic_WMS.Service.Service
                                SerialNumber = s.SerialNumber
                            };
             return listSeri;
+        }
+
+        public IEnumerable<ListSerialComboboxByWH> GetListSerialComboboxByWH(int warehouseId)
+        {
+            var listSeri = from s in _iSerialNumberRepository.GetList()
+                           where s.WareHouseId == warehouseId
+                                 && (s.Status == (int)SeriStatus.IsStock || s.Status == (int)SeriStatus.IsProcessing)
+                           select new ListSerialComboboxByWH
+                           {
+                               SerialId = s.SerialId,
+                               SerialNumber = s.SerialNumber,
+                               ProductId = s.ProductId,
+                               Price = _iProductRepository.GetById(s.ProductId).Price
+                           };
+            return listSeri;
+        }
+
+        public ListSerialComboboxByWH GetSerialNumberBySeri(string seri)
+        {
+            var s = _iSerialNumberRepository.GetBySerialNumber(seri);
+            var serial = new ListSerialComboboxByWH
+            {
+                SerialId = s.SerialId,
+                SerialNumber = s.SerialNumber,
+                ProductId = s.ProductId,
+                Price = _iProductRepository.GetById(s.ProductId).Price
+            };
+            return serial;
         }
 
         public ResponseModel UpdateLocation(List<UpdateLocation> listSeri)

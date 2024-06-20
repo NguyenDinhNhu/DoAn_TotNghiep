@@ -29,7 +29,17 @@ export class SerialNumberAPIService {
 
   getListSerialCombobox(search: any): Observable<any> {
     const headers = this.getHeaders();
-    return this.http.post<any>('http://localhost:5091/api/SerialNumber/getListSerialCombobox',search, { headers });
+    return this.http.post<any>('http://localhost:5091/api/SerialNumber/GetListSerialCombobox',search, { headers });
+  }
+
+  getListSerialComboboxByWH(warehouseId: any): Observable<any> {
+    const headers = this.getHeaders();
+    return this.http.get<any>('http://localhost:5091/api/SerialNumber/GetListSerialComboboxByWH?warehouseId=' + warehouseId, { headers });
+  }
+
+  getSerialNumberBySeri(seri: any): Observable<any> {
+    const headers = this.getHeaders();
+    return this.http.get<any>('http://localhost:5091/api/SerialNumber/GetSerialNumberBySeri?seri=' + seri, { headers });
   }
 
   updateLocation(seri: any): Observable<any> {
