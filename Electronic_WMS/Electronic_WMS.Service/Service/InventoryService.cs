@@ -22,6 +22,10 @@ using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Irony.Parsing;
 using Table = iText.Layout.Element.Table;
+using ZXing;
+using ZXing.Common;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Electronic_WMS.Service.Service
 {
@@ -126,6 +130,7 @@ namespace Electronic_WMS.Service.Service
                                     var seriUpdate = _iSerialNumberRepository.GetById(s.SerialId);
                                     seriUpdate.Status = (int)SeriStatus.IsStock;
                                     var updateSerial = _iSerialNumberRepository.Update(seriUpdate);
+
                                     if (updateSerial == 0)
                                     {
                                         return new ResponseModel
@@ -134,6 +139,9 @@ namespace Electronic_WMS.Service.Service
                                             StatusMessage = "Eror!"
                                         };
                                     }
+
+                                    // Tạo và lưu Barcode
+                                    byte[] barcodeData = GenerateBarcode(seriUpdate.SerialNumber);
                                 }
                             }
                         }
@@ -188,6 +196,72 @@ namespace Electronic_WMS.Service.Service
                 StatusCode = 200,
                 StatusMessage = "Status change successful!"
             };
+        }
+
+        public byte[] GenerateBarcode(string serialNumber)
+        {
+            // Tạo barcode
+            var barcodeWriter = new BarcodeWriterPixelData
+            {
+                Format = BarcodeFormat.CODE_128,
+                Options = new EncodingOptions
+                {
+                    Width = 300, // Chiều rộng cố định
+                    Height = 100 // Chiều cao cố định
+                }
+            };
+
+            // Tạo dữ liệu pixel cho barcode từ serialNumber
+            var barcodePixelData = barcodeWriter.Write(serialNumber);
+
+            // Tạo bitmap cho barcode
+            using (var barcodeBitmap = new Bitmap(barcodePixelData.Width, barcodePixelData.Height, PixelFormat.Format32bppRgb))
+            {
+                // Sao chép dữ liệu pixel vào bitmap
+                var barcodeBitmapData = barcodeBitmap.LockBits(new Rectangle(0, 0, barcodePixelData.Width, barcodePixelData.Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppRgb);
+                try
+                {
+                    System.Runtime.InteropServices.Marshal.Copy(barcodePixelData.Pixels, 0, barcodeBitmapData.Scan0, barcodePixelData.Pixels.Length);
+                }
+                finally
+                {
+                    barcodeBitmap.UnlockBits(barcodeBitmapData);
+                }
+
+                // Tạo bitmap mới lớn hơn để chứa cả barcode và serial number
+                using (var combinedBitmap = new Bitmap(barcodePixelData.Width, barcodePixelData.Height + 30, PixelFormat.Format32bppRgb))
+                {
+                    // Vẽ barcode lên bitmap mới
+                    using (var graphics = Graphics.FromImage(combinedBitmap))
+                    {
+                        graphics.Clear(System.Drawing.Color.White); // Xóa nền trắng
+
+                        // Vẽ barcode lên bitmap mới
+                        graphics.DrawImage(barcodeBitmap, 0, 0);
+
+                        // Vẽ serial number dưới barcode
+                        using (var font = new System.Drawing.Font("Arial", 12))
+                        {
+                            SizeF textSize = graphics.MeasureString(serialNumber, font);
+                            float x = (combinedBitmap.Width - textSize.Width) / 2; // Căn giữa theo chiều ngang
+                            float y = barcodePixelData.Height + 5; // Dịch lên 5 pixel so với cuối ảnh barcode
+                            graphics.DrawString(serialNumber, font, Brushes.Black, x, y);
+                        }
+                    }
+
+                    // Lưu hình ảnh vào thư mục và trả về dưới dạng byte[]
+                    string fileName = $"{serialNumber}.png"; // Tên tệp có thể làm theo serialNumber hoặc một cách duy nhất
+                    string filePath = Path.Combine("E:\\Nam2ki2\\Nam4Ki2\\DoAn_TotNghiep\\Electronic_WMS_Angular\\src\\assets\\img\\barcode", fileName);
+                    combinedBitmap.Save(filePath, ImageFormat.Png);
+
+                    // Trả về dữ liệu hình ảnh dưới dạng mảng byte
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        combinedBitmap.Save(stream, ImageFormat.Png);
+                        return stream.ToArray();
+                    }
+                }
+            }
         }
 
         public ResponseModel Delete(int id)

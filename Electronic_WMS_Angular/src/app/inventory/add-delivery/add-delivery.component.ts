@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import * as feather from 'feather-icons';
 import { ToastrService } from 'ngx-toastr';
@@ -15,6 +15,8 @@ import { SerialNumberAPIService } from 'src/app/serial-number/SerialNumberAPISer
   styleUrls: ['./add-delivery.component.css']
 })
 export class AddDeliveryComponent {
+  @ViewChild('action', { static: false }) action: any;
+  public scannedBarcode: string = '';
   public submited: boolean = false;
   public SourceLocation!: number;
   public WarehouseId!: number;
@@ -257,22 +259,6 @@ export class AddDeliveryComponent {
         .map(row => ({ SerialId: row.SerialId }))
       }));
 
-    // this.ListInventoryLine = this.ListProductCombobox
-    // .filter(product => product.quantity > 0)
-    // .map(product => {
-    //   const serialIds = [];
-    //   this.ListRow
-    //     .filter(row => row.productId === product.productId)
-    //     .forEach(row => {
-    //       serialIds["SerialId"] = row.SerialId; // Hoặc giá trị nào khác mà bạn muốn
-    //     });
-    //   return {
-    //     ProductId: product.productId,
-    //     Quantity: product.quantity,
-    //     ListSerialNumber: serialIds
-    //   };
-    // });
-
     if(!this.addDelivery.invalid){
       console.log(this.addDelivery.value);
       this.SourceLocation = parseInt(this.addDelivery.value.SourceLocation!);
@@ -340,29 +326,45 @@ export class AddDeliveryComponent {
       modelDiv.style.display = "none";
     }
   }
-
-  scannedBarcode: string = '';
-  
-  
+  // cameraEnabled: boolean = false;
   openScannerModal() {
+    // this.cameraEnabled = true;
     const scannerModal = document.getElementById('scannerModal');
     if (scannerModal) {
       scannerModal.classList.add('show'); // Hiển thị modal
       scannerModal.style.display = 'block';
     }
+
+    if (this.action) {
+      this.action.start();
+    }
   }
 
   closeScannerModal() {
+    // this.cameraEnabled = false;
     const scannerModal = document.getElementById('scannerModal');
     if (scannerModal) {
       scannerModal.classList.remove('show'); // Ẩn modal 
       scannerModal.style.display = 'none';
     }
-  }
 
+    if (this.action) {
+      this.action.stop();
+    }
+  }
+  
   onBarcodeScanned(result: any) {
-    this.scannedBarcode = result?.codeResult?.code ?? ''; // Lấy giá trị barcode từ kết quả quét
+    console.log(result); 
+    this.scannedBarcode = result[0].value; // Lấy giá trị barcode từ kết quả quét
     console.log('Scanned Barcode:', this.scannedBarcode); // Kiểm tra xem barcode đã được lấy đúng chưa
+    let row = {SerialId: 0}
+    // this.serialService.getSerialNumberBySeri(this.scannedBarcode).subscribe(res => {
+    //   row.SerialId = res.serialId;
+    //   this.onSerialNumberChange(row);
+    //   this.ListRow.push(row);
+    //   console.log(row.SerialId)
+    // })
+   
     this.closeScannerModal();
   }
 }

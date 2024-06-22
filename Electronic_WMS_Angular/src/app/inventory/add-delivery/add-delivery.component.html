@@ -43,26 +43,11 @@
             </form>
             <div class="w-100 d-flex justify-content-between">
                 <h2 class="main-title" style="margin-top: 12px;">List Product: </h2>
-                <div>
-                    <h1>Barcode Scanner</h1>
-                    <p>Scanned Barcode: {{ scannedBarcode }}</p>
-                    <button class="btn btn-primary" style="padding: 10px 8px;" (click)="openScannerModal()" (click)="action.start()">Start Scan</button>
-                </div>
+               <div>
+                    <button class="btn btn-info" style="padding: 10px 8px; color: #fff;" (click)="openScannerModal()">Scan barcode</button>
+               </div>
             </div>
-            <!-- <div class="w-100">
-                <ngx-scanner-qrcode #action="scanner" (detect)="onCodeResult($event)"></ngx-scanner-qrcode>
-
-                <div>
-                    <span>{{ action.data.value | json }}</span>
-                </div>
-                <span>{{ action.data | async | json }}</span>
-                <div>
-                    <p>Scanned Barcode: {{ scannedBarcode }}</p>
-                </div>
-                <p *ngIf="action.isLoading">⌛ Loading...</p>
-
-                <button (click)="action.isStart ? action.stop() : action.start()">{{action.isStart ? 'Stop' : 'Start'}}</button>
-            </div> -->
+           
             <table class="table table-bordered">
                 <thead class="text text-primary">
                     <tr>
@@ -172,14 +157,15 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="scannerModalLabel">Scan Barcode</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeScannerModal()" (click)="action.stop()"></button>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeScannerModal()"></button>
                 </div>
                 <div class="modal-body">
-                  <ngx-scanner-qrcode #action="scanner" (detect)="onBarcodeScanned($event)"></ngx-scanner-qrcode>
+                  <ngx-scanner-qrcode #action="scanner" (event)="onBarcodeScanned($event)"></ngx-scanner-qrcode>
+                  <!-- <zxing-scanner *ngIf="cameraEnabled" (scanSuccess)="onBarcodeScanned($event)"></zxing-scanner> -->
                   <p *ngIf="action.isLoading">⌛ Loading...</p>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-danger" style="padding: 10px 8px;" data-bs-dismiss="modal" (click)="closeScannerModal()" (click)="action.stop()">Close</button>
+                  <button type="button" class="btn btn-danger" style="padding: 10px 8px;" data-bs-dismiss="modal" (click)="closeScannerModal()">Close</button>
                 </div>
               </div>
             </div>

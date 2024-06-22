@@ -25,6 +25,7 @@
     "@popperjs/core": "^2.11.6",
     "@syncfusion/ej2-angular-dropdowns": "^25.1.37",
     "@syncfusion/ej2-material-theme": "~25.1.37",
+    "@zxing/ngx-scanner": "^18.0.0",
     "bootstrap": "^5.0.1",
     "feather-icons": "^4.29.1",
     "fflate": "^0.8.1",

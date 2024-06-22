@@ -42,6 +42,7 @@ import {MatButtonModule} from '@angular/material/button';
 import { AuthAPIService } from './login/AuthAPIService';
 import { AuthInterceptor } from './login/auth.interceptor';
 import { NgxScannerQrcodeModule, LOAD_WASM } from 'ngx-scanner-qrcode';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 LOAD_WASM().subscribe();
 
@@ -86,7 +87,8 @@ LOAD_WASM().subscribe();
     ToastrModule.forRoot({timeOut: 3000, positionClass: 'toast-top-right',}),
     MatMenuModule,
     MatButtonModule,
-    NgxScannerQrcodeModule
+    NgxScannerQrcodeModule,
+    ZXingScannerModule
   ],
   providers: [
     AuthAPIService,
