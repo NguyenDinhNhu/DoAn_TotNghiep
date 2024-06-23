@@ -358,12 +358,12 @@ export class AddDeliveryComponent {
     this.scannedBarcode = result[0].value; // Lấy giá trị barcode từ kết quả quét
     console.log('Scanned Barcode:', this.scannedBarcode); // Kiểm tra xem barcode đã được lấy đúng chưa
     let row = {SerialId: 0}
-    // this.serialService.getSerialNumberBySeri(this.scannedBarcode).subscribe(res => {
-    //   row.SerialId = res.serialId;
-    //   this.onSerialNumberChange(row);
-    //   this.ListRow.push(row);
-    //   console.log(row.SerialId)
-    // })
+    this.serialService.getSerialNumberBySeri(this.scannedBarcode).subscribe(res => {
+      row.SerialId = res.serialId;
+      this.onSerialNumberChange(row);
+      this.ListRow.push(row);
+      console.log(row.SerialId)
+    })
    
     this.closeScannerModal();
   }

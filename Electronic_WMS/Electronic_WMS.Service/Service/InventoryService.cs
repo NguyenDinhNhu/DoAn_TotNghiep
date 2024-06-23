@@ -1026,5 +1026,21 @@ namespace Electronic_WMS.Service.Service
                 CountProductOutOfStock = countProductOutOfStock
             };
         }
+        public List<MonthlyRevenue> GetMonthlyRevenueByType()
+        {
+            var revenueData = from i in _iInventoryRepository.GetList()
+                              join il in _iInventoryLineRepository.GetList() on i.InventoryId equals il.InventoryId
+                              where i.Status == (int)InventoryStatus.IsComplete
+                              group new { i, il } by new { i.CreatedDate.Year, i.CreatedDate.Month } into g
+                              select new MonthlyRevenue
+                              {
+                                  Year = g.Key.Year,
+                                  Month = g.Key.Month,
+                                  TotalRevenueImport = g.Where(x => x.i.Type == 1).Sum(x => x.il.Quantity * x.il.Price),
+                                  TotalRevenueExport = g.Where(x => x.i.Type == 2).Sum(x => x.il.Quantity * x.il.Price)
+                              };
+
+            return revenueData.OrderBy(r => r.Year).ThenBy(r => r.Month).ToList();
+        }
     }
 }

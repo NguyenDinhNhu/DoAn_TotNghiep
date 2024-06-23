@@ -1,38 +1,63 @@
 <div class="container">
-    <h2 class="main-title">Dashboard</h2>
-    <div class="row stat-cards">
-        <div class="col-md-6 col-xl-4">
-          <article class="stat-cards-item">
-            <div class="stat-cards-icon primary">
-              <i data-feather="clipboard" aria-hidden="true"></i>
-            </div>
-            <div class="stat-cards-info">
-              <p class="stat-cards-info__title">Receipts</p>
-              <a [routerLink]="['/receipts/index']" class="stat-cards-info__num">{{CountReceiptReady}} To Process</a>
-            </div>
-          </article>
+  <h2 class="main-title">Dashboard</h2>
+  <div class="row stat-cards">
+    <div class="col-md-6 col-xl-4">
+      <article class="stat-cards-item">
+        <div class="stat-cards-icon primary">
+          <i data-feather="clipboard" aria-hidden="true"></i>
         </div>
-        <div class="col-md-6 col-xl-4">
-          <article class="stat-cards-item">
-            <div class="stat-cards-icon warning">
-              <i data-feather="mail" aria-hidden="true"></i>
-            </div>
-            <div class="stat-cards-info">
-              <p class="stat-cards-info__title">Delivery Orders</p>
-              <a [routerLink]="['/deliveries/index']" class="stat-cards-info__num">{{CountDeliveryReady}} To Process</a>
-            </div>
-          </article>
+        <div class="stat-cards-info">
+          <p class="stat-cards-info__title">Receipts</p>
+          <a [routerLink]="['/receipts/index']" class="stat-cards-info__num">{{CountReceiptReady}} To Process</a>
         </div>
-        <div class="col-md-6 col-xl-4">
-          <article class="stat-cards-item">
-            <div class="stat-cards-icon purple">
-              <i data-feather="codesandbox" aria-hidden="true"></i>
-            </div>
-            <div class="stat-cards-info">
-              <p class="stat-cards-info__title">Product Out Of Stock</p>
-              <a [routerLink]="['/product/index']" class="stat-cards-info__num">{{CountProductOutOfStock}} To Process</a>
-            </div>
-          </article>
+      </article>
+    </div>
+    <div class="col-md-6 col-xl-4">
+      <article class="stat-cards-item">
+        <div class="stat-cards-icon warning">
+          <i data-feather="mail" aria-hidden="true"></i>
         </div>
-      </div>
+        <div class="stat-cards-info">
+          <p class="stat-cards-info__title">Delivery Orders</p>
+          <a [routerLink]="['/deliveries/index']" class="stat-cards-info__num">{{CountDeliveryReady}} To Process</a>
+        </div>
+      </article>
+    </div>
+    <div class="col-md-6 col-xl-4">
+      <article class="stat-cards-item">
+        <div class="stat-cards-icon purple">
+          <i data-feather="codesandbox" aria-hidden="true"></i>
+        </div>
+        <div class="stat-cards-info">
+          <p class="stat-cards-info__title">Product Out Of Stock</p>
+          <a [routerLink]="['/product/index']" class="stat-cards-info__num">{{CountProductOutOfStock}} To Process</a>
+        </div>
+      </article>
+    </div>
+  </div>
+  <div class="row stat-cards mt-4">
+    <div class="col-md-12">
+      <article class="stat-cards-item">
+        <h2 class="main-title">Monthly Revenue</h2>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Year</th>
+              <th>Total Revenue Import</th>
+              <th>Total Revenue Export</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let revenue of revenueData">
+              <td>{{ revenue.month }}</td>
+              <td>{{ revenue.year }}</td>
+              <td>{{ formatVND(revenue.totalRevenueImport) }}</td>
+              <td>{{ formatVND(revenue.totalRevenueExport) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+    </div>
+  </div>
 </div>

@@ -66,4 +66,9 @@ export class InventoryAPIService {
     const headers = this.getHeaders();
     return this.http.get<Blob>(`http://localhost:5091/api/Inventory/ExportExcelMoveHistory?type=${type}`, {headers, responseType: 'blob' as 'json' });
   }
+
+  getMonthlyRevenueByType(): Observable<any> {
+    const headers = this.getHeaders();
+    return this.http.get<any>('http://localhost:5091/api/Inventory/GetMonthlyRevenueByType', { headers });
+  }
 }

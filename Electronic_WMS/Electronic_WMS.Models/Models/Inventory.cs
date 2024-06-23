@@ -72,4 +72,12 @@ namespace Electronic_WMS.Models.Models
         public int CountDeliveryReady { get; set; }
         public int CountProductOutOfStock { get; set; }
     }
+
+    public class MonthlyRevenue
+    {
+        public int Year { get; set; }
+        public int Month { get; set; }
+        public decimal TotalRevenueImport { get; set; }
+        public decimal TotalRevenueExport { get; set; }
+    }
 }

@@ -18,5 +18,6 @@ namespace Electronic_WMS.Service.IService
         public byte[] GenerateInventoryPDF(int inventoryId);
         public byte[] ExportMoveHistoryToExcel(int type);
         public DashboardVM GetVMDashBoard();
+        public List<MonthlyRevenue> GetMonthlyRevenueByType();
     }
 }

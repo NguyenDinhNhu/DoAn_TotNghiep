@@ -15,6 +15,8 @@ export class DashboardComponent {
   public CountDeliveryReady: number = 0;
   public CountProductOutOfStock: number = 0;
 
+  public revenueData: any[] = [];
+
   constructor(
     private toastr: ToastrService,
     private inventoryService: InventoryAPIService,
@@ -24,6 +26,11 @@ export class DashboardComponent {
   ngOnInit(): void {
     feather.replace();
     this.getDashBoardVM();
+    this.getMonthlyRevenue();
+  }
+
+  formatVND(productPrice: number): string {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(productPrice);
   }
 
   getDashBoardVM(): any {
@@ -34,6 +41,17 @@ export class DashboardComponent {
         setTimeout(() => {
           feather.replace();
         }, 10)
+    }, error => {
+      this.toastr.error("Loading data fail!", "Error");
+    })
+  }
+
+  getMonthlyRevenue(): any {
+    this.inventoryService.getMonthlyRevenueByType().subscribe(res => {
+      this.revenueData = res;
+      setTimeout(() => {
+        feather.replace();
+      }, 10)
     }, error => {
       this.toastr.error("Loading data fail!", "Error");
     })
